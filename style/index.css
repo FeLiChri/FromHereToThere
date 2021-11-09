@@ -1,0 +1,22 @@
+.photo {
+    border-radius: 50%;
+    border: 10px solid rgba(50, 134, 243, 0.8);
+    width: 100px;
+}
+
+.form {
+    text-align: left;
+    background-color: rgba(50, 134, 243, 0.8);
+    border-radius: 3%;
+    color: #ffffff;
+    overflow: auto;
+}
+
+.map {
+    color:blue;
+}
+
+.blue_border {
+    border-radius: 3%;
+    border: 10px solid rgba(50, 134, 243, 0.8);
+}
