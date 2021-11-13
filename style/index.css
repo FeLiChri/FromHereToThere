@@ -12,8 +12,10 @@
     overflow: auto;
 }
 
-.map {
+#map-div {
     color:blue;
+    display: flex;
+    flex-direction: column;
 }
 
 .blue_border {
@@ -42,4 +44,8 @@
 #list li{
   margin: 10px;
   cursor: pointer;
+}
+
+.mapclass {
+    flex-grow: 1;
 }
