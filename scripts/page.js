@@ -82,16 +82,16 @@ router.on('routesfound', function(e) {
 router.addTo(routermap);
 
 
-var searchControl = L.esri.Geocoding.geosearch().addTo(routermap);
+// var searchControl = L.esri.Geocoding.geosearch().addTo(routermap);
 
-var results = L.layerGroup().addTo(routermap);
+// var results = L.layerGroup().addTo(routermap);
 
-searchControl.on('results', function (data) {
-  results.clearLayers();
-  for (var i = data.results.length - 1; i >= 0; i--) {
-    results.addLayer(L.marker(data.results[i].latlng));
-  }
-});
+// searchControl.on('results', function (data) {
+//   results.clearLayers();
+//   for (var i = data.results.length - 1; i >= 0; i--) {
+//     results.addLayer(L.marker(data.results[i].latlng));
+//   }
+// });
 
   
 
