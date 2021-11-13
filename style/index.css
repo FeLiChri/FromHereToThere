@@ -12,11 +12,17 @@
     overflow: auto;
 }
 
-.map {
+#map-div {
     color:blue;
+    display: flex;
+    flex-direction: column;
 }
 
 .blue_border {
     border-radius: 3%;
     border: 10px solid rgba(50, 134, 243, 0.8);
+}
+
+.mapclass {
+    flex-grow: 1;
 }
