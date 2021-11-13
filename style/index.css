@@ -20,3 +20,18 @@
     border-radius: 3%;
     border: 10px solid rgba(50, 134, 243, 0.8);
 }
+
+.placeholder {
+    position: relative;
+    font-family: monospace;
+}
+
+.placeholder::after {
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    content: attr(data-placeholder);
+    pointer-events: none;
+    opacity: 1;
+    color: black;
+}

@@ -38,6 +38,9 @@ map = new Vue({
         this.distance = distance.toFixed(2);
         this.time = time.toFixed(2);
     },
+    guessText: function(e) {
+      console.log(e);
+    },
   }
 });
 
