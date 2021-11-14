@@ -23,11 +23,12 @@ map = new Vue({
       markers: [L.latLng(42.2808, -83.7430), L.latLng(42.2808, -83.7433)],
       distance: 0,
       time: 0,
+      guessText: "",
     };
   },
   mounted() {
-  	const map = this.$refs.mymap.mapObject;
-    routermap = map;
+  	// const map = this.$refs.mymap.mapObject;
+    // routermap = map;
     // map.addControl(new L.Control.Fullscreen());
   },
   methods: {
@@ -38,9 +39,12 @@ map = new Vue({
         this.distance = distance.toFixed(2);
         this.time = time.toFixed(2);
     },
-    guessText: function(e) {
-      console.log(e);
+    updateGuess: function() {
+      console.log("hi");
     },
+    testFunc: function() {
+      console.log('test');
+    }
   }
 });
 
@@ -82,19 +86,19 @@ router.on('routesfound', function(e) {
     // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
  });
 
-router.addTo(routermap);
+// router.addTo(routermap);
 
 
-var searchControl = L.esri.Geocoding.geosearch().addTo(routermap);
+// var searchControl = L.esri.Geocoding.geosearch().addTo(routermap);
 
-var results = L.layerGroup().addTo(routermap);
+// var results = L.layerGroup().addTo(routermap);
 
-searchControl.on('results', function (data) {
-  results.clearLayers();
-  for (var i = data.results.length - 1; i >= 0; i--) {
-    results.addLayer(L.marker(data.results[i].latlng));
-  }
-});
+// searchControl.on('results', function (data) {
+//   results.clearLayers();
+//   for (var i = data.results.length - 1; i >= 0; i--) {
+//     results.addLayer(L.marker(data.results[i].latlng));
+//   }
+// });
 
   
 

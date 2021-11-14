@@ -2,9 +2,29 @@
 <head>
   <title>From Here to There</title>
 
+  
+  <!-- vue2 Leaflet -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"></link>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/vue2-leaflet@1.0.1/dist/vue2-leaflet.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css"></link>
+  <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js"></script>
+    
+  <!-- Routing -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <!-- <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script> -->
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+  <!-- Jquery and Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+  
+
   <!-- JS -->
-  <script src='scripts/page.js'></script>
-  <script src='scripts/jquery.min.js'></script>
+  <script defer src='scripts/page.js'></script>
 
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="style/index.css">
@@ -15,7 +35,7 @@
 <!-- HTML -->
 <body>
 
-  <div class="container align-items-center text-center">
+  <div id="app" class="container align-items-center text-center">
     <!-- title -->
     <div> 
       <h1>
@@ -40,12 +60,15 @@
             <br>
             Where to hide in stacks?
             <br>
+            {{ zoom }}
+            <br>
+            <!-- based on https://stackoverflow.com/questions/26324252/html-keep-placeholder-when-user-types -->
             <div class="placeholder" data-placeholder="_ _ _ _ _ _ _">
-              <input class="guess" type="text" onchange="console.log('hi')" />  
+              <input class="guess" v-model="guessText" v-on:input="updateGuess" />  
             </div>
           </h1>
 
-          <button type="button" class="btn btn-primary mt-4">
+          <button type="button" class="btn btn-primary mt-4" v-on:click='testFunc'>
             <h1>Hint</h1>
           </button>
           <br>
@@ -66,7 +89,7 @@
       </div>
     </div>
   </footer> <!-- footer -->
-  
+  <script src="scripts/page.js"></script>
 </body>
 
 </html>
