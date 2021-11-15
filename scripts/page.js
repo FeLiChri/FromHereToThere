@@ -16,13 +16,14 @@ map = new Vue({
   components: { LMap, LTileLayer, LMarker },
   data() {
     return {
-      zoom:14,
+      zoom: 14,
       center: L.latLng(42.2808, -83.7430),
       url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       markers: [L.latLng(42.2808, -83.7430), L.latLng(42.2808, -83.7433)],
       distance: 0,
       time: 0,
+      clues: [],
     };
   },
   mounted() {
@@ -38,6 +39,15 @@ map = new Vue({
         this.distance = distance.toFixed(2);
         this.time = time.toFixed(2);
     },
+    renderClues: function() {
+      for (var i=0; i < 3; i++) {
+        Vue.set(this.clues[i], 'clue', 'clue');
+        Vue.set(this.clues[i], 'answer', 'answer');
+        Vue.set(this.clues[i], 'hint', 'hint');
+        Vue.set(this.clues[i], 'task', 'task');
+        Vue.set(this.clues[i], 'points', 0);
+      }
+    }
   }
 });
 
