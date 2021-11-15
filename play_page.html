@@ -24,7 +24,7 @@
   
 
   <!-- JS -->
-  <script defer src='scripts/page.js'></script>
+  <!-- <script defer src='scripts/page.js'></script> -->
 
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="style/index.css">
@@ -43,7 +43,7 @@
         Welcome Home
         <br>
         Time Remaining: <input type="text" id="" name="" maxlength="3" size="5" placeholder="">
-        Points: <input type="text" id="" name="" maxlength="3" size="3" placeholder="">
+        Points: {{ numPoints }}
       </h1>
     </div> <!-- row -->
 
@@ -54,28 +54,47 @@
       </div> <!-- map -->
 
       <!-- clue -->
-      <div class="form col-6 align-items-center text-center">
+      <div v-if="!correct" class="form col-6 align-items-center text-center">
           <h1>
             Clue #1 (15pts)
             <br>
             Where to hide in stacks?
             <br>
-            {{ zoom }}
-            <br>
+            <p v-if="hintClicked">
+              It starts with "Hat"
+            </p>
             <!-- based on https://stackoverflow.com/questions/26324252/html-keep-placeholder-when-user-types -->
             <div class="placeholder" data-placeholder="_ _ _ _ _ _ _">
-              <input class="guess" v-model="guessText" v-on:input="updateGuess" />  
+              <input class="guess" maxlength="13" size="13" v-model="guessText" @keyup.enter="makeGuess" @input="updateGuess" />  
             </div>
+            <p v-if="tryAgain">
+              Try again!
+            </p>
           </h1>
 
-          <button type="button" class="btn btn-primary mt-4" v-on:click='testFunc'>
+          <button type="button" class="btn btn-primary mt-4" @click='showHint'>
             <h1>Hint</h1>
           </button>
           <br>
-          <button type="button" class="btn btn-primary mt-4">
+          <button type="button" class="btn btn-primary mt-4" @click="pressNuclear">
             <h1>Nuclear (-50pts)</h1>
           </button>
       </div> <!-- form -->
+      <div v-else class="form col-6 align-items-center text-center">
+        <h1>
+          Go to
+          <br>
+          H A T C H E R
+          <br>
+          and take a photo
+          <br>
+          in the stacks
+
+        </h1>
+        <button type="button" class="btn btn-primary mt-4">
+          <h1>Submit Evidence</h1>
+        </button>
+      </div>
     </div>
   </div> <!-- container -->
 

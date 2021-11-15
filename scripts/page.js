@@ -24,6 +24,11 @@ map = new Vue({
       distance: 0,
       time: 0,
       guessText: "",
+      tempGuess: "",
+      hintClicked: false,
+      tryAgain: false,
+      correct: false,
+      numPoints: 0,
     };
   },
   mounted() {
@@ -40,10 +45,33 @@ map = new Vue({
         this.time = time.toFixed(2);
     },
     updateGuess: function() {
-      console.log("hi");
+      if (this.guessText.length < this.tempGuess.length) {
+        // Backspace
+        this.guessText = this.guessText.substring(0, this.guessText.length - 1);
+      } else {
+        // Type something
+        this.guessText = this.guessText + " ";
+      }
+      this.guessText = this.guessText.toUpperCase();
+      this.tempGuess = this.guessText;
     },
-    testFunc: function() {
-      console.log('test');
+    showHint: function() {
+      this.hintClicked = true;
+    },
+    makeGuess: function() {
+      if (this.guessText == "H A T C H E R ") {
+        console.log("Correct!");
+        this.tryAgain = false;
+        this.correct = true;
+        this.numPoints += 25;
+      } else {
+        console.log("Wrong Guess!");
+        this.tryAgain = true;
+      }
+    },
+    pressNuclear: function() {
+      this.numPoints -= 50;
+      this.correct = true;
     }
   }
 });
