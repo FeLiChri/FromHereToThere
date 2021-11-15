@@ -23,7 +23,9 @@ map = new Vue({
       markers: [L.latLng(42.2808, -83.7430), L.latLng(42.2808, -83.7433)],
       distance: 0,
       time: 0,
-      clues: [],
+      clues: [{num:'1', clue:'clue', answer: 'answer', hint: 'hint', task: 'task', points: 0},
+              {num:'2', clue:'clue', answer: 'answer', hint: 'hint', task: 'task', points: 0},
+              {num:'3', clue:'clue', answer: 'answer', hint: 'hint', task: 'task', points: 0}],
     };
   },
   mounted() {
@@ -39,14 +41,29 @@ map = new Vue({
         this.distance = distance.toFixed(2);
         this.time = time.toFixed(2);
     },
-    renderClues: function() {
-      for (var i=0; i < 3; i++) {
-        Vue.set(this.clues[i], 'clue', 'clue');
-        Vue.set(this.clues[i], 'answer', 'answer');
-        Vue.set(this.clues[i], 'hint', 'hint');
-        Vue.set(this.clues[i], 'task', 'task');
-        Vue.set(this.clues[i], 'points', 0);
-      }
+    // renderClues: function() {
+    //   for (var i=0; i < 3; i++) {
+    //     Vue.set(this.clues[i], 'clue', 'clue');
+    //     Vue.set(this.clues[i], 'answer', 'answer');
+    //     Vue.set(this.clues[i], 'hint', 'hint');
+    //     Vue.set(this.clues[i], 'task', 'task');
+    //     Vue.set(this.clues[i], 'points', 0);
+    //   }
+    // }
+    addStop: function() {
+      var i = this.clues.length;
+      console.log(i);
+      this.clues.push({});
+      Vue.set(this.clues[i], 'num', i + 1);
+      Vue.set(this.clues[i], 'clue', 'clue');
+      Vue.set(this.clues[i], 'answer', 'answer');
+      Vue.set(this.clues[i], 'hint', 'hint');
+      Vue.set(this.clues[i], 'task', 'task');
+      Vue.set(this.clues[i], 'points', 0);
+    },
+    deleteStop: function(i) {
+      console.log("delete!");
+      // this.clues = [...this.clues.splice(i-1, 1)];
     }
   }
 });
