@@ -35,6 +35,7 @@ map = new Vue({
           distanceSoFar: 0,
           numPoints: 0,
           currStop: 0,
+          numMarkers: 0,
           guessText: "",
           tempGuess: "",
           hintClicked: false,
@@ -57,15 +58,6 @@ map = new Vue({
             answer: "Fishbowl",
             hint: "Nemo from Finding Nemo might swim in one.",
             task: "Print a poster and upload a photo of the print!",
-            points: 15,
-            latlong: L.latLng(42.2766, -83.7397),
-            expanded: true,
-          },
-          {
-            clue: "",
-            answer: "",
-            hint: "",
-            task: "",
             points: 15,
             latlong: L.latLng(42.2766, -83.7397),
             expanded: true,
@@ -109,15 +101,6 @@ map = new Vue({
             latlong: L.latLng(42.2766, -83.7397),
             expanded: true,
           },
-          {
-            clue: "",
-            answer: "",
-            hint: "",
-            task: "",
-            points: 15,
-            latlong: L.latLng(42.2766, -83.7397),
-            expanded: true,
-          },
         ],
       }, 
     {
@@ -153,15 +136,6 @@ map = new Vue({
             answer: "Fishbowl",
             hint: "Nemo from Finding Nemo might swim in one.",
             task: "Print a poster and upload a photo of the print!",
-            points: 15,
-            latlong: L.latLng(42.2766, -83.7397),
-            expanded: true,
-          },
-          {
-            clue: "",
-            answer: "",
-            hint: "",
-            task: "",
             points: 15,
             latlong: L.latLng(42.2766, -83.7397),
             expanded: true,
@@ -241,7 +215,41 @@ map = new Vue({
         console.log("Correct!");
         this.currHunt.inProgress.tryAgain = false;
         this.currHunt.inProgress.correct = true;
-        this.currHunt.inProgress.numPoints += 25;
+        this.currHunt.inProgress.numPoints += this.currHunt.stops[this.currHunt.inProgress.currStop].points;
+        this.currHunt.inProgress.numMarkers += 1;
+
+        markers = this.guessMarkers;
+
+        this.router = L.Routing.control({
+          // TODO: check waypoints appearing
+          waypoints: markers,   
+          routeWhileDragging: false,
+          // TODO: fix dragging problem
+          lineOptions: {
+            addWaypoints: false,
+          },
+          show: false,
+          units: 'imperial',
+          // summaryTemplate: '<h2>{name}</h2><h3>{distance}, {time}</h3>',
+        });
+
+        // TODO: figure out how to replace the router
+            
+        this.router.on('routesfound', function(e) {
+            console.log("ROUTES FOUND");
+            console.log(e.waypoints);
+            var routes = e.routes;
+            var summary = routes[0].summary;
+            // alert distance and time in miles and minutes
+            console.log(summary.totalDistance / 1760 + ' mi');
+            console.log(summary.totalTime % 3600 / 60 + ' min');
+            map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
+            map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
+            // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
+        });
+        
+        this.router.addTo(routermap);
+
       } else {
         console.log("Wrong Guess!");
         this.currHunt.inProgress.tryAgain = true;
@@ -250,6 +258,19 @@ map = new Vue({
     pressNuclear: function() {
       this.currHunt.inProgress.numPoints -= 50;
       this.currHunt.inProgress.correct = true;
+    },
+    nextClue: function() {
+      console.log("NEXT CLUE");
+      if (this.currHunt.inProgress.currStop == this.currHunt.stops.length - 1) {
+        alert("CONGRATULATIONS YOU'RE DONE!");
+      } else {
+        this.currHunt.inProgress.currStop += 1;
+        this.currHunt.inProgress.guessText = "";
+        this.currHunt.inProgress.tempGuess = "";
+        this.currHunt.inProgress.hintClicked = false;
+        this.currHunt.inProgress.tryAgain = false;
+        this.currHunt.inProgress.correct = false;
+      }
     },
     addStop: function() {
       this.currHunt.stops.push( {
@@ -273,14 +294,19 @@ map = new Vue({
     },
     guessMarkers: function() {
       console.log("GUESS MARKERS");
-      console.log(this.currHunt.inProgress.currStop);
-      console.log(this.makeMarkers);
-      console.log(!this.currHunt.inProgress.currStop);
-      if (!this.currHunt.inProgress.currStop) {
+      if (!this.currHunt.inProgress.numMarkers) {
         return []
       }
-      return this.makeMarkers.slice(0, this.currHunt.inProgress.currStop - 1);
+      return this.makeMarkers.slice(0, this.currHunt.inProgress.numMarkers);
     }, 
+    answerLength: function() {
+      return this.placeholder.length;
+    },
+    placeholder: function() {
+      hashes = '_'.repeat(this.currHunt.stops[this.currHunt.inProgress.currStop].answer.length).split('').join(' ');
+      console.log(hashes);
+      return hashes;
+    },
   }
 });
 
