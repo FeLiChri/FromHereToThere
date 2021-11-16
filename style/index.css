@@ -16,11 +16,35 @@
     color:blue;
     display: flex;
     flex-direction: column;
+    min-height: 500px;
 }
 
 .blue_border {
     border-radius: 3%;
     border: 10px solid rgba(50, 134, 243, 0.8);
+}
+
+.accordion-body {
+    background-color: rgba(50, 134, 243, 0.8);
+}
+
+.accordion-body {
+    background-color: rgba(50, 134, 243, 0.8);
+}
+
+#container{
+  width: 300px;
+  display: block;
+  margin: auto;
+}
+
+#list{
+  list-style: none;
+}
+
+#list li{
+  margin: 10px;
+  cursor: pointer;
 }
 
 .mapclass {

@@ -2,6 +2,8 @@
 <head>
   <title>From Here to There</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <!-- vue2 Leaflet -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"></link>
@@ -44,7 +46,7 @@
       <h1>
         <img alt="logo" src="src/favicon.png" class="photo img-fluid" />
         Title:
-        <input type="text" id="title" name="title" placeholder="Add a title here!">
+        <input type="text" id="title" name="title" v-model="currHunt.title" placeholder="Add a title here!">
       </h1>
     </div> <!-- row -->
 
@@ -55,7 +57,7 @@
             <div class="mapclass">
               <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymap" id="mymap">
                 <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
-                <l-marker v-for="marker in markers" :key="marker" :lat-lng="marker" @click="registerMarker"></l-marker>
+                <l-marker v-for="marker in currHunt.makeMarkers" :key="marker" :lat-lng="marker" @click="registerMarker"></l-marker>
               </l-map>
             </div>
             <h3> {{currHunt.expectedDistance}} mi, {{currHunt.expectedTime}} minutes</h3>
@@ -68,7 +70,34 @@
 
         <!-- form -->
         <div class="form col-6">
-            <h1>
+          <!-- hint accordion -->
+          <div class="accordion mt-4" id="accordionExample">
+          <div class="accordion-item" draggable="true" v-for="(c, i) in currHunt.stops">
+            <h2 class="accordion-header" v-bind:id="'header'+i">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" v-bind:data-bs-target="'#collapse'+i" aria-expanded="false" v-bind:aria-controls="'collapse'+i">
+                <p style="display: flex; justify-content: space-between; width: 100%"><span style="float:left"> Location #{{i}}</span> <span style="float:right; color:red" v-on:click="deleteStop(i)">delete</span></p>
+              </button>
+            </h2>
+            <div v-bind:id="'collapse'+i" class="accordion-collapse collapse" v-bind:aria-labelledby="'header'+i" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <h1>
+                  Clue: <input type="text" id="" name="" v-bind:value="c.clue" placeholder="Add your clue here!">
+                  <br>
+                  Answer: <input type="text" id="" name="" v-bind:value="c.answer" placeholder="Add your answer here!">
+                  <br>
+                  Hint (opt.): <input type="text" id="" name="" v-bind:value="c.hint" placeholder="Add your optional hint here!">
+                  <br>
+                  Task: <input type="text" id="" name="" v-bind:value="c.task" placeholder="Add your task here!">
+                  <br>
+                  Points: <input type="text" id="" name="" v-bind:value="c.points" placeholder="Add your points here!">
+                  <br>
+                </h1>
+              </div>
+            </div>
+          </div>
+        </div> <!-- accordion -->
+
+            <!-- <h1>
               Clue: <input type="text" id="" name="" placeholder="Add your clue here!">
               <br>
               Answer: <input type="text" id="" name="" placeholder="Add your answer here!">
@@ -79,8 +108,8 @@
               <br>
               Points: <input type="text" id="" name="" placeholder="Add your points here!">
               <br>
-            </h1>
-            <button type="button" class="btn btn-primary mt-4">
+            </h1> -->
+            <button type="button" class="btn btn-primary mt-4" @click="addStop">
               <h1>Add Stop</h1>
             </button>
         </div> <!-- form -->
@@ -88,7 +117,7 @@
 
     <!-- publish -->
     <div class="row"> 
-      <button type="button" class="btn btn-primary mt-4">
+      <button type="button" class="btn btn-primary mt-4" @click="publish">
         <h1>Publish</h1>
       </button>
     </div> <!-- row -->
@@ -106,5 +135,69 @@
   </footer> <!-- footer -->
   
 </body>
+<script>
+// var aItems = document.getElementsByClassName('accordion-item');
+// aItems.addEventListener('drag', setDragging);
+// aItems.addEventListener('dragover', setDraggedOver);
+// aItems.addEventListener('drop', compare);
 
+// var list = document.getElementById('list')
+// var base, randomized, dragging, draggedOver;
+// var isRight = 'Not In Order!';
+
+// const genRandom = (array) => {
+//   console.log("genRandom");
+//   base = array.slice()
+//   randomized = array.sort(() => Math.random() - 0.5)
+//   if (randomized.join("") !== base.join("")){
+//       renderItems(randomized)
+//   } else {
+//     //recursion to account if the randomization returns the original array
+//     genRandom()
+//   }
+// }
+
+// const renderItems = (data) =>{
+//   console.log("renderItems");
+//   document.getElementById('isRight').innerText = isRight
+//   list.innerText = ''
+//   data.forEach(item=>{
+//     var node = document.createElement("li");    
+//     node.draggable = true
+//     node.style.backgroundColor = item
+//     node.style.backgroundColor = node.style.backgroundColor.length > 0  
+//     ? item : 'lightblue'
+//     node.addEventListener('drag', setDragging) 
+//     node.addEventListener('dragover', setDraggedOver)
+//     node.addEventListener('drop', compare) 
+//     node.innerText = item
+//     list.appendChild(node)
+//   })
+// }
+
+// const compare = (e) =>{
+//   console.log("compare");
+//   var index1 = randomized.indexOf(dragging);
+//   var index2 = randomized.indexOf(draggedOver);
+//   randomized.splice(index1, 1);
+//   randomized.splice(index2, 0, dragging);
+
+//   renderItems(randomized);
+// };
+
+
+// const setDraggedOver = (e) => {
+//   console.log("setDraggedOver");
+//   e.preventDefault();
+//   draggedOver = Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText);
+// }
+
+// const setDragging = (e) =>{
+//   console.log("setDragging");
+//   dragging = Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText);
+// }
+
+// genRandom([0, 1, 2, 3, 4, 5, 6])
+// genRandom(['red', 'orange', 'yellow', 'greens', 'blue', 'indigo', 'violet'])
+</script>
 </html>
