@@ -52,7 +52,7 @@
 
     <div class="row"> 
         <!-- map -->
-        <div id="map-div" class="blue_border col-6">
+        <div id="map-div" class="blue_border col-sm-6">
             <h1>Map!</h1>
             <div class="mapclass">
               <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymap" id="mymap">
@@ -69,7 +69,7 @@
         </div> <!-- map -->
 
         <!-- form -->
-        <div class="form col-6">
+        <div class="form col-sm-6 mt-2 mt-sm-0">
           <!-- hint accordion -->
           <div class="accordion mt-4" id="accordionExample">
           <div class="accordion-item" draggable="true" v-for="(c, i) in currHunt.stops">

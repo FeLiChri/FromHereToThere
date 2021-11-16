@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>From Here to There</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- JS -->
   <script src='scripts/page.js'></script>
@@ -22,19 +23,25 @@
         <img alt="logo" src="src/favicon.png" class="photo img-fluid" />
         Welcome Home
         <br>
-        Time Remaining: <input type="text" id="" name="" maxlength="3" size="5" placeholder="">
-        Points: <input type="text" id="" name="" maxlength="3" size="3" placeholder="">
+        <div class="row justify-content-md-center">
+          <div class="col-sm-auto">
+          Time Remaining: <input type="text" id="" name="" maxlength="3" size="5" placeholder="">
+          </div>
+          <div class="col-sm-auto">
+          Points: <input type="text" id="" name="" maxlength="3" size="3" placeholder="">
+          </div>
+        </div>
       </h1>
     </div> <!-- row -->
 
     <div class="row">
       <!-- map -->
-      <div class="blue_border map col-6">
+      <div class="blue_border map col-sm-6">
         <h1>Map!</h1>
       </div> <!-- map -->
 
       <!-- clue -->
-      <div class="form col-6 align-items-center text-center">
+      <div class="form col-sm-6 mt-2 mt-sm-0 align-items-center text-center">
           <h1>
             Clue #1 (15pts)
             <br>
