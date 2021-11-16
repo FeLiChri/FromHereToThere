@@ -53,12 +53,12 @@
         <div id="map-div" class="blue_border col-6">
             <h1>Map!</h1>
             <div class="mapclass">
-              <l-map :zoom="zoom" :center="center" ref="mymap" id="mymap">
-                <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+              <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymap" id="mymap">
+                <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
                 <l-marker v-for="marker in markers" :key="marker" :lat-lng="marker" @click="registerMarker"></l-marker>
               </l-map>
             </div>
-            <h3> {{distance}} mi, {{time}} minutes</h3>
+            <h3> {{currHunt.expectedDistance}} mi, {{currHunt.expectedTime}} minutes</h3>
             <!-- <div id='routermap' style="height: 350px; width: 100%;"> -->
 
             <!-- </div> -->

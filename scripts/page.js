@@ -16,13 +16,47 @@ map = new Vue({
   components: { LMap, LTileLayer, LMarker },
   data() {
     return {
-      zoom:14,
-      center: L.latLng(42.2808, -83.7430),
-      url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      markers: [L.latLng(42.2808, -83.7430), L.latLng(42.2808, -83.7433)],
-      distance: 0,
-      time: 0,
+      mapConfig: {
+        zoom:14,
+        center: L.latLng(42.2808, -83.7430),
+        url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      },
+      // TODO: diff between current hunt being made vs. being played?
+      currHunt: {
+        inProgress: {
+          timeSoFar: 0,
+          distanceSoFar: 0,
+          pointsSoFar: 0,
+          currStop: 0,
+          guessText: "",
+          tempGuess: "",
+          hintClicked: false,
+          tryAgain: false,
+          correct: false,
+        },
+        expectedDistance: 0,
+        expectedTime: 0,
+        stops: [
+          {
+            clue: "Where the graduates study.",
+            answer: "Hatcher",
+            hint: "It starts with 'hat'",
+            task: "Take a photo in the stacks.",
+            points: 15,
+            latlong: L.latLng(42.2808, -83.7430),
+          },
+          {
+            clue: "Where to find computers in Angell Hall.",
+            answer: "Fishbowl",
+            hint: "Nemo from Finding Nemo might swim in one.",
+            task: "Print a poster and upload a photo of the print!",
+            points: 15,
+            latlong: L.latLng(42.2808, -83.7430),
+          },
+        ],
+      },
+      allHunts: [],      
     };
   },
   mounted() {
@@ -35,32 +69,24 @@ map = new Vue({
         console.log(e);
     },
     setTimeAndDistance: function(time, distance) {
-        this.distance = distance.toFixed(2);
-        this.time = time.toFixed(2);
+        this.currHunt.expectedDistance = distance.toFixed(2);
+        this.currHunt.expectedTime = time.toFixed(2);
     },
+  }, 
+  computed: {
+    makeMarkers: function() {
+      return this.currHunt.stops.filter(s => s.latlong);
+    },
+    guessMarkers: function() {
+      return this.makeMarkers.slice(0, this.currHunt.inProgress.currStop - 1);
+    }
   }
 });
 
-// var mymap = $('#mymap')
-
-// L.Routing.control({
-//     waypoints: [
-//         L.latLng(57.74, 11.94),
-//         L.latLng(57.6792, 11.949)
-//     ]
-// }).addTo(mymap);
-
-// var routermap = window.maps.leafletList[0].map;
-
-// L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//     attribution: '© OpenStreetMap contributors'
-// }).addTo(routermap);
 
 var router = L.Routing.control({
-    waypoints: [
-        L.latLng(42.2808, -83.7430), 
-        L.latLng(42.2808, -83.7460),
-    ],
+    // TODO: check waypoints appearing
+    waypoints: map.makeMarkers,   
     routeWhileDragging: false,
     addWaypoints: false,
     show: false,
@@ -81,53 +107,3 @@ router.on('routesfound', function(e) {
 
 router.addTo(routermap);
 
-
-// var searchControl = L.esri.Geocoding.geosearch().addTo(routermap);
-
-// var results = L.layerGroup().addTo(routermap);
-
-// searchControl.on('results', function (data) {
-//   results.clearLayers();
-//   for (var i = data.results.length - 1; i >= 0; i--) {
-//     results.addLayer(L.marker(data.results[i].latlng));
-//   }
-// });
-
-  
-
-// // var map = new Vue({
-// //     el: '#map-id',
-// // data: {
-// //     zoom: 13,
-// //     path: "/images/",
-// //     center: [47.41322, -1.219482],
-// //     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-// //     attribution:
-// //         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-// //     marker: latLng(47.41322, -1.219482),
-// // },
-// // });
-
-// import { latLng } from "leaflet";
-// import { LMap, LTileLayer, LMarker, LIconDefault } from "vue2-leaflet";
-
-// export default {
-//   name: "CustomPath",
-//   components: {
-//     LMap,
-//     LTileLayer,
-//     LMarker,
-//     LIconDefault
-//   },
-//   data() {
-//     return {
-//       zoom: 13,
-//       path: "/images/",
-//       center: [47.41322, -1.219482],
-//       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-//       attribution:
-//         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-//       marker: latLng(47.41322, -1.219482)
-//     };
-//   }
-// };
