@@ -76,7 +76,7 @@ map = new Vue({
         expectedDistance: 10000,
         expectedTime: 0.2,
         title: "Test 1", // TODO: add id
-        icon: "",
+        icon: "src/welcomeHomeIcon.png",
 
         inProgress: {
           timeSoFar: 0,
@@ -124,7 +124,7 @@ map = new Vue({
       expectedDistance: 20,
         expectedTime: 30,
         title: "Test 2", // TODO: add id
-        icon: "",
+        icon: "src/welcomeHomeIcon.png",
 
         inProgress: {
           timeSoFar: 0,
