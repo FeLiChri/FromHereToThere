@@ -27,7 +27,8 @@ map = new Vue({
       currHunt: {
         expectedDistance: 0,
         expectedTime: 0,
-        title: "",
+        title: "", // TODO: add id
+        icon: "",
 
         inProgress: {
           timeSoFar: 0,
@@ -71,7 +72,103 @@ map = new Vue({
           },
         ],
       },
-      allHunts: [],      
+      allHunts: [{
+        expectedDistance: 10000,
+        expectedTime: 0.2,
+        title: "Test 1", // TODO: add id
+        icon: "",
+
+        inProgress: {
+          timeSoFar: 0,
+          distanceSoFar: 0,
+          numPoints: 0,
+          currStop: 0,
+          guessText: "",
+          tempGuess: "",
+          hintClicked: false,
+          tryAgain: false,
+          correct: false,
+        },
+        // TODO: when they publish, remove spaces from ends of all answers
+        stops: [
+          {
+            clue: "Where the graduates study.",
+            answer: "Hatcher",
+            hint: "It starts with 'hat'",
+            task: "Take a photo in the stacks.",
+            points: 15,
+            latlong: L.latLng(42.2808, -83.7430),
+            expanded: true,
+          },
+          {
+            clue: "Where to find computers in Angell Hall.",
+            answer: "Fishbowl",
+            hint: "Nemo from Finding Nemo might swim in one.",
+            task: "Print a poster and upload a photo of the print!",
+            points: 15,
+            latlong: L.latLng(42.2766, -83.7397),
+            expanded: true,
+          },
+          {
+            clue: "",
+            answer: "",
+            hint: "",
+            task: "",
+            points: 15,
+            latlong: L.latLng(42.2766, -83.7397),
+            expanded: true,
+          },
+        ],
+      }, 
+    {
+      expectedDistance: 20,
+        expectedTime: 30,
+        title: "Test 2", // TODO: add id
+        icon: "",
+
+        inProgress: {
+          timeSoFar: 0,
+          distanceSoFar: 0,
+          numPoints: 0,
+          currStop: 0,
+          guessText: "",
+          tempGuess: "",
+          hintClicked: false,
+          tryAgain: false,
+          correct: false,
+        },
+        // TODO: when they publish, remove spaces from ends of all answers
+        stops: [
+          {
+            clue: "Where the graduates study.",
+            answer: "Hatcher",
+            hint: "It starts with 'hat'",
+            task: "Take a photo in the stacks.",
+            points: 15,
+            latlong: L.latLng(42.2808, -83.7430),
+            expanded: true,
+          },
+          {
+            clue: "Where to find computers in Angell Hall.",
+            answer: "Fishbowl",
+            hint: "Nemo from Finding Nemo might swim in one.",
+            task: "Print a poster and upload a photo of the print!",
+            points: 15,
+            latlong: L.latLng(42.2766, -83.7397),
+            expanded: true,
+          },
+          {
+            clue: "",
+            answer: "",
+            hint: "",
+            task: "",
+            points: 15,
+            latlong: L.latLng(42.2766, -83.7397),
+            expanded: true,
+          },
+        ],
+    }
+    ],      
     };
   },
   mounted() {

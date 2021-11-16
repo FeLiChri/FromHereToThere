@@ -3,9 +3,23 @@
   <title>From Here to There</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- vue2 Leaflet -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"></link>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/vue2-leaflet@1.0.1/dist/vue2-leaflet.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css"></link>
+  <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js"></script>
+    
+  <!-- Routing -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <!-- <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script> -->
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
 
   <!-- JS -->
-  <script src='scripts/page.js'></script>
+  <!-- <script src='scripts/page.js'></script> -->
   <script src='scripts/jquery.min.js'></script>
 
   <!-- CSS -->
@@ -17,26 +31,28 @@
 <!-- HTML -->
 <body>
 
-  <div class="container align-items-center text-center">
+  <div id="app" class="container align-items-center text-center">
     <!-- title -->
     <div class="blue_border row"> 
-      <h1>Title!</h1>
+      <h1>Pick a scavenger hunt!</h1>
     </div> <!-- title -->
 
-    <!-- clue -->
-    <div class="blue_border row mt-4"> 
-      <h1>Clue!</h1>
-    </div> <!-- clue -->
-
-    <!-- hint and guess -->
-    <div class="row mt-4"> 
-      <div class="blue_border col-6">
-        <h1>Ask for a Hint!</h1>
+    <div v-for="h in allHunts"> 
+      <div key="h.title" class="row mt-4">
+        <div class="blue_border col-2">
+          <img :src="h.icon"/>
+        </div>
+        <div class="blue_border col-6">
+          <h1>{{h.title}}</h1>
+        </div>
+        <div class="blue_border col-2">
+          <h1>{{h.expectedTime}} mins</h1>
+        </div>
+        <div class="blue_border col-2">
+          <h1>{{h.expectedDistance}} mi</h1>
+        </div>
       </div>
-      <div class="blue_border col-6">
-        <h1>Guess the location!</h1>
-      </div>
-    </div> <!-- hint and guess -->
+    </div>
 
   </div> <!-- container -->
 
@@ -50,7 +66,8 @@
       </div>
     </div>
   </footer> <!-- footer -->
-  
+  <script src="scripts/page.js"></script>
+
 </body>
 
 </html>
