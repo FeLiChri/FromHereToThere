@@ -3,9 +3,29 @@
   <title>From Here to There</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  
+  <!-- vue2 Leaflet -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"></link>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/vue2-leaflet@1.0.1/dist/vue2-leaflet.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css"></link>
+  <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js"></script>
+    
+  <!-- Routing -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <!-- <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script> -->
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+  <!-- Jquery and Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+  
+
   <!-- JS -->
-  <script src='scripts/page.js'></script>
-  <script src='scripts/jquery.min.js'></script>
+  <!-- <script defer src='scripts/page.js'></script> -->
 
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="style/index.css">
@@ -16,7 +36,7 @@
 <!-- HTML -->
 <body>
 
-  <div class="container align-items-center text-center">
+  <div id="app" class="container align-items-center text-center">
     <!-- title -->
     <div> 
       <h1>
@@ -28,7 +48,7 @@
           Time Remaining: <input type="text" id="" name="" maxlength="3" size="5" placeholder="">
           </div>
           <div class="col-sm-auto">
-          Points: <input type="text" id="" name="" maxlength="3" size="3" placeholder="">
+          Points: {{currHunt.inProgress.numPoints}}
           </div>
         </div>
       </h1>
@@ -36,28 +56,63 @@
 
     <div class="row">
       <!-- map -->
-      <div class="blue_border map col-sm-6">
+      <div id="map-div" class="blue_border col-sm-6">
         <h1>Map!</h1>
-      </div> <!-- map -->
+        <div class="mapclass">
+          <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymap" id="mymap">
+            <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
+            <l-marker v-for="marker in guessMarkers" :key="marker" :lat-lng="marker" @click="registerMarker"></l-marker>
+          </l-map>
+        </div>
+        <h3> {{currHunt.expectedDistance}} mi, {{currHunt.expectedTime}} minutes</h3>
+        <!-- <div id='routermap' style="height: 350px; width: 100%;"> -->
+
+        <!-- </div> -->
+        <br>
+    </div> <!-- map -->
 
       <!-- clue -->
-      <div class="form col-sm-6 mt-2 mt-sm-0 align-items-center text-center">
+      <div v-if="!currHunt.inProgress.correct" class="form col-sm-6 mt-2 mt-sm-0 align-items-center text-center">
           <h1>
             Clue #1 (15pts)
             <br>
             Where to hide in stacks?
             <br>
-            <input type="text" id="" name="" placeholder="_ _ _ _ _ _ _">
+            <p v-if="currHunt.inProgress.hintClicked">
+              It starts with "Hat"
+            </p>
+            <!-- based on https://stackoverflow.com/questions/26324252/html-keep-placeholder-when-user-types -->
+            <div class="placeholder" data-placeholder="_ _ _ _ _ _ _">
+              <input class="guess" maxlength="13" size="13" v-model="currHunt.inProgress.guessText" @keyup.enter="makeGuess" @input="updateGuess" />  
+            </div>
+            <p v-if="currHunt.inProgress.tryAgain">
+              Try again!
+            </p>
           </h1>
 
-          <button type="button" class="btn btn-primary mt-4">
+          <button type="button" class="btn btn-primary mt-4" @click='showHint'>
             <h1>Hint</h1>
           </button>
           <br>
-          <button type="button" class="btn btn-primary mt-4">
+          <button type="button" class="btn btn-primary mt-4" @click="pressNuclear">
             <h1>Nuclear (-50pts)</h1>
           </button>
       </div> <!-- form -->
+      <div v-else class="form col-sm-6 mt-2 mt-sm-0 align-items-center text-center">
+        <h1>
+          Go to
+          <br>
+          {{convertAnswerToCaps(currHunt.stops[this.currHunt.inProgress.currStop].answer)}}
+          <br>
+          and take a photo
+          <br>
+          in the stacks
+
+        </h1>
+        <button type="button" class="btn btn-primary mt-4">
+          <h1>Submit Evidence</h1>
+        </button>
+      </div>
     </div>
   </div> <!-- container -->
 
@@ -71,7 +126,7 @@
       </div>
     </div>
   </footer> <!-- footer -->
-  
+  <script src="scripts/page.js"></script>
 </body>
 
 </html>

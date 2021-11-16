@@ -22,6 +22,7 @@ map = new Vue({
         url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       },
+      inPlayMode: true, // TODO: set to false if in edit mode
       // TODO: diff between current hunt being made vs. being played?
       currHunt: {
         expectedDistance: 0,
@@ -31,7 +32,7 @@ map = new Vue({
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
-          pointsSoFar: 0,
+          numPoints: 0,
           currStop: 0,
           guessText: "",
           tempGuess: "",
@@ -39,6 +40,7 @@ map = new Vue({
           tryAgain: false,
           correct: false,
         },
+        // TODO: when they publish, remove spaces from ends of all answers
         stops: [
           {
             clue: "Where the graduates study.",
@@ -78,9 +80,12 @@ map = new Vue({
     // map.addControl(new L.Control.Fullscreen());
 
     console.log(this.makeMarkers);
+
+    markers = this.inPlayMode ? this.guessMarkers : this.makeMarkers;
+
     this.router = L.Routing.control({
       // TODO: check waypoints appearing
-      waypoints: this.makeMarkers,   
+      waypoints: markers,   
       routeWhileDragging: false,
       // TODO: fix dragging problem
       lineOptions: {
@@ -115,6 +120,40 @@ map = new Vue({
         this.currHunt.expectedDistance = distance.toFixed(2);
         this.currHunt.expectedTime = time.toFixed(2);
     },
+    updateGuess: function() {
+      if (this.currHunt.inProgress.guessText.length < this.currHunt.inProgress.tempGuess.length) {
+        // Backspace
+        this.currHunt.inProgress.guessText = this.currHunt.inProgress.guessText.substring(0, this.currHunt.inProgress.guessText.length - 1);
+      } else {
+        // Type something
+        this.currHunt.inProgress.guessText = this.currHunt.inProgress.guessText + " ";
+      }
+      this.currHunt.inProgress.guessText = this.currHunt.inProgress.guessText.toUpperCase();
+      this.currHunt.inProgress.tempGuess = this.currHunt.inProgress.guessText;
+    },
+    showHint: function() {
+      this.currHunt.inProgress.hintClicked = true;
+    },
+    convertAnswerToCaps: function(answer) {
+      console.log(answer);
+      console.log(answer.toUpperCase().split('').join(' '));
+      return answer.toUpperCase().split('').join(' ') + ' ';
+    },
+    makeGuess: function() {
+      if (this.currHunt.inProgress.guessText == this.convertAnswerToCaps(this.currHunt.stops[this.currHunt.inProgress.currStop].answer)) {
+        console.log("Correct!");
+        this.currHunt.inProgress.tryAgain = false;
+        this.currHunt.inProgress.correct = true;
+        this.currHunt.inProgress.numPoints += 25;
+      } else {
+        console.log("Wrong Guess!");
+        this.currHunt.inProgress.tryAgain = true;
+      }
+    },
+    pressNuclear: function() {
+      this.currHunt.inProgress.numPoints -= 50;
+      this.currHunt.inProgress.correct = true;
+    },
     addStop: function() {
       this.currHunt.stops.push( {
         clue: "",
@@ -136,6 +175,13 @@ map = new Vue({
       return this.currHunt.stops.map(s => s.latlong);
     },
     guessMarkers: function() {
+      console.log("GUESS MARKERS");
+      console.log(this.currHunt.inProgress.currStop);
+      console.log(this.makeMarkers);
+      console.log(!this.currHunt.inProgress.currStop);
+      if (!this.currHunt.inProgress.currStop) {
+        return []
+      }
       return this.makeMarkers.slice(0, this.currHunt.inProgress.currStop - 1);
     }, 
   }
