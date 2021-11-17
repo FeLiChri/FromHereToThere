@@ -26,9 +26,10 @@ map = new Vue({
       // TODO: diff between current hunt being made vs. being played?
       currHunt: {
         expectedDistance: 0,
-        expectedTime: 0,
+        expectedTime: 30,
         title: "", // TODO: add id
         icon: "",
+        id: 0,
 
         inProgress: {
           timeSoFar: 0,
@@ -67,9 +68,9 @@ map = new Vue({
       allHunts: [{
         expectedDistance: 10000,
         expectedTime: 0.2,
-        title: "Test 1", // TODO: add id
+        title: "Test 1",
         icon: "src/welcomeHomeIcon.png",
-
+        id:0,
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
@@ -108,7 +109,7 @@ map = new Vue({
         expectedTime: 30,
         title: "Test 2", // TODO: add id
         icon: "src/welcomeHomeIcon.png",
-
+        id:1,
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
@@ -183,6 +184,21 @@ map = new Vue({
     this.router.addTo(routermap);
   },
   methods: {
+    loadHunt: function(event){
+      location.href = "play_page.html";
+      // this.currHunt = this.allHunts[event.id]
+      console.log("loadHunt");
+      // Start countdown of time remaining
+
+
+      // update time so far
+      setInterval(function(){
+        this.currHunt.inProgress.timeSoFar += 1;
+        console.log("updated time");
+          }
+
+      , 10000);
+    },
     registerMarker: function(e) {
         console.log(e);
     },
@@ -285,6 +301,7 @@ map = new Vue({
     },
     publish: function() {
       // TODO: error checking!
+      // TODO: increment id when adding this
     }
   }, 
   computed: {

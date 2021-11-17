@@ -38,14 +38,14 @@
 
   <div id="app" class="container align-items-center text-center">
     <!-- title -->
-    <div> 
+    <div>
       <h1>
         <img alt="logo" src="src/favicon.png" class="photo img-fluid" />
         Welcome Home
         <br>
         <div class="row justify-content-md-center">
           <div class="col-sm-auto">
-          Time Remaining: <input type="text" id="" name="" maxlength="3" size="5" placeholder="">
+          Time Remaining: {{currHunt.expectedTime - currHunt.inProgress.timeSoFar}}
           </div>
           <div class="col-sm-auto">
           Points: {{currHunt.inProgress.numPoints}}
@@ -86,13 +86,19 @@
               <input class="guess" :maxlength="answerLength" :size="answerLength" v-model="currHunt.inProgress.guessText" @keyup.enter="makeGuess" @input="updateGuess" />  
             </div>
             <p v-if="currHunt.inProgress.tryAgain">
+              <img src="src/tryagain.png">
+              <br>
               Try again!
             </p>
           </h1>
 
-          <button type="button" class="btn btn-primary mt-4" @click='showHint'>
+          <button v-if="!currHunt.inProgress.hintClicked" type="button" class="btn btn-primary mt-4" @click='showHint'>
             <h1>Hint</h1>
           </button>
+          <button v-else type="button" class="btn btn-primary mt-4" disabled>
+            <h1>Hint</h1>
+          </button>
+
           <br>
           <button type="button" class="btn btn-primary mt-4" @click="pressNuclear">
             <h1>Nuclear (-50pts)</h1>
@@ -109,8 +115,11 @@
           <br>
 
         </h1>
-        <button type="button" class="btn btn-primary mt-4" @click="nextClue">
-          <h1>Submit Evidence</h1>
+        <h1>Submit Evidence:</h1>
+        <button type="button" class="btn btn-primary mt-4">
+          <input type="file" id="evidence" accept="image/png, image/jpeg">
+          <br>
+          <input type="submit" @click="nextClue">
         </button>
       </div>
     </div>

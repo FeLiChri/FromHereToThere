@@ -38,7 +38,7 @@
     </div> <!-- title -->
 
     <div v-for="h in allHunts"> 
-      <div key="h.title" class="row mt-4">
+      <div key="h.title" class="row mt-4" v-on:click="loadHunt" id="h.id">
         <div class="blue_border col-2">
           <img :src="h.icon" class="img-fluid"/>
         </div>
