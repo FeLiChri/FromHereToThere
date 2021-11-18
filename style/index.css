@@ -50,3 +50,26 @@
 .mapclass {
     flex-grow: 1;
 }
+
+.placeholder {
+    position: relative;
+    font-family: monospace;
+}
+
+.placeholder::after {
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    content: attr(data-placeholder);
+    pointer-events: none;
+    opacity: 1;
+    color: black;
+}
+
+#timelimit {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+}
