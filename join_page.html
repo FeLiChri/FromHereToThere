@@ -37,23 +37,24 @@
       <h1>Pick a scavenger hunt!</h1>
     </div> <!-- title -->
 
-    <div v-for="h in allHunts"> 
-      <div key="h.title" class="row mt-4" v-on:click="loadHunt" id="h.id">
-        <div class="blue_border col-2">
-          <img :src="h.icon" class="img-fluid"/>
-        </div>
-        <div class="blue_border col-6">
-          <h1>{{h.title}}</h1>
-        </div>
-        <div class="blue_border col-2">
-          <h1>{{h.expectedTime}} mins</h1>
-        </div>
-        <div class="blue_border col-2">
-          <h1>{{h.expectedDistance}} mi</h1>
-        </div>
-      </div>
-    </div>
-
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Hunt Name</th>
+          <th scope="col">Est. Time</th>
+          <th scope="col">Est. Dist</th>
+        </tr>
+      </thead>
+      <tbody v-for="h in allHunts">
+        <tr key="h.title" v-on:click="loadHunt(h.id)" id="h.id">
+          <th scope="row"><img :src="h.icon" class="icon"/></th>
+          <td><h1>{{h.title}}</h1></td>
+          <td><h1>{{h.expectedTime}} mins</h1></td>
+          <td><h1>{{h.expectedDistance}} mi</h1></td>
+        </tr>
+      </tbody>
+    </table>
   </div> <!-- container -->
 
   <!-- footer -->

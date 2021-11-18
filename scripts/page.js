@@ -66,9 +66,9 @@ map = new Vue({
         ],
       },
       allHunts: [{
-        expectedDistance: 10000,
-        expectedTime: 0.2,
-        title: "Test 1",
+        expectedDistance: 1.6,
+        expectedTime: 60,
+        title: "Welcome Home",
         icon: "src/welcomeHomeIcon.png",
         id:0,
         inProgress: {
@@ -105,48 +105,94 @@ map = new Vue({
         ],
       }, 
     {
-      expectedDistance: 20,
-        expectedTime: 30,
-        title: "Test 2", // TODO: add id
-        icon: "src/welcomeHomeIcon.png",
-        id:1,
-        inProgress: {
-          timeSoFar: 0,
-          distanceSoFar: 0,
-          numPoints: 0,
-          currStop: 0,
-          guessText: "",
-          tempGuess: "",
-          hintClicked: false,
-          tryAgain: false,
-          correct: false,
+      expectedDistance: 2,
+      expectedTime: 120,
+      title: "Arbor Adventure", // TODO: add id
+      icon: "src/arborAdventureIcon.png",
+      id:1,
+      inProgress: {
+        timeSoFar: 0,
+        distanceSoFar: 0,
+        numPoints: 0,
+        currStop: 0,
+        guessText: "",
+        tempGuess: "",
+        hintClicked: false,
+        tryAgain: false,
+        correct: false,
+      },
+      // TODO: when they publish, remove spaces from ends of all answers
+      stops: [
+        {
+          clue: "The arb has a special bed of this kind of flower",
+          answer: "Peony",
+          hint: "It starts with 'p'",
+          task: "Take a photo smelling the flowers.",
+          points: 15,
+          latlong: L.latLng(42.2808, -83.7430),
+          expanded: true,
         },
-        // TODO: when they publish, remove spaces from ends of all answers
-        stops: [
-          {
-            clue: "Where the graduates study.",
-            answer: "Hatcher",
-            hint: "It starts with 'hat'",
-            task: "Take a photo in the stacks.",
-            points: 15,
-            latlong: L.latLng(42.2808, -83.7430),
-            expanded: true,
-          },
-          {
-            clue: "Where to find computers in Angell Hall.",
-            answer: "Fishbowl",
-            hint: "Nemo from Finding Nemo might swim in one.",
-            task: "Print a poster and upload a photo of the print!",
-            points: 15,
-            latlong: L.latLng(42.2766, -83.7397),
-            expanded: true,
-          },
-        ],
-    }
-    ],      
+        {
+          clue: "You can see this playwright performed in the Arb",
+          answer: "Shakespeare",
+          hint: "The bard himself",
+          task: "Take a photo on stage, giving your best 'to be or not to be'",
+          points: 15,
+          latlong: L.latLng(42.2808, -83.7430),
+          expanded: true,
+        },
+      ],
+    },
+    {
+      expectedDistance: 2,
+      expectedTime: 120,
+      title: "Book Bonanza",
+      icon: "src/bookBonanzaIcon.png",
+      id:2,
+      inProgress: {
+        timeSoFar: 0,
+        distanceSoFar: 0,
+        numPoints: 0,
+        currStop: 0,
+        guessText: "",
+        tempGuess: "",
+        hintClicked: false,
+        tryAgain: false,
+        correct: false,
+      },
+      // TODO: when they publish, remove spaces from ends of all answers
+      stops: [
+        {
+          clue: "Famous for it's typewriter theme",
+          answer: "Literati",
+          hint: "It starts with 'lit'",
+          task: "Take a photo of your typewritten message.",
+          points: 15,
+          latlong: L.latLng(42.2808, -83.7476),
+          expanded: true,
+        },
+        {
+          clue: "Pick up a new comic or your next favorite game here",
+          answer: "Vault of Midnight",
+          hint: "Three words (_ of _)",
+          task: "Take a photo with a cool character",
+          points: 15,
+          latlong: L.latLng(42.2801, -83.7484),
+          expanded: true,
+        },
+      ],
+    },],      
     };
   },
   mounted() {
+    console.log("currHunt: ");
+    console.log(this.currHunt);
+    qs = this.parseQueryString();
+    console.log(qs.huntId);
+    this.currHunt = this.allHunts[qs.huntId];
+    console.log("currHunt: ");
+    console.log(this.currHunt);
+
   	const this_map = this.$refs.mymap.mapObject;
     routermap = this_map;
     // map.addControl(new L.Control.Fullscreen());
@@ -184,20 +230,20 @@ map = new Vue({
     this.router.addTo(routermap);
   },
   methods: {
-    loadHunt: function(event){
-      location.href = "play_page.html";
-      // this.currHunt = this.allHunts[event.id]
+    loadHunt: function(id){
+      console.log("loadHunt");
+      location.href = "play_page.html?huntId="+id;
       console.log("loadHunt");
       // Start countdown of time remaining
 
 
       // update time so far
-      setInterval(function(){
-        this.currHunt.inProgress.timeSoFar += 1;
-        console.log("updated time");
-          }
+      // setInterval(function(){
+      //   this.currHunt.inProgress.timeSoFar += 1;
+      //   console.log("updated time");
+      //     }
 
-      , 10000);
+      // , 10000);
     },
     registerMarker: function(e) {
         console.log(e);
@@ -302,7 +348,29 @@ map = new Vue({
     publish: function() {
       // TODO: error checking!
       // TODO: increment id when adding this
-    }
+    },
+    parseQueryString: function() {
+      // This function is anonymous, is executed immediately and 
+      // the return value is assigned to QueryString!
+      var query_string = {};
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+            // If first entry with this name
+        if (typeof query_string[pair[0]] === "undefined") {
+          query_string[pair[0]] = decodeURIComponent(pair[1]);
+            // If second entry with this name
+        } else if (typeof query_string[pair[0]] === "string") {
+          var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+          query_string[pair[0]] = arr;
+            // If third or later entry with this name
+        } else {
+          query_string[pair[0]].push(decodeURIComponent(pair[1]));
+        }
+      } 
+      return query_string;
+    },
   }, 
   computed: {
     makeMarkers: function() {
@@ -329,8 +397,6 @@ map = new Vue({
 
 console.log("I think Vue just rendered?");
 console.log(map.makeMarkers);
-
-
 
 /*
 stops: [

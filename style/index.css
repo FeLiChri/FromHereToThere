@@ -65,3 +65,8 @@
     opacity: 1;
     color: black;
 }
+
+.icon {
+    width: 100px; 
+    height: auto;
+}
