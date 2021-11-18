@@ -40,7 +40,7 @@ map = new Vue({
         attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         search_text: '',
       },
-      inPlayMode: false, // TODO: set to false if in edit mode
+      inPlayMode: true, // TODO: set to false if in edit mode
       expandLastAcc: false,
       publishLabel: "Publish",
       // TODO: diff between current hunt being made vs. being played?
@@ -99,7 +99,8 @@ map = new Vue({
           timeSoFar: 0,
           distanceSoFar: 0,
           numPoints: 0,
-          currStop: 0,
+          numMarkers: 0,
+          currStopId: 0,
           guessText: "",
           tempGuess: "",
           hintClicked: false,
@@ -140,7 +141,8 @@ map = new Vue({
         timeSoFar: 0,
         distanceSoFar: 0,
         numPoints: 0,
-        currStop: 0,
+        numMarkers: 0,
+        currStopId: 0,
         guessText: "",
         tempGuess: "",
         hintClicked: false,
@@ -179,7 +181,8 @@ map = new Vue({
         timeSoFar: 0,
         distanceSoFar: 0,
         numPoints: 0,
-        currStop: 0,
+        currStopId: 0,
+        numMarkers: 0,
         guessText: "",
         tempGuess: "",
         hintClicked: false,
@@ -194,7 +197,7 @@ map = new Vue({
           hint: "It starts with 'lit'",
           task: "Take a photo of your typewritten message.",
           points: 15,
-          latlong: L.latLng(42.2808, -83.7476),
+          latlong: L.latLng(42.280291,-83.7474556),
           expanded: true,
         },
         {
@@ -330,6 +333,7 @@ map = new Vue({
         this.currHunt.inProgress.numMarkers += 1;
 
         markers = this.guessMarkers;
+        console.log(this.guessMarkers);
 
         routermap.removeControl(this.router);
         this.router = L.Routing.control({
@@ -486,7 +490,8 @@ map = new Vue({
         } else {
           query_string[pair[0]].push(decodeURIComponent(pair[1]));
         }
-      } 
+      }
+      console.log(query_string);
       return query_string;
     },    
     searchLocation: function(e) {

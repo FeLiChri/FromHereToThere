@@ -74,12 +74,12 @@
       <!-- clue -->
       <div v-if="!currHunt.inProgress.correct" class="form col-sm-6 mt-2 mt-sm-0 align-items-center text-center">
           <h1>
-            Clue #{{currHunt.inProgress.currStop + 1}} ({{currHunt.stops[this.currHunt.inProgress.currStop].points}} pts)
+            Clue #{{currHunt.inProgress.currStopId + 1}} ({{currStop.points}} pts)
             <br>
-            {{currHunt.stops[this.currHunt.inProgress.currStop].clue}}
+            {{currStop.clue}}
             <br>
             <p v-if="currHunt.inProgress.hintClicked">
-              {{currHunt.stops[this.currHunt.inProgress.currStop].hint}}
+              {{currStop.hint}}
             </p>
             <!-- based on https://stackoverflow.com/questions/26324252/html-keep-placeholder-when-user-types -->
             <div class="placeholder" :data-placeholder="placeholder">
@@ -108,10 +108,10 @@
         <h1>
           Go to
           <br>
-          {{convertAnswerToCaps(currHunt.stops[this.currHunt.inProgress.currStop].answer)}}
+          {{convertAnswerToCaps(currStop.answer)}}
           <br>
           and 
-          {{currHunt.stops[this.currHunt.inProgress.currStop].task}}
+          {{currStop.task}}
           <br>
 
         </h1>
