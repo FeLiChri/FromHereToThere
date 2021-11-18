@@ -42,11 +42,14 @@ map = new Vue({
       },
       inPlayMode: false, // TODO: set to false if in edit mode
       expandLastAcc: false,
+      publishLabel: "Publish",
       // TODO: diff between current hunt being made vs. being played?
       currHunt: {
         expectedDistance: 0,
-        expectedTime: 0,
-        title: "",
+        expectedTime: 30,
+        title: "", // TODO: add id
+        icon: "",
+        id: 0,
 
         inProgress: {
           timeSoFar: 0,
@@ -60,6 +63,7 @@ map = new Vue({
           tryAgain: false,
           correct: false,
         },
+        // TODO: when they publish, remove spaces from ends of all answers
         stops: [
           {
             clue: "Where the graduates study.",
@@ -86,16 +90,16 @@ map = new Vue({
         ],
       },
       allHunts: [{
-        expectedDistance: 10000,
-        expectedTime: 0.2,
-        title: "Test 1",
+        expectedDistance: 1.6,
+        expectedTime: 60,
+        title: "Welcome Home",
         icon: "src/welcomeHomeIcon.png",
         id:0,
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
           numPoints: 0,
-          currStopId: 0,
+          currStop: 0,
           guessText: "",
           tempGuess: "",
           hintClicked: false,
@@ -119,58 +123,104 @@ map = new Vue({
             hint: "Nemo from Finding Nemo might swim in one.",
             task: "Print a poster and upload a photo of the print!",
             points: 15,
+            location: "",
+            possibleLocations: [],
             latlong: L.latLng(42.2766, -83.7397),
             expanded: true,
           },
         ],
       }, 
     {
-      expectedDistance: 20,
-        expectedTime: 30,
-        title: "Test 2", // TODO: add id
-        icon: "src/welcomeHomeIcon.png",
-        id:1,
-        inProgress: {
-          timeSoFar: 0,
-          distanceSoFar: 0,
-          numPoints: 0,
-          currStopId: 0,
-          guessText: "",
-          tempGuess: "",
-          hintClicked: false,
-          tryAgain: false,
-          correct: false,
-        },
-        // TODO: when they publish, remove spaces from ends of all answers
-        stops: [
-          {
-            clue: "Where the graduates study.",
-            answer: "Hatcher",
-            hint: "It starts with 'hat'",
-            task: "Take a photo in the stacks.",
-            points: 15,
-            location: "",
-            possibleLocations: [],
-            latlong: L.latLng(42.2808, -83.7430),
-            expanded: true,
-          },
-          {
-            clue: "",
-            answer: "",
-            hint: "",
-            task: "",
-            points: 15,
-            location: "",
-            possibleLocations: [],
-            latlong: L.latLng(42.2766, -83.7397),
-            expanded: true,
-          },
-        ],
+      expectedDistance: 2,
+      expectedTime: 120,
+      title: "Arbor Adventure", // TODO: add id
+      icon: "src/arborAdventureIcon.png",
+      id:1,
+      inProgress: {
+        timeSoFar: 0,
+        distanceSoFar: 0,
+        numPoints: 0,
+        currStop: 0,
+        guessText: "",
+        tempGuess: "",
+        hintClicked: false,
+        tryAgain: false,
+        correct: false,
       },
-      allHunts: [],      
+      // TODO: when they publish, remove spaces from ends of all answers
+      stops: [
+        {
+          clue: "The arb has a special bed of this kind of flower",
+          answer: "Peony",
+          hint: "It starts with 'p'",
+          task: "Take a photo smelling the flowers.",
+          points: 15,
+          latlong: L.latLng(42.2808, -83.7430),
+          expanded: true,
+        },
+        {
+          clue: "You can see this playwright performed in the Arb",
+          answer: "Shakespeare",
+          hint: "The bard himself",
+          task: "Take a photo on stage, giving your best 'to be or not to be'",
+          points: 15,
+          latlong: L.latLng(42.2808, -83.7430),
+          expanded: true,
+        },
+      ],
+    },
+    {
+      expectedDistance: 2,
+      expectedTime: 120,
+      title: "Book Bonanza",
+      icon: "src/bookBonanzaIcon.png",
+      id:2,
+      inProgress: {
+        timeSoFar: 0,
+        distanceSoFar: 0,
+        numPoints: 0,
+        currStop: 0,
+        guessText: "",
+        tempGuess: "",
+        hintClicked: false,
+        tryAgain: false,
+        correct: false,
+      },
+      // TODO: when they publish, remove spaces from ends of all answers
+      stops: [
+        {
+          clue: "Famous for it's typewriter theme",
+          answer: "Literati",
+          hint: "It starts with 'lit'",
+          task: "Take a photo of your typewritten message.",
+          points: 15,
+          latlong: L.latLng(42.2808, -83.7476),
+          expanded: true,
+        },
+        {
+          clue: "Pick up a new comic or your next favorite game here",
+          answer: "Vault of Midnight",
+          hint: "Three words (_ of _)",
+          task: "Take a photo with a cool character",
+          points: 15,
+          latlong: L.latLng(42.2801, -83.7484),
+          expanded: true,
+        },
+      ],
+    },],      
     };
   },
   mounted() {
+    if (this.inPlayMode) {
+      console.log("currHunt: ");
+      console.log(this.currHunt);
+      qs = this.parseQueryString();
+      console.log(qs.huntId);
+      this.currHunt = this.allHunts[qs.huntId];
+      console.log("currHunt: ");
+      console.log(this.currHunt);
+    }
+
   	const this_map = this.$refs.mymap.mapObject;
     routermap = this_map;
     // map.addControl(new L.Control.Fullscreen());
@@ -182,7 +232,7 @@ map = new Vue({
 
     this.router = L.Routing.control({
       // TODO: check waypoints appearing
-      waypoints: this.makeMarkers,   
+      waypoints: markers,   
       routeWhileDragging: false,
       // TODO: fix dragging problem
       lineOptions: {
@@ -220,6 +270,29 @@ map = new Vue({
     }
   },
   methods: {
+    createNav: function(){
+      location.href = "create_page.html";
+      inPlayMode = false;
+    },
+    joinNav: function(){
+      location.href = "join_page.html";
+      inPlayMode = true;
+    },
+    loadHunt: function(id){
+      console.log("loadHunt");
+      location.href = "play_page.html?huntId="+id;
+      console.log("loadHunt");
+      // Start countdown of time remaining
+
+
+      // update time so far
+      // setInterval(function(){
+      //   this.currHunt.inProgress.timeSoFar += 1;
+      //   console.log("updated time");
+      //     }
+
+      // , 10000);
+    },
     registerMarker: function(e) {
         console.log(e);
     },
@@ -348,7 +421,74 @@ map = new Vue({
     publish: function() {
       // TODO: error checking!
       // TODO: increment id when adding this
-    }, 
+      this.publishLabel = "Download";
+      console.log("publish");
+
+      // convert JSON object to string
+      this.allHunts.push(this.currHunt);
+
+      // convert JSON object to string
+      var hunt_data = JSON.stringify(this.allHunts);
+
+      // set up automatic download
+      (function() {
+        var textFile = null,
+          makeTextFile = function(text) {
+            var data = new Blob([text], {
+              type: 'application/json'
+            });
+      
+            // If we are replacing a previously generated file we need to
+            // manually revoke the object URL to avoid memory leaks.
+            if (textFile !== null) {
+              window.URL.revokeObjectURL(textFile);
+            }
+      
+            textFile = window.URL.createObjectURL(data);
+      
+            return textFile;
+          };
+      
+        var publish = document.getElementById('publish');
+      
+        publish.addEventListener('click', function() {
+          var link = document.createElement('a');
+          link.setAttribute('download', 'hunts.json');
+          link.href = makeTextFile(hunt_data);
+          document.body.appendChild(link);
+      
+          // wait for the link to be added to the document
+          window.requestAnimationFrame(function() {
+            var event = new MouseEvent('click');
+            link.dispatchEvent(event);
+            document.body.removeChild(link);
+          });
+      
+        }, false);
+      })();
+    },
+    parseQueryString: function() {
+      // This function is anonymous, is executed immediately and 
+      // the return value is assigned to QueryString!
+      var query_string = {};
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+            // If first entry with this name
+        if (typeof query_string[pair[0]] === "undefined") {
+          query_string[pair[0]] = decodeURIComponent(pair[1]);
+            // If second entry with this name
+        } else if (typeof query_string[pair[0]] === "string") {
+          var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+          query_string[pair[0]] = arr;
+            // If third or later entry with this name
+        } else {
+          query_string[pair[0]].push(decodeURIComponent(pair[1]));
+        }
+      } 
+      return query_string;
+    },    
     searchLocation: function(e) {
     query = e.target.value;
     console.log("Searching for " + e.target.value);
@@ -422,7 +562,7 @@ map = new Vue({
     setActiveStop: function(i) {
       console.log(i);
       this.currHunt.inProgress.currStopId = i;
-    }      
+    }  
   }, 
   computed: {
     makeMarkers: function() {
@@ -430,7 +570,11 @@ map = new Vue({
       return this.currHunt.stops.map(s => s.latlong);
     },
     guessMarkers: function() {
-      return this.makeMarkers.slice(0, this.currHunt.inProgress.currStop - 1);
+      console.log("GUESS MARKERS");
+      if (!this.currHunt.inProgress.numMarkers) {
+        return []
+      }
+      return this.makeMarkers.slice(0, this.currHunt.inProgress.numMarkers);
     }, 
     getStopNames: function() {
       return this.currHunt.stops.map(s => s.answer);
@@ -451,8 +595,6 @@ map = new Vue({
 
 console.log("I think Vue just rendered?");
 console.log(map.makeMarkers);
-
-
 
 /*
 stops: [
