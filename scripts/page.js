@@ -22,7 +22,8 @@ map = new Vue({
         url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       },
-      inPlayMode: true, // TODO: set to false if in edit mode
+      inPlayMode: false, // TODO: set to false if in edit mode
+      publishLabel: "Publish",
       // TODO: diff between current hunt being made vs. being played?
       currHunt: {
         expectedDistance: 0,
@@ -185,13 +186,15 @@ map = new Vue({
     };
   },
   mounted() {
-    console.log("currHunt: ");
-    console.log(this.currHunt);
-    qs = this.parseQueryString();
-    console.log(qs.huntId);
-    this.currHunt = this.allHunts[qs.huntId];
-    console.log("currHunt: ");
-    console.log(this.currHunt);
+    if (this.inPlayMode) {
+      console.log("currHunt: ");
+      console.log(this.currHunt);
+      qs = this.parseQueryString();
+      console.log(qs.huntId);
+      this.currHunt = this.allHunts[qs.huntId];
+      console.log("currHunt: ");
+      console.log(this.currHunt);
+    }
 
   	const this_map = this.$refs.mymap.mapObject;
     routermap = this_map;
@@ -345,9 +348,59 @@ map = new Vue({
         expanded: true,
       });
     },
+    deleteStop: function(x) {
+      console.log("delete stop" +  x);
+      // TODO: fix deletion
+      // this.currHunt.stops = [...this.currHunt.stops.slice(0, x).concat(this.currHunt.stops.slice(-x))];
+    },
     publish: function() {
       // TODO: error checking!
       // TODO: increment id when adding this
+      this.publishLabel = "Download";
+      console.log("publish");
+
+      // convert JSON object to string
+      this.allHunts.push(this.currHunt);
+
+      // convert JSON object to string
+      var hunt_data = JSON.stringify(this.allHunts);
+
+      // set up automatic download
+      (function() {
+        var textFile = null,
+          makeTextFile = function(text) {
+            var data = new Blob([text], {
+              type: 'application/json'
+            });
+      
+            // If we are replacing a previously generated file we need to
+            // manually revoke the object URL to avoid memory leaks.
+            if (textFile !== null) {
+              window.URL.revokeObjectURL(textFile);
+            }
+      
+            textFile = window.URL.createObjectURL(data);
+      
+            return textFile;
+          };
+      
+        var publish = document.getElementById('publish');
+      
+        publish.addEventListener('click', function() {
+          var link = document.createElement('a');
+          link.setAttribute('download', 'hunts.json');
+          link.href = makeTextFile(hunt_data);
+          document.body.appendChild(link);
+      
+          // wait for the link to be added to the document
+          window.requestAnimationFrame(function() {
+            var event = new MouseEvent('click');
+            link.dispatchEvent(event);
+            document.body.removeChild(link);
+          });
+      
+        }, false);
+      })();
     },
     parseQueryString: function() {
       // This function is anonymous, is executed immediately and 
