@@ -22,7 +22,7 @@ map = new Vue({
         url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       },
-      inPlayMode: false, // TODO: set to false if in edit mode
+      inPlayMode: true, // TODO: set to false if in edit mode
       publishLabel: "Publish",
       // TODO: diff between current hunt being made vs. being played?
       currHunt: {
@@ -233,6 +233,14 @@ map = new Vue({
     this.router.addTo(routermap);
   },
   methods: {
+    createNav: function(){
+      location.href = "create_page.html";
+      inPlayMode = false;
+    },
+    joinNav: function(){
+      location.href = "join_page.html";
+      inPlayMode = true;
+    },
     loadHunt: function(id){
       console.log("loadHunt");
       location.href = "play_page.html?huntId="+id;
