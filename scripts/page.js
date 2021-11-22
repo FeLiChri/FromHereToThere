@@ -111,7 +111,7 @@ map = new Vue({
         stops: [
           {
             clue: "Where the graduates study.",
-            answer: "Hatcher",
+            answer: "Hatcher!!!",
             hint: "It starts with 'hat'",
             task: "Take a photo in the stacks.",
             points: 15,
@@ -120,7 +120,7 @@ map = new Vue({
           },
           {
             clue: "Where to find computers in Angell Hall.",
-            answer: "Fishbowl",
+            answer: "Fishbowl in Angell Hall",
             hint: "Nemo from Finding Nemo might swim in one.",
             task: "Print a poster and upload a photo of the print!",
             points: 15,
@@ -264,9 +264,9 @@ map = new Vue({
     this.router.addTo(routermap);
   },
   updated() {
-    console.log("Updated!");
+    // console.log("Updated!");
     e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
-    console.log(e);
+    // console.log(e);
     if (this.expandLastAcc) {
       this.expandLastAcc = false;
       $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('show');
@@ -319,13 +319,23 @@ map = new Vue({
       this.currHunt.inProgress.hintClicked = true;
     },
     convertAnswerToCaps: function(answer) {
-      console.log(answer);
-      console.log(answer.toUpperCase().split('').join(' '));
-      return answer.toUpperCase().split('').join(' ') + ' ';
+      console.log(answer.toUpperCase().split('').join('\xa0'));
+      return answer.toUpperCase().split('').join('\xa0');
+    },
+    checkAnswer: function(answer, guess) {
+
+      // Strip all non-alphanumeric characters
+      stripped_answer = answer.replace(/\W/g, '').toUpperCase();
+      stripped_guess = guess.replace(/\W/g, '').toUpperCase();
+
+      console.log("CHECK ANSWER")
+      console.log(stripped_answer);
+      console.log(stripped_guess);
+      return stripped_answer === stripped_guess;
     },
     // TODO: keep commas and spaces and such in the answer
     makeGuess: function() {
-      if (this.currHunt.inProgress.guessText == this.convertAnswerToCaps(this.currStop.answer)) {
+      if (this.checkAnswer(this.currStop.answer, this.currHunt.inProgress.guessText)) {
         console.log("Correct!");
         this.currHunt.inProgress.tryAgain = false;
         this.currHunt.inProgress.correct = true;
@@ -588,9 +598,22 @@ map = new Vue({
       return this.placeholder.length;
     },
     placeholder: function() {
-      hashes = '_'.repeat(this.currStop.answer.length).split('').join(' ');
+      var alphanumRegex = /^[0-9a-zA-Z]+$/;
+      hashes = "";
+
+      for (var i = 0; i < this.currStop.answer.length; i++) {
+        l = this.currStop.answer[i];
+        if (l.match(alphanumRegex)) {
+          // Need \xa0 as non-breaking whitespace so the form will keep whitespaces
+          hashes += '_' + '\xa0';
+        }
+        else {
+          hashes += l + '\xa0';
+        }
+      }
+      // hashes = '_'.repeat(this.currStop.answer.length).split('').join(' ');
       console.log(hashes);
-      return hashes;
+      return hashes.substring(0, hashes.length - 1);
     },
     currStop: function() {
       return this.currHunt.stops[this.currHunt.inProgress.currStopId];
