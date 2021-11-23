@@ -510,7 +510,7 @@ map = new Vue({
             expectedTime: 30,
             title: "", // TODO: add id
             icon: "",
-            id: 0,
+            id: this.allHunts.length,
             inProgress: {
               timeSoFar: 0,
               distanceSoFar: 0,
@@ -534,6 +534,13 @@ map = new Vue({
       } else {
         console.log("Not a valid page to switch to: " + pageIn);
       }
+    }, 
+    goBack: function() {
+      if (this.page == "play") {
+        this.switchPage("join");
+        return;
+      }
+      this.switchPage("index");
     }
   }, 
   computed: {
