@@ -25,7 +25,6 @@ window.cb = function cb(json) {
   console.log(possibleLocations);
   console.log(map.currHunt.inProgress.currStopId);
   map.currStop.possibleLocations = possibleLocations;
-
 }
 
 map = new Vue({
@@ -33,17 +32,16 @@ map = new Vue({
   components: { LMap, LTileLayer, LMarker, LTooltip },
   data() {
     return {
+      inPlayMode: false,
+      expandLastAcc: false,
+      page: "index", // options ["index", "play", "create", "join"]
+      // TODO: diff between current hunt being made vs. being played?
       mapConfig: {
         zoom:14,
         center: L.latLng(42.2808, -83.7430),
         url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        search_text: '',
       },
-      inPlayMode: true, // TODO: set to false if in edit mode
-      expandLastAcc: false,
-      publishLabel: "Publish",
-      // TODO: diff between current hunt being made vs. being played?
       currHunt: {
         expectedDistance: 0,
         expectedTime: 30,
@@ -209,21 +207,10 @@ map = new Vue({
           latlong: L.latLng(42.2801, -83.7484),
           expanded: true,
         },
-      ],
-    },],      
+      ]}],      
     };
   },
   mounted() {
-    if (this.inPlayMode) {
-      console.log("currHunt: ");
-      console.log(this.currHunt);
-      qs = this.parseQueryString();
-      console.log(qs.huntId);
-      this.currHunt = this.allHunts[qs.huntId];
-      console.log("currHunt: ");
-      console.log(this.currHunt);
-    }
-
   	const this_map = this.$refs.mymap.mapObject;
     routermap = this_map;
     // map.addControl(new L.Control.Fullscreen());
@@ -247,12 +234,12 @@ map = new Vue({
     });
         
     this.router.on('routesfound', function(e) {
-        console.log("ROUTES FOUND");
-        console.log(e.waypoints);
+        // console.log("ROUTES FOUND");
+        // console.log(e.waypoints);
         var routes = e.routes;
         var summary = routes[0].summary;
         // alert distance and time in miles and minutes
-        console.log(summary.totalDistance / 1760 + ' mi');
+        // console.log(summary.totalDistance / 1760 + ' mi');
         // console.log(summary.totalTime % 3600 / 60 + ' min');
         map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
         map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
@@ -273,18 +260,12 @@ map = new Vue({
     }
   },
   methods: {
-    createNav: function(){
-      location.href = "create_page.html";
-      inPlayMode = false;
-    },
-    joinNav: function(){
-      location.href = "join_page.html";
-      inPlayMode = true;
-    },
     loadHunt: function(id){
-      console.log("loadHunt");
-      location.href = "play_page.html?huntId="+id;
-      console.log("loadHunt");
+      this.page = "play";
+      this.inPlayMode = true;
+      this.currHunt = this.allHunts[id];
+      // console.log("loadHunt");
+      // console.log("loadHunt");
       // Start countdown of time remaining
 
 
@@ -297,10 +278,10 @@ map = new Vue({
       // , 10000);
     },
     registerMarker: function(e) {
-        console.log(e);
+        // console.log(e);
     },
     setTimeAndDistance: function(time, distance) {
-        console.log(time, distance);
+        // console.log(time, distance);
         this.currHunt.expectedDistance = distance.toFixed(2);
         this.currHunt.expectedTime = time.toFixed(2);
     },
@@ -319,7 +300,7 @@ map = new Vue({
       this.currHunt.inProgress.hintClicked = true;
     },
     convertAnswerToCaps: function(answer) {
-      console.log(answer.toUpperCase().split('').join('\xa0'));
+      // console.log(answer.toUpperCase().split('').join('\xa0'));
       return answer.toUpperCase().split('').join('\xa0');
     },
     checkAnswer: function(answer, guess) {
@@ -328,22 +309,22 @@ map = new Vue({
       stripped_answer = answer.replace(/\W/g, '').toUpperCase();
       stripped_guess = guess.replace(/\W/g, '').toUpperCase();
 
-      console.log("CHECK ANSWER")
-      console.log(stripped_answer);
-      console.log(stripped_guess);
+      // console.log("CHECK ANSWER")
+      // console.log(stripped_answer);
+      // console.log(stripped_guess);
       return stripped_answer === stripped_guess;
     },
     // TODO: keep commas and spaces and such in the answer
     makeGuess: function() {
       if (this.checkAnswer(this.currStop.answer, this.currHunt.inProgress.guessText)) {
-        console.log("Correct!");
+        // console.log("Correct!");
         this.currHunt.inProgress.tryAgain = false;
         this.currHunt.inProgress.correct = true;
         this.currHunt.inProgress.numPoints += this.currStop.points;
         this.currHunt.inProgress.numMarkers += 1;
 
         markers = this.guessMarkers;
-        console.log(this.guessMarkers);
+        // console.log(this.guessMarkers);
 
         routermap.removeControl(this.router);
         this.router = L.Routing.control({
@@ -362,13 +343,13 @@ map = new Vue({
         // TODO: figure out how to replace the router
             
         this.router.on('routesfound', function(e) {
-            console.log("ROUTES FOUND");
-            console.log(e.waypoints);
+            // console.log("ROUTES FOUND");
+            // console.log(e.waypoints);
             var routes = e.routes;
             var summary = routes[0].summary;
             // alert distance and time in miles and minutes
-            console.log(summary.totalDistance / 1760 + ' mi');
-            console.log(summary.totalTime % 3600 / 60 + ' min');
+            // console.log(summary.totalDistance / 1760 + ' mi');
+            // console.log(summary.totalTime % 3600 / 60 + ' min');
             map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
             map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
             // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
@@ -377,7 +358,7 @@ map = new Vue({
         this.router.addTo(routermap);
 
       } else {
-        console.log("Wrong Guess!");
+        // console.log("Wrong Guess!");
         this.currHunt.inProgress.tryAgain = true;
       }
     },
@@ -386,7 +367,7 @@ map = new Vue({
       this.currHunt.inProgress.correct = true;
     },
     nextClue: function() {
-      console.log("NEXT CLUE");
+      // console.log("NEXT CLUE");
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
         alert("CONGRATULATIONS YOU'RE DONE!");
       } else {
@@ -416,7 +397,7 @@ map = new Vue({
         possibleLocations: [],
       });
       map.currHunt.inProgress.currStopId = this.currHunt.stops.length - 1;
-      console.log("ADD STOP");
+      // console.log("ADD STOP");
       // $("#collapse" + this.currHunt.stops.length - 1).collapse({
       //   show: true
       // });
@@ -435,78 +416,15 @@ map = new Vue({
     publish: function() {
       // TODO: error checking!
       // TODO: increment id when adding this
-      this.publishLabel = "Download";
       console.log("publish");
 
-      // convert JSON object to string
+      // add hunt to persistent memory
       this.allHunts.push(this.currHunt);
-
-      // convert JSON object to string
-      var hunt_data = JSON.stringify(this.allHunts);
-
-      // set up automatic download
-      (function() {
-        var textFile = null,
-          makeTextFile = function(text) {
-            var data = new Blob([text], {
-              type: 'application/json'
-            });
-      
-            // If we are replacing a previously generated file we need to
-            // manually revoke the object URL to avoid memory leaks.
-            if (textFile !== null) {
-              window.URL.revokeObjectURL(textFile);
-            }
-      
-            textFile = window.URL.createObjectURL(data);
-      
-            return textFile;
-          };
-      
-        var publish = document.getElementById('publish');
-      
-        publish.addEventListener('click', function() {
-          var link = document.createElement('a');
-          link.setAttribute('download', 'hunts.json');
-          link.href = makeTextFile(hunt_data);
-          document.body.appendChild(link);
-      
-          // wait for the link to be added to the document
-          window.requestAnimationFrame(function() {
-            var event = new MouseEvent('click');
-            link.dispatchEvent(event);
-            document.body.removeChild(link);
-          });
-      
-        }, false);
-      })();
-    },
-    parseQueryString: function() {
-      // This function is anonymous, is executed immediately and 
-      // the return value is assigned to QueryString!
-      var query_string = {};
-      var query = window.location.search.substring(1);
-      var vars = query.split("&");
-      for (var i=0;i<vars.length;i++) {
-        var pair = vars[i].split("=");
-            // If first entry with this name
-        if (typeof query_string[pair[0]] === "undefined") {
-          query_string[pair[0]] = decodeURIComponent(pair[1]);
-            // If second entry with this name
-        } else if (typeof query_string[pair[0]] === "string") {
-          var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
-          query_string[pair[0]] = arr;
-            // If third or later entry with this name
-        } else {
-          query_string[pair[0]].push(decodeURIComponent(pair[1]));
-        }
-      }
-      console.log(query_string);
-      return query_string;
+      this.switchPage("join");
     },    
     searchLocation: function(e) {
     query = e.target.value;
-    console.log("Searching for " + e.target.value);
+    // console.log("Searching for " + e.target.value);
 
     cleaned_query = query.replace(' ', '+');
 
@@ -517,7 +435,7 @@ map = new Vue({
     s.src = 'http://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query + ",ann+arbor";
     document.getElementsByTagName('head')[0].appendChild(s);
     // TODO: attribute!
-    // console.log("Calling iTunes API with: https://itunes.apple.com/search?attribute=allArtistTerm&term=" + cleaned_query);
+    // // console.log("Calling iTunes API with: https://itunes.apple.com/search?attribute=allArtistTerm&term=" + cleaned_query);
     // axios.get("https://nominatim.openstreetmap.org/search?email=fee.christoph@gmail.com&q=" + cleaned_query + '+ann+arbor/', {
     //   headers: {
     //     "Access-Control-Allow-Origin": "*",
@@ -559,13 +477,13 @@ map = new Vue({
       });
           
       this.router.on('routesfound', function(e) {
-          console.log("ROUTES FOUND");
-          console.log(e.waypoints);
+          // console.log("ROUTES FOUND");
+          // console.log(e.waypoints);
           var routes = e.routes;
           var summary = routes[0].summary;
           // alert distance and time in miles and minutes
-          console.log(summary.totalDistance / 1760 + ' mi');
-          console.log(summary.totalTime % 3600 / 60 + ' min');
+          // console.log(summary.totalDistance / 1760 + ' mi');
+          // console.log(summary.totalTime % 3600 / 60 + ' min');
           map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
           map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
           // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
@@ -575,9 +493,55 @@ map = new Vue({
 
     }, 
     setActiveStop: function(i) {
-      console.log(i);
+      // console.log(i);
       this.currHunt.inProgress.currStopId = i;
-    }  
+    }, 
+    switchPage: function(pageIn) {
+      // console.log("SWITCHING PAGE TO: " + pageIn);
+      this.page = pageIn;
+
+      if (pageIn == "join") {
+        this.inPlayMode = false;
+      } else if (pageIn == "create") {
+        this.inPlayMode = false;
+        // Initialize new blank hunt
+        this.currHunt = {
+            expectedDistance: 0,
+            expectedTime: 30,
+            title: "", // TODO: add id
+            icon: "",
+            id: this.allHunts.length,
+            inProgress: {
+              timeSoFar: 0,
+              distanceSoFar: 0,
+              numPoints: 0,
+              currStopId: 0,
+              numMarkers: 0,
+              guessText: "",
+              tempGuess: "",
+              hintClicked: false,
+              tryAgain: false,
+              correct: false,
+            },
+            // TODO: when they publish, remove spaces from ends of all answers
+            stops: [],
+        };
+      } else if (pageIn == "play") {
+        this.inPlayMode = true;
+        this.currHunt = this.allHunt[id];
+      } else if (pageIn == "index") {
+        this.inPlayMode = false;
+      } else {
+        console.log("Not a valid page to switch to: " + pageIn);
+      }
+    }, 
+    goBack: function() {
+      if (this.page == "play") {
+        this.switchPage("join");
+        return;
+      }
+      this.switchPage("index");
+    }
   }, 
   computed: {
     makeMarkers: function() {
@@ -585,7 +549,7 @@ map = new Vue({
       return this.currHunt.stops.map(s => s.latlong);
     },
     guessMarkers: function() {
-      console.log("GUESS MARKERS");
+      // console.log("GUESS MARKERS");
       if (!this.currHunt.inProgress.numMarkers) {
         return []
       }
@@ -617,41 +581,36 @@ map = new Vue({
     },
     currStop: function() {
       return this.currHunt.stops[this.currHunt.inProgress.currStopId];
-    }
+    },
+    onIndexPage: function() {
+      console.log("on index page? ")
+      console.log(this.page == "index");
+
+      return this.page == "index";
+    },
+    onJoinPage: function() {
+      console.log("on join page? ")
+      console.log(this.page == "join");
+
+
+      return this.page == "join";
+    },
+    onCreatePage: function() {
+      console.log("on create page? ")
+      console.log(this.page == "create");
+      console.log(this.currHunt);
+
+      return this.page == "create";
+    },
+    onPlayPage: function() {
+      console.log("on play page? ")
+      console.log(this.page == "play");
+
+
+      return this.page == "play";
+    },
   }
 });
 
-console.log("I think Vue just rendered?");
-console.log(map.makeMarkers);
-
-/*
-stops: [
-  {
-    clue: "Where the graduates study.",
-    answer: "Hatcher",
-    hint: "It starts with 'hat'",
-    task: "Take a photo in the stacks.",
-    points: 15,
-    latlong: L.latLng(42.2808, -83.7430),
-    expanded: true,
-  },
-  {
-    clue: "Where to find computers in Angell Hall.",
-    answer: "Fishbowl",
-    hint: "Nemo from Finding Nemo might swim in one.",
-    task: "Print a poster and upload a photo of the print!",
-    points: 15,
-    latlong: L.latLng(42.2766, -83.7397),
-    expanded: true,
-  },
-  {
-    clue: "",
-    answer: "",
-    hint: "",
-    task: "",
-    points: 15,
-    latlong: L.latLng(42.2766, -83.7397),
-    expanded: true,
-  },
-],
-*/
+// console.log("I think Vue just rendered?");
+// console.log(map.makeMarkers);
