@@ -1,0 +1,334 @@
+<html>
+<head>
+  <title>From Here to There</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- vue2 Leaflet -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"></link>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/vue2-leaflet@1.0.1/dist/vue2-leaflet.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css"></link>
+  <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js"></script>
+
+  <!-- Map Routing -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <!-- <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script> -->
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+   <!-- Jquery and Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="style/index.css">
+  <!-- Bootstrap Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="src/favicon.png" />
+
+</head>
+
+<body>
+
+<!-- app id -->
+<div id="app">
+
+<!-- INDEX ------------------------------------------------------------------------------------------------>
+<div v-if="onIndexPage" class="index_page">
+  <!-- body -->
+  <div class="container">
+    <div class="row"> 
+      <img alt="logo image" src="src/logo.png" class="img-fluid" />
+    
+      <button type="button" class="btn btn-primary mt-4" @click="switchPage('join')">
+        <h1>Join a Hunt!</h1>
+      </button>
+
+      <button type="button" class="btn btn-primary mt-4" @click="switchPage('create')">
+        <h1>Make a New Hunt!</h1>
+      </button>
+    </div> <!-- row -->    
+  </div> <!-- container -->
+</div>
+<!-- CREATE ------------------------------------------------------------------------------------------------>
+<div v-if="onCreatePage" class="create_page">
+    <div class="container align-items-center text-center app">
+        <!-- title -->
+        <div> 
+          <h1>
+            <img alt="logo" src="src/favicon.png" class="photo img-fluid" />
+            Title:
+            <input type="text" id="title" name="title" v-model="currHunt.title" placeholder="Add a title here!">
+          </h1>
+        </div> <!-- row -->
+    
+        <div class="row"> 
+            <!-- map -->
+            <div id="map-div" class="blue_border col-sm-6">
+                <div class="mapclass">
+                  <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymap" id="mymap">
+                    <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
+                    <l-marker v-for="(marker, i) in currHunt.makeMarkers" :key="marker" :lat-lng="marker">
+                      <l-tooltip>hello!</l-tooltip>
+                    </l-marker>
+                  </l-map>
+                </div>
+                <h3> {{currHunt.expectedDistance}} mi, {{currHunt.expectedTime}} minutes</h3>
+                <!-- <div id='routermap' style="height: 350px; width: 100%;"> -->
+    
+                <!-- </div> -->
+                Time Limit: 
+    
+                <div id="timelimit">
+                    <label for="hours">Hours:</label>
+                    <select class="form-control" id="hours" style="width:50px; margin: 5px;">
+                      <option>0</option>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                      <option>9</option>
+                      <option>10</option>
+                    </select>
+                    <label for="mins">Mins:</label>
+                    <select class="form-control" id="mins" style="width: 50px; margin: 5px;">
+                      <option>0</option>
+                      <option>5</option>
+                      <option>10</option>
+                      <option>15</option>
+                      <option>20</option>
+                      <option>25</option>
+                      <option>30</option>
+                      <option>35</option>
+                      <option>40</option>
+                      <option>45</option>
+                      <option>50</option>
+                      <option>55</option>
+                    </select>
+                </div>
+                
+                <br>
+            </div> <!-- map -->
+    
+            <!-- form -->
+            <div class="form col-sm-6 mt-2 mt-sm-0">
+              <!-- hint accordion -->
+              <div class="accordion mt-4" id="accordionExample">
+              <div class="accordion-item" draggable="true" v-for="(c, i) in currHunt.stops">
+                <h2 class="accordion-header" v-bind:id="'header'+i">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" v-bind:data-bs-target="'#collapse'+i" aria-expanded="false" v-bind:aria-controls="'collapse'+i" @click="setActiveStop(i)">
+                    <p style="display: flex; justify-content: space-between; width: 100%; align-items: center; align-content: center;"><span style="float:left"> #{{i + 1}} - {{c.answer}}</span> <span style="float:right; color:red" v-on:click="deleteStop(i)"><i class="bi bi-trash"></i>
+                    </span></p>
+                  </button>
+                </h2>
+                <div v-bind:id="'collapse'+i" class="accordion-collapse collapse" v-bind:aria-labelledby="'header'+i" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <h1>
+                      Location: 
+                      <!-- <input type="text" id="" name="" v-bind:value="mapConfig.search_text" v-on:keyup.enter="searchLocation" placeholder="Where is this stop?"> -->
+                      <div class="input-group rounded">
+                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                        aria-describedby="search-addon" v-bind:value="c.location" v-on:keyup.enter="searchLocation"/>
+                        <span class="input-group-text border-0" id="search-addon">
+                          <i class="fas fa-search"></i>
+                        </span>
+                      </div>
+                      <div>
+                        <div>
+                          <button v-for="(loc, j) in c.possibleLocations" class="dropdown-item" id="'loc-'+i+'-'+j" @click="setLocation(i, j)">{{loc.name}}</button>
+                        </div>
+                      </div>
+                      <br>
+                      Clue: <input type="text" id="" name="" v-model="c.clue" placeholder="Add your clue here!">
+                      <br>
+                      Answer: <input type="text" id="" name="" v-model="c.answer" placeholder="Add your answer here!">
+                      <br>
+                      Hint (opt.): <input type="text" id="" name="" v-model="c.hint" placeholder="Add your optional hint here!">
+                      <br>
+                      Task: <input type="text" id="" name="" v-model="c.task" placeholder="Add your task here!">
+                      <br>
+                      Points: <input type="text" id="" name="" v-model="c.points" placeholder="Add your points here!">
+                      <br>
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- accordion -->
+    
+                <!-- <h1>
+                  Clue: <input type="text" id="" name="" placeholder="Add your clue here!">
+                  <br>
+                  Answer: <input type="text" id="" name="" placeholder="Add your answer here!">
+                  <br>
+                  Hint (opt.): <input type="text" id="" name="" placeholder="Add your optional hint here!">
+                  <br>
+                  Task: <input type="text" id="" name="" placeholder="Add your task here!">
+                  <br>
+                  Points: <input type="text" id="" name="" placeholder="Add your points here!">
+                  <br>
+                </h1> -->
+                <!-- TODO: make sure to add a "save and close" type button -->
+    <!-- button -->
+    <div class="row align-items-center">            
+    <button type="button" class="btn btn-primary mt-4" @click="addStop">
+                  <h1>Add Stop</h1>
+                </button>
+              </div> <!-- button -->
+              
+            </div> <!-- form -->
+        </div> <!-- row -->
+    
+        <!-- publish -->
+        <div class="row"> 
+          <button id="publish" type="button" class="btn btn-primary mt-4" @click="publish">
+            <h1>Publish</h1>
+          </button>
+        </div> <!-- row -->
+      </div> <!-- container -->
+    
+</div>
+<!-- JOIN ------------------------------------------------------------------------------------------------>
+<div v-if="onJoinPage" class="join_page">
+    <div class="container align-items-center text-center">
+        <!-- title -->
+        <div class="blue_border row"> 
+          <h1>Pick a scavenger hunt!</h1>
+        </div> <!-- title -->
+    
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Hunt Name</th>
+              <th scope="col">Est. Time</th>
+              <th scope="col">Est. Dist</th>
+            </tr>
+          </thead>
+          <tbody v-for="h in this.allHunts">
+            <tr key="h.title" v-on:click="loadHunt(h.id)" id="h.id">
+              <th scope="row"><img :src="h.icon" class="icon"/></th>
+              <td><h1>{{h.title}}</h1></td>
+              <td><h1>{{h.expectedTime}} mins</h1></td>
+              <td><h1>{{h.expectedDistance}} mi</h1></td>
+            </tr>
+          </tbody>
+        </table>
+      </div> <!-- container -->
+</div>
+<!-- PLAY ------------------------------------------------------------------------------------------------>
+<div v-if="onPlayPage" class="play_page">
+    <div class="container align-items-center text-center">
+        <!-- title -->
+        <div>
+          <h1>
+            <img alt="logo" :src="currHunt.icon" class="photo img-fluid" />
+            {{currHunt.title}}
+            <br>
+            <div class="row justify-content-md-center">
+              <div class="col-sm-auto">
+              Time Remaining: {{currHunt.expectedTime - currHunt.inProgress.timeSoFar}}
+              </div>
+              <div class="col-sm-auto">
+              Points: {{currHunt.inProgress.numPoints}}
+              </div>
+            </div>
+          </h1>
+        </div> <!-- row -->
+    
+        <div class="row">
+          <!-- map -->
+          <div id="map-div" class="blue_border col-sm-6">
+            <h1>Map!</h1>
+            <div class="mapclass">
+              <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymap" id="mymap">
+                <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
+                <l-marker v-for="marker in guessMarkers" :key="marker" :lat-lng="marker" @click="registerMarker"></l-marker>
+              </l-map>
+            </div>
+            <h3> {{currHunt.expectedDistance}} mi, {{currHunt.expectedTime}} minutes</h3>
+            <!-- <div id='routermap' style="height: 350px; width: 100%;"> -->
+    
+            <!-- </div> -->
+            <br>
+        </div> <!-- map -->
+    
+          <!-- clue -->
+          <div v-if="!currHunt.inProgress.correct" class="form col-sm-6 mt-2 mt-sm-0 align-items-center text-center">
+              <h1>
+                Clue #{{currHunt.inProgress.currStopId + 1}} ({{currStop.points}} pts)
+                <br>
+                {{currStop.clue}}
+                <br>
+                <p v-if="currHunt.inProgress.hintClicked">
+                  {{currStop.hint}}
+                </p>
+                <!-- based on https://stackoverflow.com/questions/26324252/html-keep-placeholder-when-user-types -->
+                <div class="placeholder" :data-placeholder="placeholder">
+                  <input class="guess" :maxlength="answerLength" :size="answerLength" v-model="currHunt.inProgress.guessText" @keyup.enter="makeGuess" @input="updateGuess" />  
+                </div>
+                <p v-if="currHunt.inProgress.tryAgain">
+                  <img src="src/tryagain.png">
+                  <br>
+                  Try again!
+                </p>
+              </h1>
+    
+              <button v-if="!currHunt.inProgress.hintClicked" type="button" class="btn btn-primary mt-4" @click='showHint'>
+                <h1>Hint</h1>
+              </button>
+              <button v-else type="button" class="btn btn-primary mt-4" disabled>
+                <h1>Hint</h1>
+              </button>
+    
+              <br>
+              <button type="button" class="btn btn-primary mt-4" @click="pressNuclear">
+                <h1>Nuclear (-50pts)</h1>
+              </button>
+          </div> <!-- form -->
+          <div v-else class="form col-sm-6 mt-2 mt-sm-0 align-items-center text-center">
+            <h1>
+              Go to
+              <br>
+              <span class="keep-spaces">{{convertAnswerToCaps(currStop.answer)}}</span>
+              <br>
+              and 
+              <br>
+              {{currStop.task}}
+              <br>
+    
+            </h1>
+            <h1>Submit Evidence:</h1>
+            <button type="button" class="btn btn-primary mt-4">
+              <input type="file" id="evidence" accept="image/png, image/jpeg">
+              <br>
+              <input type="submit" @click="nextClue">
+            </button>
+          </div>
+        </div>
+      </div> <!-- container -->
+</div>
+<!-- app id -->
+</div>
+<!-- footer -->
+<footer>
+    <div class="container-fluid align-items-center text-center">
+      <div class="row">
+        <div class="col-sm-12">
+          <p>Made with ❤ in Ann Arbor, Michigan.<br> Copyright © 2021 The Scavengers. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer> <!-- footer -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="scripts/page.js"></script>
+</body>
+
+</html>
