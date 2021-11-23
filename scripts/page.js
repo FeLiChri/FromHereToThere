@@ -11,6 +11,8 @@ var { LMap, LTileLayer, LMarker, LTooltip } = Vue2Leaflet;
 
 var routermap;
 
+var store;
+
 window.cb = function cb(json) {
   //do what you want with the json
   console.log("CALLBACK");
