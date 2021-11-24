@@ -235,7 +235,7 @@
             </tr>
           </thead>
           <tbody v-for="h in this.allHunts">
-            <tr key="h.title"  id="h.id">
+            <tr v-if="!h.completed" key="h.title"  id="h.id">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
               <td @click="switchPage('play', h.id)" >
               <p>{{h.title}}</p></td>
@@ -245,7 +245,7 @@
               <td><h1>{{h.expectedTime}} mins</h1></td>
               <td><h1>{{h.expectedDistance}} mi</h1></td>
             </tr>
-            <tr key="h.title"  id="h.id">
+            <tr v-else key="h.title"  id="h.id">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
               <td @click="switchPage('play', h.id)" >
               <td><h1>{{h.title}} (Completed!)</h1></td>
