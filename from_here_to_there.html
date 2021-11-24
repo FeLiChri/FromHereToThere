@@ -220,25 +220,19 @@
             </tr>
           </thead>
           <tbody v-for="h in this.allHunts">
-            <tr key="h.title" v-on:click="loadHunt(h.id)" id="h.id">
+            <tr key="h.title" v-if="!h.completed" v-on:click="loadHunt(h.id)" id="h.id">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
               <td><h1>{{h.title}}</h1></td>
-              <td>
-                <h1 v-if="h.completed">
-                  {{h.finalStats.numPoints}}
-                </h1>
-                <h1 v-else>
-                  --
-                </h1>
-              </td>
-              <td>
-                <h1 v-if="h.completed">
-                  {{h.finalStats.timeTaken}}
-                </h1>
-                <h1 v-else>
-                  --
-                </h1>
-              </td>
+              <td><h1>--</h1></td>
+              <td><h1>--</td>
+              <td><h1>{{h.expectedTime}} mins</h1></td>
+              <td><h1>{{h.expectedDistance}} mi</h1></td>
+            </tr>
+            <tr class="completed-hunt" key="h.title" v-else id="h.id">
+              <th scope="row"><img :src="h.icon" class="icon"/></th>
+              <td><h1>{{h.title}} (Completed!)</h1></td>
+              <td><h1>{{h.finalStats.numPoints}}</h1></td>
+              <td><h1>{{h.finalStats.timeTaken}}</h1></td>
               <td><h1>{{h.expectedTime}} mins</h1></td>
               <td><h1>{{h.expectedDistance}} mi</h1></td>
             </tr>

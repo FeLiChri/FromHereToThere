@@ -95,3 +95,7 @@
     width: 30px; 
     height: auto;
 }
+
+.completed-hunt {
+    background-color: lightgray;
+}
