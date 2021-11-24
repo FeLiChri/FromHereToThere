@@ -104,6 +104,10 @@
     height: auto;
 }
 
+.completed-hunt {
+    background-color: lightgray;
+}
+
 /* Table-Mobile */
 .table tr {
     font-size: 15px;

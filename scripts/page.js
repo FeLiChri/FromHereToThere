@@ -87,12 +87,14 @@ map = new Vue({
           },
         ],
       },
-      allHunts: [{
+      allHunts: [
+      {
+        id:0,
+        completed: false,
         expectedDistance: 1.6,
         expectedTime: 60,
         title: "Welcome Home",
         icon: "src/welcomeHomeIcon.png",
-        id:0,
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
@@ -105,11 +107,15 @@ map = new Vue({
           tryAgain: false,
           correct: false,
         },
+        finalStats: {
+          numPoints: null,
+          timeTaken: null,
+        },
         // TODO: when they publish, remove spaces from ends of all answers
         stops: [
           {
             clue: "Where the graduates study.",
-            answer: "Hatcher!!!",
+            answer: "Hatcher",
             hint: "It starts with 'hat'",
             task: "Take a photo in the stacks.",
             points: 15,
@@ -129,85 +135,75 @@ map = new Vue({
           },
         ],
       }, 
-    {
-      expectedDistance: 2,
-      expectedTime: 120,
-      title: "Arbor Adventure", // TODO: add id
-      icon: "src/arborAdventureIcon.png",
-      id:1,
-      inProgress: {
-        timeSoFar: 0,
-        distanceSoFar: 0,
-        numPoints: 0,
-        numMarkers: 0,
-        currStopId: 0,
-        guessText: "",
-        tempGuess: "",
-        hintClicked: false,
-        tryAgain: false,
-        correct: false,
+      {
+        id:1,
+        completed: false,
+        expectedDistance: 2,
+        expectedTime: 120,
+        title: "Arbor Adventure", // TODO: add id
+        icon: "src/arborAdventureIcon.png",
+        inProgress: {
+          timeSoFar: 0,
+          distanceSoFar: 0,
+          numPoints: 0,
+          numMarkers: 0,
+          currStopId: 0,
+          guessText: "",
+          tempGuess: "",
+          hintClicked: false,
+          tryAgain: false,
+          correct: false,
+        },
+        finalStats: {
+          numPoints: null,
+          timeTaken: null,
+        },
+        // TODO: when they publish, remove spaces from ends of all answers
+        stops: [
+          {
+            clue: "The arb has a special bed of this kind of flower",
+            answer: "Peony",
+            hint: "It starts with 'p'",
+            task: "Take a photo smelling the flowers.",
+            points: 15,
+            latlong: L.latLng(42.2808, -83.7430),
+            expanded: true,
+          },
+          {
+            clue: "You can see this playwright performed in the Arb",
+            answer: "Shakespeare",
+            hint: "The bard himself",
+            task: "Take a photo on stage, giving your best 'to be or not to be'",
+            points: 15,
+            latlong: L.latLng(42.2808, -83.7430),
+            expanded: true,
+          },
+        ],
       },
-      // TODO: when they publish, remove spaces from ends of all answers
-      stops: [
-        {
-          clue: "The arb has a special bed of this kind of flower",
-          answer: "Peony",
-          hint: "It starts with 'p'",
-          task: "Take a photo smelling the flowers.",
-          points: 15,
-          latlong: L.latLng(42.2808, -83.7430),
-          expanded: true,
+      {
+        id:2,
+        completed: false,
+        expectedDistance: 2,
+        expectedTime: 120,
+        title: "Book Bonanza",
+        icon: "src/bookBonanzaIcon.png",
+        inProgress: {
+          timeSoFar: 0,
+          distanceSoFar: 0,
+          numPoints: 0,
+          currStopId: 0,
+          numMarkers: 0,
+          guessText: "",
+          tempGuess: "",
+          hintClicked: false,
+          tryAgain: false,
+          correct: false,
         },
-        {
-          clue: "You can see this playwright performed in the Arb",
-          answer: "Shakespeare",
-          hint: "The bard himself",
-          task: "Take a photo on stage, giving your best 'to be or not to be'",
-          points: 15,
-          latlong: L.latLng(42.2808, -83.7430),
-          expanded: true,
+        finalStats: {
+          numPoints: null,
+          timeTaken: null,
         },
-      ],
-    },
-    {
-      expectedDistance: 2,
-      expectedTime: 120,
-      title: "Book Bonanza",
-      icon: "src/bookBonanzaIcon.png",
-      id:2,
-      inProgress: {
-        timeSoFar: 0,
-        distanceSoFar: 0,
-        numPoints: 0,
-        currStopId: 0,
-        numMarkers: 0,
-        guessText: "",
-        tempGuess: "",
-        hintClicked: false,
-        tryAgain: false,
-        correct: false,
-      },
-      // TODO: when they publish, remove spaces from ends of all answers
-      stops: [
-        {
-          clue: "Famous for it's typewriter theme",
-          answer: "Literati",
-          hint: "It starts with 'lit'",
-          task: "Take a photo of your typewritten message.",
-          points: 15,
-          latlong: L.latLng(42.280291,-83.7474556),
-          expanded: true,
-        },
-        {
-          clue: "Pick up a new comic or your next favorite game here",
-          answer: "Vault of Midnight",
-          hint: "Three words (_ of _)",
-          task: "Take a photo with a cool character",
-          points: 15,
-          latlong: L.latLng(42.2801, -83.7484),
-          expanded: true,
-        },
-      ]}],      
+      }],      
     };
   },
   mounted() {
@@ -364,7 +360,12 @@ map = new Vue({
     nextClue: function() {
       // console.log("NEXT CLUE");
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
-        alert("CONGRATULATIONS YOU'RE DONE!");
+        alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar}\nPoints: ${this.currHunt.inProgress.numPoints}`);
+        this.allHunts[this.currHunt.id].completed = true;
+        Vue.set(this.allHunts[this.currHunt.id].finalStats, "numPoints", this.currHunt.inProgress.numPoints);
+        Vue.set(this.allHunts[this.currHunt.id].finalStats, "timeTaken", this.currHunt.inProgress.timeSoFar);
+        console.log(this.allHunts);
+        this.goBack();
       } else {
         this.currHunt.inProgress.currStopId += 1;
         this.currHunt.inProgress.guessText = "";
@@ -629,7 +630,7 @@ map = new Vue({
         }
       }
       // hashes = '_'.repeat(this.currStop.answer.length).split('').join(' ');
-      console.log(hashes);
+      console.log("hashes: ", hashes);
       return hashes.substring(0, hashes.length - 1);
     },
     currStop: function() {
