@@ -45,7 +45,7 @@ map = new Vue({
       currHunt: {
         expectedDistance: 0,
         expectedTime: 30,
-        title: "", // TODO: add id
+        title: "",
         icon: "",
         id: 0,
 
@@ -251,7 +251,7 @@ map = new Vue({
     this.router.addTo(routermap);
   },
   updated() {
-    // console.log("Updated!");
+    console.log("Updated!");
     e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
     // console.log(e);
     if (this.expandLastAcc) {
@@ -390,7 +390,7 @@ map = new Vue({
         answer: "",
         hint: "",
         task: "",
-        points: 15,
+        points: 0,
         latlong: L.latLng(42.2766, -83.7397),
         expanded: true,
         location: "",
@@ -614,3 +614,8 @@ map = new Vue({
 
 // console.log("I think Vue just rendered?");
 // console.log(map.makeMarkers);
+
+function auto_height(elem) {  /* javascript */
+  elem.style.height = "1px";
+  elem.style.height = (elem.scrollHeight)+"px";
+}

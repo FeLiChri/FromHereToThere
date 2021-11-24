@@ -12,6 +12,15 @@
     overflow: auto;
 }
 
+.instructions {
+    border-radius: 10px;
+    color: white;
+    text-align: left;
+    flex-direction: row;
+    background-color: rgba(50, 134, 243, 0.8);
+    padding: 10px;
+}
+
 .backbutton {
     color: rgba(50, 134, 243, 0.8);
     position: absolute;
@@ -22,6 +31,10 @@
 
 .dropdown-item {
     font-size: 20px;
+}
+
+.input-text {
+    width: 100%;
 }
 
 #map-div {
@@ -86,12 +99,40 @@
     margin: 5px;
 }
 
-.icon {
-    width: 100px; 
-    height: auto;
-}
-
 .garbage {
     width: 30px; 
     height: auto;
+}
+
+/* Table-Mobile */
+.table tr {
+    font-size: 15px;
+}
+
+.table th {
+    font-size: 15px;
+}
+
+.icon {
+    width: 50px; 
+    height: 50px;
+}
+
+/*screen that is larger than the mobile view, Large Screen*/
+@media only screen and (min-width:480px) {
+    
+    /* Table-Web */
+    .table tr {
+        font-size: 30px;
+    }
+
+    .table th {
+        font-size: 30px;
+    }
+
+    .icon {
+        width: 100px; 
+        height: 100px;
+        /* object-fit: cover; */
+    }
 }
