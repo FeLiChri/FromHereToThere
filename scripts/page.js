@@ -109,7 +109,7 @@ map = new Vue({
         stops: [
           {
             clue: "Where the graduates study.",
-            answer: "Hatcher!!!",
+            answer: "Hatcher",
             hint: "It starts with 'hat'",
             task: "Take a photo in the stacks.",
             points: 15,
@@ -576,7 +576,7 @@ map = new Vue({
         }
       }
       // hashes = '_'.repeat(this.currStop.answer.length).split('').join(' ');
-      console.log(hashes);
+      console.log("hashes: ", hashes);
       return hashes.substring(0, hashes.length - 1);
     },
     currStop: function() {
