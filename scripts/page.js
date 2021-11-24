@@ -423,6 +423,24 @@ map = new Vue({
 
 
     },
+    moveStopUp: function(idx) {
+      console.log("move stop up" + idx);
+      if (idx != 0) {
+        var temp = this.currHunt.stops[idx];
+        Vue.set(this.currHunt.stops, idx, this.currHunt.stops[idx - 1]);
+        Vue.set(this.currHunt.stops, idx - 1, temp);
+      }
+      console.log(this.currHunt.stops);
+    },
+    moveStopDown: function(idx) {
+      console.log("move stop down" + idx);
+      if (idx < this.currHunt.stops.length - 1) {
+        var temp = this.currHunt.stops[idx];
+        Vue.set(this.currHunt.stops, idx, this.currHunt.stops[idx + 1]);
+        Vue.set(this.currHunt.stops, idx + 1, temp);
+      }
+      console.log(this.currHunt.stops);
+    },
     publish: function() {
       // TODO: error checking!
 
