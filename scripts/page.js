@@ -22,8 +22,16 @@ window.cb = function cb(json) {
       "latlong": [e.lat, e.lon],
     }
   });
+
+  if (json.length == 0) {
+    map.currStop.noLocationResults = true;
+  }
+  else {
+    map.currStop.noLocationResults = false;
+  }
   console.log(possibleLocations);
   console.log(map.currHunt.inProgress.currStopId);
+  console.log("Assign possible locations");
   map.currStop.possibleLocations = possibleLocations;
 }
 
@@ -73,6 +81,7 @@ map = new Vue({
             expanded: true,
             location: "Hatcher Graduate Library, 913, South University Avenue, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
             possibleLocations: [],
+            noLocationResults: false,
           },
           {
             clue: "Where to find computers in Angell Hall.",
@@ -84,6 +93,7 @@ map = new Vue({
             expanded: true,
             location: "Angell Hall, 435, South State Street, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
             possibleLocations: [],
+            noLocationResults: false,
           },
         ],
       },
@@ -115,6 +125,7 @@ map = new Vue({
             points: 15,
             latlong: L.latLng(42.2808, -83.7430),
             expanded: true,
+            noLocationResults: false,
           },
           {
             clue: "Where to find computers in Angell Hall.",
@@ -126,6 +137,7 @@ map = new Vue({
             possibleLocations: [],
             latlong: L.latLng(42.2766, -83.7397),
             expanded: true,
+            noLocationResults: false,
           },
         ],
       }, 
@@ -157,6 +169,7 @@ map = new Vue({
           points: 15,
           latlong: L.latLng(42.2808, -83.7430),
           expanded: true,
+          noLocationResults: false,
         },
         {
           clue: "You can see this playwright performed in the Arb",
@@ -166,6 +179,7 @@ map = new Vue({
           points: 15,
           latlong: L.latLng(42.2808, -83.7430),
           expanded: true,
+          noLocationResults: false,
         },
       ],
     },
@@ -197,6 +211,7 @@ map = new Vue({
           points: 15,
           latlong: L.latLng(42.280291,-83.7474556),
           expanded: true,
+          noLocationResults: false,
         },
         {
           clue: "Pick up a new comic or your next favorite game here",
@@ -206,49 +221,50 @@ map = new Vue({
           points: 15,
           latlong: L.latLng(42.2801, -83.7484),
           expanded: true,
+          noLocationResults: false,
         },
       ]}],      
     };
   },
   mounted() {
-  	const this_map = this.$refs.mymap.mapObject;
-    routermap = this_map;
-    // map.addControl(new L.Control.Fullscreen());
+  	// const this_map = this.$refs.mymap.mapObject;
+    // routermap = this_map;
+    // // map.addControl(new L.Control.Fullscreen());
 
-    console.log(this.makeMarkers);
+    // console.log(this.makeMarkers);
 
-    // TODO: make this a helper function
-    markers = this.inPlayMode ? this.guessMarkers : this.makeMarkers;
+    // // TODO: make this a helper function
+    // markers = this.inPlayMode ? this.guessMarkers : this.makeMarkers;
 
-    this.router = L.Routing.control({
-      // TODO: check waypoints appearing
-      waypoints: markers,   
-      routeWhileDragging: false,
-      // TODO: fix dragging problem
-      lineOptions: {
-        addWaypoints: false,
-      },
-      show: false,
-      units: 'imperial',
-      // summaryTemplate: '<h2>{name}</h2><h3>{distance}, {time}</h3>',
-    });
+    // this.router = L.Routing.control({
+    //   // TODO: check waypoints appearing
+    //   waypoints: markers,   
+    //   routeWhileDragging: false,
+    //   // TODO: fix dragging problem
+    //   lineOptions: {
+    //     addWaypoints: false,
+    //   },
+    //   show: false,
+    //   units: 'imperial',
+    //   // summaryTemplate: '<h2>{name}</h2><h3>{distance}, {time}</h3>',
+    // });
         
-    this.router.on('routesfound', function(e) {
-        // console.log("ROUTES FOUND");
-        // console.log(e.waypoints);
-        var routes = e.routes;
-        var summary = routes[0].summary;
-        // alert distance and time in miles and minutes
-        // console.log(summary.totalDistance / 1760 + ' mi');
-        // console.log(summary.totalTime % 3600 / 60 + ' min');
-        map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
-        map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
-        // map.currHunt.expectedTime = ((summary.totalDistance / (1760 * 2.5)) % 3600 / 60).toFixed(2);
+    // this.router.on('routesfound', function(e) {
+    //     // console.log("ROUTES FOUND");
+    //     // console.log(e.waypoints);
+    //     var routes = e.routes;
+    //     var summary = routes[0].summary;
+    //     // alert distance and time in miles and minutes
+    //     // console.log(summary.totalDistance / 1760 + ' mi');
+    //     // console.log(summary.totalTime % 3600 / 60 + ' min');
+    //     map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
+    //     map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
+    //     // map.currHunt.expectedTime = ((summary.totalDistance / (1760 * 2.5)) % 3600 / 60).toFixed(2);
 
-        // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
-    });
+    //     // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
+    // });
     
-    this.router.addTo(routermap);
+    // this.router.addTo(routermap);
   },
   updated() {
     // console.log("Updated!");
@@ -326,7 +342,12 @@ map = new Vue({
         markers = this.guessMarkers;
         // console.log(this.guessMarkers);
 
-        routermap.removeControl(this.router);
+        if (this.router) {
+          routermap.removeControl(this.router);
+        } else {
+          const this_map = this.$refs.mymap.mapObject;
+          routermap = this_map;
+        }
         this.router = L.Routing.control({
           // TODO: check waypoints appearing
           waypoints: markers,   
@@ -391,7 +412,7 @@ map = new Vue({
         hint: "",
         task: "",
         points: 15,
-        latlong: L.latLng(42.2766, -83.7397),
+        latlong: null,
         expanded: true,
         location: "",
         possibleLocations: [],
@@ -418,21 +439,29 @@ map = new Vue({
       // TODO: increment id when adding this
       console.log("publish");
 
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+    
       // add hunt to persistent memory
       this.allHunts.push(this.currHunt);
       this.switchPage("join");
     },    
-    searchLocation: function(e) {
-    query = e.target.value;
+    searchLocation: function(q) {
+    // query = e.target.value;
+    query = q;
+    console.log(q)
     // console.log("Searching for " + e.target.value);
 
     cleaned_query = query.replace(' ', '+');
+
+    if (!cleaned_query.includes("ann") && !cleaned_query.includes("Ann")) {
+      cleaned_query +=  ",ann+arbor";
+    }
 
     // TODO: overwrite
     // With help from: https://stackoverflow.com/questions/10923769/simple-reverse-geocoding-using-nominatim
     var s = document.createElement('script');     
     s.setAttribute("id", "locSearchScript");  
-    s.src = 'http://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query + ",ann+arbor";
+    s.src = 'http://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query;
     document.getElementsByTagName('head')[0].appendChild(s);
     // TODO: attribute!
     // // console.log("Calling iTunes API with: https://itunes.apple.com/search?attribute=allArtistTerm&term=" + cleaned_query);
@@ -456,13 +485,25 @@ map = new Vue({
     // TODO: set time to be walking time
     // TODO: also make sure that you can get the possible locations for any location
     setLocation(stop_i, possible_loc_i) {
+      console.log("Set location");
+      console.log(stop_i, possible_loc_i);
       chosenLoc = this.currHunt.stops[stop_i].possibleLocations[possible_loc_i];
       this.currHunt.stops[stop_i].latlong = L.latLng(chosenLoc.latlong[0], chosenLoc.latlong[1])
       this.currHunt.stops[stop_i].location = chosenLoc.name;
+      
+      // TODO: prefer to keep previous possible locations? and just hide them after click?
+      this.currHunt.stops[stop_i].possibleLocations = [];
 
       markers = this.inPlayMode ? this.guessMarkers : this.makeMarkers;
 
-      routermap.removeControl(this.router);
+      // TODO: make this a helper function 
+      // TODO: zoom map to markers
+      if (this.router) {
+        routermap.removeControl(this.router);
+      } else {
+        const this_map = this.$refs.mymap.mapObject;
+        routermap = this_map;
+      }
       this.router = L.Routing.control({
         // TODO: check waypoints appearing
         waypoints: markers,   
@@ -490,6 +531,8 @@ map = new Vue({
       });
       
       this.router.addTo(routermap);
+
+      $('#loc'+stop_i).hide();
 
     }, 
     setActiveStop: function(i) {
@@ -583,30 +626,15 @@ map = new Vue({
       return this.currHunt.stops[this.currHunt.inProgress.currStopId];
     },
     onIndexPage: function() {
-      console.log("on index page? ")
-      console.log(this.page == "index");
-
       return this.page == "index";
     },
     onJoinPage: function() {
-      console.log("on join page? ")
-      console.log(this.page == "join");
-
-
       return this.page == "join";
     },
     onCreatePage: function() {
-      console.log("on create page? ")
-      console.log(this.page == "create");
-      console.log(this.currHunt);
-
       return this.page == "create";
     },
     onPlayPage: function() {
-      console.log("on play page? ")
-      console.log(this.page == "play");
-
-
       return this.page == "play";
     },
   }
@@ -614,3 +642,23 @@ map = new Vue({
 
 // console.log("I think Vue just rendered?");
 // console.log(map.makeMarkers);
+
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()

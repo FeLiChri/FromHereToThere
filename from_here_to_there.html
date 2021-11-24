@@ -1,4 +1,5 @@
 <html>
+  <!-- TODO: rename to be index.html -->
 <head>
   <title>From Here to There</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -138,16 +139,19 @@
                     <h2>
                       Location: 
                       <!-- <input type="text" id="" name="" v-bind:value="mapConfig.search_text" v-on:keyup.enter="searchLocation" placeholder="Where is this stop?"> -->
-                      <div class="input-group rounded">
+                      <div class="input-group input-group-sm mb-3">
                         <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-                        aria-describedby="search-addon" v-bind:value="c.location" v-on:keyup.enter="searchLocation"/>
-                        <span class="input-group-text border-0" id="search-addon">
-                          <i class="fas fa-search"></i>
-                        </span>
+                        aria-describedby="search-addon" v-model="c.location" v-on:keyup.enter="searchLocation(c.location)"/>
+                        <div class="input-group-append">
+                          <button class="btn btn-secondary" type="button" @click="searchLocation(c.location)"><i class="bi bi-search"></i></button>
+                        </div>
                       </div>
                       <div>
-                        <div>
-                          <button v-for="(loc, j) in c.possibleLocations" class="dropdown-item" id="'loc-'+i+'-'+j" @click="setLocation(i, j)"><p>{{loc.name}}</p></button>
+                        <div id="'loc-'+i">
+                          <button v-for="(loc, j) in c.possibleLocations" class="dropdown-item possible-location" id="'loc-'+i+'-'+j" @click="setLocation(i, j)"><p>{{loc.name}}</p></button>
+                        </div>
+                        <div id="'no-results'+i" v-if="c.noLocationResults">
+                          <div class="alert alert-danger" role="alert">No search results. Make sure the location is spelled correctly and is in Ann Arbor.</div>
                         </div>
                       </div>
                       <br>

@@ -95,3 +95,10 @@
     width: 30px; 
     height: auto;
 }
+
+.dropdown-item.possible-location{
+    height: auto;
+    white-space: normal;
+    width: 100%;
+    margin: auto;
+}
