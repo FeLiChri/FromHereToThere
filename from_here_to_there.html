@@ -213,6 +213,8 @@
             <tr>
               <th scope="col"></th>
               <th scope="col">Hunt Name</th>
+              <th scope="col">Points</th>
+              <th scope="col">Time Taken</th>
               <th scope="col">Est. Time</th>
               <th scope="col">Est. Dist</th>
             </tr>
@@ -221,6 +223,22 @@
             <tr key="h.title" v-on:click="loadHunt(h.id)" id="h.id">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
               <td><h1>{{h.title}}</h1></td>
+              <td>
+                <h1 v-if="h.completed">
+                  {{h.finalStats.numPoints}}
+                </h1>
+                <h1 v-else>
+                  --
+                </h1>
+              </td>
+              <td>
+                <h1 v-if="h.completed">
+                  {{h.finalStats.timeTaken}}
+                </h1>
+                <h1 v-else>
+                  --
+                </h1>
+              </td>
               <td><h1>{{h.expectedTime}} mins</h1></td>
               <td><h1>{{h.expectedDistance}} mi</h1></td>
             </tr>
@@ -286,6 +304,11 @@
                   Try again!
                 </p>
               </h1>
+
+              <button type="button" class="btn btn-primary mt-4" @click='makeGuess'>
+                <h1>Submit</h1>
+              </button>
+              <br>
     
               <button v-if="!currHunt.inProgress.hintClicked" type="button" class="btn btn-primary mt-4" @click='showHint'>
                 <h1>Hint</h1>

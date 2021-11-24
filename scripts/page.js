@@ -370,6 +370,7 @@ map = new Vue({
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "numPoints", this.currHunt.inProgress.numPoints);
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "timeTaken", this.currHunt.inProgress.timeSoFar);
         console.log(this.allHunts);
+        this.goBack();
       } else {
         this.currHunt.inProgress.currStopId += 1;
         this.currHunt.inProgress.guessText = "";
