@@ -65,7 +65,8 @@
         <div> 
           <h1>
             <img alt="From Here to There" src="src/favicon.png" class="photo img-fluid" />
-            Title:
+
+              Title:
             <input type="text" id="title" name="title" v-model="currHunt.title" placeholder="Add a title here!">
           </h1>
         </div> <!-- row -->
@@ -88,7 +89,7 @@
                 Time Limit: 
     
                 <div id="timelimit">
-                    <label for="hours">Hours:</label>
+                    <label for="hours" style="color:red;">Hours:</label>
                     <select class="form-control" id="hours" style="width:50px; margin: 5px;">
                       <option>0</option>
                       <option>1</option>
@@ -102,7 +103,7 @@
                       <option>9</option>
                       <option>10</option>
                     </select>
-                    <label for="mins">Mins:</label>
+                    <label for="mins" style="color:red;">Mins:</label>
                     <select class="form-control" id="mins" style="width: 50px; margin: 5px;">
                       <option>0</option>
                       <option>5</option>
@@ -183,7 +184,7 @@
     <!-- button -->
     <div class="row align-items-center">            
     <button type="button" class="btn btn-primary mt-4" @click="addStop">
-                  <h1>Add Stop</h1>
+                  <h1 id="addStopBtn">Add Stop</h1>
                 </button>
               </div> <!-- button -->
               
@@ -208,7 +209,7 @@
           <h1>Pick a scavenger hunt!</h1>
         </div> <!-- title -->
     
-        <table class="table">
+        <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col"></th>
@@ -218,9 +219,9 @@
             </tr>
           </thead>
           <tbody v-for="h in this.allHunts">
-            <tr key="h.title" v-on:click="loadHunt(h.id)" id="h.id">
+            <tr key="h.title"  id="h.id">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
-              <td><h1>{{h.title}}</h1></td>
+              <td @click="switchPage('play', h.id)" ><h1>{{h.title}}</h1></td>
               <td><h1>{{h.expectedTime}} mins</h1></td>
               <td><h1>{{h.expectedDistance}} mi</h1></td>
             </tr>
@@ -240,7 +241,7 @@
             <br>
             <div class="row justify-content-md-center">
               <div class="col-sm-auto">
-              Time Remaining: {{currHunt.expectedTime - currHunt.inProgress.timeSoFar}}
+              Time Remaining: {{currHunt.expectedTime - currHunt.inProgress.timeSoFar}} mins
               </div>
               <div class="col-sm-auto">
               Points: {{currHunt.inProgress.numPoints}}
