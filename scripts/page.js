@@ -45,7 +45,7 @@ map = new Vue({
       currHunt: {
         expectedDistance: 0,
         expectedTime: 30,
-        title: "", // TODO: add id
+        title: "",
         icon: "",
         id: 0,
 
@@ -247,7 +247,7 @@ map = new Vue({
     this.router.addTo(routermap);
   },
   updated() {
-    // console.log("Updated!");
+    console.log("Updated!");
     e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
     // console.log(e);
     if (this.expandLastAcc) {
@@ -259,19 +259,14 @@ map = new Vue({
     loadHunt: function(id){
       this.page = "play";
       this.inPlayMode = true;
-      this.currHunt = this.allHunts[id];
+      // this.currHunt = this.allHunts[id];
       // console.log("loadHunt");
       // console.log("loadHunt");
       // Start countdown of time remaining
 
 
       // update time so far
-      // setInterval(function(){
-      //   this.currHunt.inProgress.timeSoFar += 1;
-      //   console.log("updated time");
-      //     }
 
-      // , 10000);
     },
     registerMarker: function(e) {
         // console.log(e);
@@ -386,18 +381,9 @@ map = new Vue({
       // TODO: decrement currStop if it's after i - make sure it's still open
     },
     addStop: function() {
-      this.currHunt.stops.push( {
-        clue: "",
-        answer: "",
-        hint: "",
-        task: "",
-        points: 15,
-        latlong: L.latLng(42.2766, -83.7397),
-        expanded: true,
-        location: "",
-        possibleLocations: [],
-      });
-      map.currHunt.inProgress.currStopId = this.currHunt.stops.length - 1;
+      // Change "add stop" to "save":
+      var ogbtn = $('#addStopBtn').html();
+
       // console.log("ADD STOP");
       // $("#collapse" + this.currHunt.stops.length - 1).collapse({
       //   show: true
@@ -410,18 +396,53 @@ map = new Vue({
       //   $('#collapse' + this.currHunt.stops.length - 1).collapse('show');
       // });
       // setTimeout( () => {}, 1000);
-      
-      this.expandLastAcc = true;
+
+
+
+      if(ogbtn == "Save Stop"){
+        $('#addStopBtn').html("Add Stop");
+        $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('hide');
+        this.expandLastAcc = false;
+      }
+      else{
+
+        $('#addStopBtn').html("Save Stop");
+        this.currHunt.stops.push( {
+        clue: "",
+        answer: "",
+        hint: "",
+        task: "",
+        points: 15,
+        latlong: L.latLng(42.2766, -83.7397),
+        expanded: true,
+        location: "",
+        possibleLocations: [],
+      });
+        map.currHunt.inProgress.currStopId = this.currHunt.stops.length - 1;
+        this.expandLastAcc = true;
+      }
+
 
     },
     publish: function() {
       // TODO: error checking!
+
+      // Check if selected time limit
+      var timelimit = document.getElementById('mins').value + (60*document.getElementById('hours').value)
+      if(timelimit == 0 ){
+        $('#timelimit').css('border', '2px solid red');
+        alert("No time limit selected");
+        return;
+      }
       // TODO: increment id when adding this
       console.log("publish");
 
       // add hunt to persistent memory
       this.allHunts.push(this.currHunt);
       this.switchPage("join");
+
+
+
     },    
     searchLocation: function(e) {
     query = e.target.value;
@@ -497,8 +518,15 @@ map = new Vue({
       // console.log(i);
       this.currHunt.inProgress.currStopId = i;
     }, 
-    switchPage: function(pageIn) {
+    switchPage: function(pageIn, idIn=null) {
       // console.log("SWITCHING PAGE TO: " + pageIn);
+      // let pageIn;
+      // let idIn;
+      // let split_args_array = args.split(",");
+      // pageIn = split_args_array[0]
+      // if(split_args_array.length > 1) {
+      //   idIn = split_args_array[1];
+      // }
       this.page = pageIn;
 
       if (pageIn == "join") {
@@ -529,7 +557,14 @@ map = new Vue({
         };
       } else if (pageIn == "play") {
         this.inPlayMode = true;
-        this.currHunt = this.allHunt[id];
+        this.currHunt = this.allHunts[idIn];
+        console.log(this.currHunt);
+        setInterval(()=>{
+          this.currHunt.inProgress.timeSoFar += 1;
+
+          }
+          , 60000);
+
       } else if (pageIn == "index") {
         this.inPlayMode = false;
       } else {
@@ -615,3 +650,8 @@ map = new Vue({
 
 // console.log("I think Vue just rendered?");
 // console.log(map.makeMarkers);
+
+function auto_height(elem) {  /* javascript */
+  elem.style.height = "1px";
+  elem.style.height = (elem.scrollHeight)+"px";
+}
