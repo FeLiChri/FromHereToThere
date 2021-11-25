@@ -243,9 +243,7 @@
           <tbody v-for="h in this.allHunts">
             <tr v-if="!h.completed" key="h.title"  id="h.id">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
-              <td @click="switchPage('play', h.id)" >
-              <p>{{h.title}}</p></td>
-              <td><h1>{{h.title}}</h1></td>
+              <td @click="switchPage('play', h.id)" ><p>{{h.title}}</p></td>
               <td><h1>--</h1></td>
               <td><h1>--</td>
               <td><h1>{{h.expectedTime}} mins</h1></td>
@@ -253,8 +251,7 @@
             </tr>
             <tr v-else key="h.title"  id="h.id">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
-              <td @click="switchPage('play', h.id)" >
-              <td><h1>{{h.title}} (Completed!)</h1></td>
+              <td @click="switchPage('play', h.id)" ><p>{{h.title}} (Completed!)</p></td>
               <td><h1>{{h.finalStats.numPoints}}</h1></td>
               <td><h1>{{h.finalStats.timeTaken}}</h1></td>
               <td><h1>{{h.expectedTime}} mins</h1></td>
@@ -276,7 +273,7 @@
             <img alt="logo" :src="currHunt.icon" class="photo icon" />
             {{currHunt.title}}
             <br>
-            <div class="row justify-content-md-center">
+            <div v-if="!currHunt.completed" class="row justify-content-md-center">
               <div class="col-sm-auto">
               Time Remaining: {{currHunt.expectedTime - currHunt.inProgress.timeSoFar}} mins
               </div>
@@ -284,9 +281,17 @@
               Points: {{currHunt.inProgress.numPoints}}
               </div>
             </div>
+            <div v-else class="row justify-content-md-center">
+              <div class="col-sm-auto">
+              Time Taken: {{currHunt.finalStats.timeTaken}} mins
+              </div>
+              <div class="col-sm-auto">
+              Points: {{currHunt.finalStats.numPoints}}
+              </div>
+            </div>
           </h1>
           
-          <div class="Instructions">
+          <div v-if="!currHunt.completed" class="Instructions">
             <h2><i class="bi bi-info-circle"></i> &nbsp;Instructions:</h2>
             <ul>
               <li>Reveal the next destination on the map by typing in the answer to the clue and pressing ENTER</li>
@@ -297,7 +302,7 @@
           </div>
         </div> <!-- row -->
     
-        <div class="row">
+        <div v-if="!currHunt.completed" class="row">
           <!-- map -->
           <div id="map-div" class="blue_border col-sm-6">
             <h1>Map!</h1>
@@ -312,7 +317,7 @@
     
             <!-- </div> -->
             <br>
-        </div> <!-- map -->
+          </div> <!-- map -->
     
           <!-- clue -->
           <div v-if="!currHunt.inProgress.correct" class="form col-sm-6 mt-2 mt-sm-0 align-items-center text-center">
@@ -366,10 +371,21 @@
             </h1>
             <h1>Submit Evidence:</h1>
             <button type="button" class="btn btn-primary mt-4">
-              <input type="file" id="evidence" accept="image/png, image/jpeg">
+              <input type="file" id="evidence" @change="prepareEvidence($event.target.files)" accept="image/png, image/jpeg">
               <br>
-              <input type="submit" @click="nextClue">
+              <input v-if="tempImg" type="submit" @click="nextClue">
+              <input v-else type="submit" @click="nextClue" disabled>
             </button>
+          </div>
+        </div>
+        <div class="evidence">
+          <h1>
+            Evidence Gathered:
+          </h1>
+          <br>
+          <br>
+          <div v-for="(imgUrl, i) in currHunt.inProgress.evidence">
+            <img class="evidenceImg" :src="imgUrl" />
           </div>
         </div>
       </div> <!-- container -->

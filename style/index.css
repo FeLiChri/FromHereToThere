@@ -108,6 +108,16 @@
     background-color: lightgray;
 }
 
+.evidence {
+    display: block;
+    align-items: center;
+    width: 100%;
+}
+
+.evidenceImg {
+    max-width: 50%;
+}
+
 /* Table-Mobile */
 .table tr {
     font-size: 15px;

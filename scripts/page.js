@@ -42,6 +42,7 @@ map = new Vue({
         url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       },
+      tempImg: null,
       currHunt: {
         expectedDistance: 0,
         expectedTime: 30,
@@ -60,6 +61,7 @@ map = new Vue({
           hintClicked: false,
           tryAgain: false,
           correct: false,
+          evidence: [],
         },
         // TODO: when they publish, remove spaces from ends of all answers
         stops: [
@@ -106,6 +108,7 @@ map = new Vue({
           hintClicked: false,
           tryAgain: false,
           correct: false,
+          evidence: [],
         },
         finalStats: {
           numPoints: null,
@@ -153,6 +156,7 @@ map = new Vue({
           hintClicked: false,
           tryAgain: false,
           correct: false,
+          evidence: [],
         },
         finalStats: {
           numPoints: null,
@@ -198,6 +202,7 @@ map = new Vue({
           hintClicked: false,
           tryAgain: false,
           correct: false,
+          evidence: [],
         },
         finalStats: {
           numPoints: null,
@@ -359,6 +364,7 @@ map = new Vue({
     },
     nextClue: function() {
       // console.log("NEXT CLUE");
+      this.allHunts[this.currHunt.id].inProgress.evidence.push(this.tempImg);
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
         alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar}\nPoints: ${this.currHunt.inProgress.numPoints}`);
         this.allHunts[this.currHunt.id].completed = true;
@@ -373,7 +379,20 @@ map = new Vue({
         this.currHunt.inProgress.hintClicked = false;
         this.currHunt.inProgress.tryAgain = false;
         this.currHunt.inProgress.correct = false;
+        this.tempImg = null;
       }
+    },
+    prepareEvidence: function(files) {
+      console.log("prepareEvidence");
+      console.log(files);
+      // No file submitted
+      if (!files.length) {
+        this.tempImg = null;
+        return;
+      }
+      this.tempImg = URL.createObjectURL(files[0]);
+      console.log(this.tempImg);
+
     },
     deleteStop: function(i) {
       // TODO: make sure to add an "are you sure? popup"
