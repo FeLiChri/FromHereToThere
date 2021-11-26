@@ -1,0 +1,121 @@
+<html>
+  <!-- TODO: rename to be index.html -->
+<head>
+  <title>From Here to There</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- vue2 Leaflet -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"></link>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/vue2-leaflet@1.0.1/dist/vue2-leaflet.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css"></link>
+  <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js"></script>
+
+  <!-- Map Routing -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <!-- <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script> -->
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+   <!-- Jquery and Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="style/index.css">
+  <!-- Bootstrap Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="src/favicon.png" />
+
+
+  <!-- Vuelidate Form Validation -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@vue/composition-api@1.4.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.6/lib/index.min.js"></script>
+
+</head>
+
+<body>
+<!-- app id -->
+<div id="app">
+    <form class="needs-validation row mt-3" novalidate>
+        <label :for="'answer'+i" class="col-sm-2 mt-2 col-form-label">Go to: <span style="color: red;">*</span></label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control mt-2" :id="'answer'+i" v-model="answer" placeholder="Stop Name (e.g. Hatcher)"  required>
+            <div class="invalid-feedback mb-2">
+                Tell the participants where they should go. This is also what they will guess.
+            </div>
+        </div>
+
+        <label :for="'location'+i" class="col-sm-2 mt-2 col-form-label">Located at: <span style="color: red;">*</span></label>
+        <div class="col-sm-10">
+            <div class="input-group input-group-sm-2 mt-2">
+                <input type="search" class="form-control rounded" placeholder="Search for Location" aria-label="Search"
+                aria-describedby="search-addon" v-model="location" v-on:keyup.enter="searchLocation(location)" style="border-radius: 0.25em 0 0 0.25em !important;"/>
+                <div class="input-group-append" >
+                  <button class="btn btn-secondary" type="button" style="height: 100%; border-radius: 0 0.25em 0.25em 0 !important;" @click="searchLocation(location)"><i class="bi bi-search"></i></button>
+                </div>
+              </div>
+              <div>
+                <div id="'loc-'+i">
+                  <button v-for="(loc, j) in possibleLocations" class="dropdown-item possible-location" id="'loc-'+i+'-'+j" @click="setLocation(i, j)"><p>{{loc.name}}</p></button>
+                </div>
+                <div id="'no-results'+i" v-if="noLocationResults">
+                  <div class="alert alert-danger" role="alert">No search results. Make sure the location is spelled correctly and is in Ann Arbor.</div>
+                </div>
+              </div>
+            <div class="invalid-feedback mb-2">
+                Search for the exact location of this stop.
+            </div>
+        </div>
+
+        <label :for="'clue'+i" class="col-sm-2 mt-2 col-form-label">Clue: <span style="color: red;">*</span></label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control mt-2" :id="'clue'+i" v-model="clue" placeholder="e.g. Where do the graduate students study?" required>
+            <div class="invalid-feedback mb-2">
+                Please provide a clue for where participants should go.
+            </div>
+        </div>
+
+        <label :for="'hint'+i" class="col-sm-2 mt-2 col-form-label">Hint:</label>
+        <div class="col-sm-10">
+        <input type="text" class="form-control mt-2" :id="'hint'+i" v-model="hint" placeholder="e.g. It starts with 'hat'.">
+        </div>
+
+        <label :for="'task'+i" class="col-sm-2 mt-2 col-form-label">Task: <span style="color: red;">*</span></label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control mt-2" :id="'task'+i" v-model="task" placeholder="e.g. Take a photo in the stacks." required>
+            <div class="invalid-feedback mb-2">
+                Please provide a task for people to complete at the location.
+            </div>
+        </div>
+
+        <div class="">
+          <button class="btn btn-primary" type="button" @click="validateForm">Submit form</button>
+        </div>
+      </form>
+<!-- app id -->
+</div>
+<!-- footer -->
+<footer>
+    <div class="container-fluid align-items-center text-center">
+      <div class="row">
+        <div class="col-sm-12">
+          <p>Made with ❤ in Ann Arbor, Michigan.<br> Copyright © 2021 The Scavengers. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer> <!-- footer -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="test_form.js"></script>
+<script>
+</script>
+</body>
+
+</html>

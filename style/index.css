@@ -132,6 +132,13 @@
     height: 50px;
 }
 
+.dropdown-item.possible-location{
+    height: auto;
+    white-space: normal;
+    width: 100%;
+    margin: auto;
+}
+
 /*screen that is larger than the mobile view, Large Screen*/
 @media only screen and (min-width:480px) {
     
