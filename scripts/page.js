@@ -32,6 +32,10 @@ map = new Vue({
   components: { LMap, LTileLayer, LMarker, LTooltip },
   data() {
     return {
+      iconImage:"",
+      arborAdventureIconSelected:false,
+      bookBonanzaIconSelected:false,
+      welcomeHomeIconSelected:false,
       inPlayMode: false,
       expandLastAcc: false,
       page: "index", // options ["index", "play", "create", "join"]
@@ -261,6 +265,29 @@ map = new Vue({
     }
   },
   methods: {
+    selectIcon(event){
+      // arborAdventureIconSelected:true,
+      // bookBonanzaIconSelected:false,
+      // welcomeHomeIconSelected:false,
+      var iconSelected = event.target.id;
+      this.arborAdventureIconSelected = false;
+      this.bookBonanzaIconSelected = false;
+      this.welcomeHomeIconSelected = false;
+
+      if(iconSelected == "aaIcon"){
+        this.iconImage = "src/arborAdventureIcon.png";
+        this.arborAdventureIconSelected = true;
+      }
+      else if(iconSelected == "bbIcon"){
+        this.iconImage = "src/bookBonanzaIcon.png";
+        this.bookBonanzaIconSelected = true;
+      }
+      else if(iconSelected == "whIcon"){
+        this.iconImage = "src/welcomeHomeIcon.png";
+        this.welcomeHomeIconSelected = true;
+      }
+      console.log("icon:", this.iconImage);
+    },
     loadHunt: function(id){
       this.page = "play";
       this.inPlayMode = true;
