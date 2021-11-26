@@ -595,7 +595,7 @@ map = new Vue({
         // Loop over them and prevent submission
         Array.prototype.slice.call(forms)
           .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
+            form.addEventListener('click', function (event) {
               if (!form.checkValidity()) {
                 event.preventDefault()
                 event.stopPropagation()
