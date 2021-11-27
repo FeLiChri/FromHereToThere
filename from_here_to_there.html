@@ -5,6 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- Tooltips Popper -->
+  <script scr="https://unpkg.com/@popperjs/core@2"></script>
+
   <!-- vue2 Leaflet -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"></link>
@@ -31,10 +34,6 @@
   <link rel="icon" type="image/x-icon" href="src/favicon.png" />
 
 
-  <!-- Vuelidate Form Validation -->
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@vue/composition-api@1.4.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.6/lib/index.min.js"></script>
 
 </head>
 
@@ -186,45 +185,11 @@
                 </div>
                 <div v-bind:id="'collapse'+i" class="accordion-collapse collapse" v-bind:aria-labelledby="'header'+i" data-bs-parent="#accordionExample">
                   <div class="accordion-body">
-<<<<<<< HEAD
-                    <h2>Location:</h2>
-                    <!-- <input type="text" id="" name="" v-bind:value="mapConfig.search_text" v-on:keyup.enter="searchLocation" placeholder="Where is this stop?"> -->
-                    <div class="input-group rounded">
-                    <input type="search" class="form-control rounded" placeholder="Where to go?" aria-label="Search"
-                    aria-describedby="search-addon" v-bind:value="c.location" v-on:keyup.enter="searchLocation"/>
-                    <span class="input-group-text border-0" id="search-addon">
-                        <i class="fas fa-search"></i>
-                    </span>
-                    </div>
-                    <div>
-                    <div>
-                        <button v-for="(loc, j) in c.possibleLocations" class="dropdown-item" id="'loc-'+i+'-'+j" @click="setLocation(i, j)"><p>{{loc.name}}</p></button>
-                    </div>
-                    </div>
-                    <br>
-                    <h2>Clue:</h2> 
-                    <textarea oninput="auto_height(this)" class="input-text" v-model="c.clue" placeholder="Give your players an initial clue of how to get there!"></textarea>
-                    <!-- <input type="text" class="input-text" name="" v-model="c.clue" placeholder="Give your players an initial clue of how to get there!"> -->
-                    <br>
-                    <h2>Answer:</h2>
-                    <textarea oninput="auto_height(this)" class="input-text" v-model="c.answer" placeholder="Nickname of your destination - what your players will guess"></textarea>
-                    <!-- <input type="text" class="input-text" name="" v-model="c.answer" placeholder="Nickname of your destination, this is what your players will type in to guess"> -->
-                    <br>
-                    <h2>Hint (opt.):</h2> 
-                    <textarea oninput="auto_height(this)" class="input-text" v-model="c.hint" placeholder="Another optional hint, in case your players get stuck"></textarea>
-                    <!-- <input type="text" class="input-text" name="" v-model="c.hint" placeholder="Another optional hint, in case your players get stuck"> -->
-                    <br>
-                    <h2>Task:</h2>
-                    <textarea oninput="auto_height(this)" class="input-text" v-model="c.task" placeholder="What should your players do once there? Take a photo of ..."></textarea>
-                    <!-- <input type="text" class="input-text" name="" v-model="c.task" placeholder="What should your players do once there? Take a photo of ..."> -->
-                    <br>
-                    <h2>Points:</h2>
-                    <textarea oninput="auto_height(this)" class="input-text" v-model="c.points" placeholder="How many points should be awarded?"></textarea>
-                    <!-- <input type="text" class="input-text" name="" v-model="c.points" placeholder="How many points should be awarded?"> -->
-                    <br>
-=======
                     <form class="needs-validation row mt-3" novalidate>
-                      <label :for="'answer'+i" class="col-sm-2 mt-2 col-form-label">Go to: <span style="color: red;">*</span></label>
+                      <label :for="'answer'+i" class="col-sm-2 mt-2 col-form-label">Go to: 
+                      <span style="color: red;">* </span>
+                      <span data-toggle="tooltip" title="Nickname of your destination - what your players will guess." class="bi bi-info-circle static"><span>
+                    </label>               
                       <div class="col-sm-10">
                           <input type="text" class="form-control mt-2" :id="'answer'+i" v-model="c.answer" placeholder="Stop Name (e.g. Hatcher)"  required>
                           <div class="invalid-feedback mb-2">
@@ -232,14 +197,20 @@
                           </div>
                       </div>
               
-                      <label :for="'location'+i" class="col-sm-2 mt-2 col-form-label">At / In: <span style="color: red;">*</span></label>
-                      <div class="col-sm-10">
+                      <label :for="'location'+i" class="col-sm-2 mt-2 col-form-label">At / In: 
+                        <span style="color: red;">*</span>
+                        <span data-toggle="tooltip" title="Which building or location is this stop in or at?" class="bi bi-info-circle static"><span>
+                      </label>
+                        <div class="col-sm-10">
                           <div class="input-group input-group-sm-2 mt-2">
                               <input type="search" class="form-control rounded" placeholder="Search for Location" aria-label="Search"
-                              aria-describedby="search-addon" v-model="c.location" v-on:keyup.enter="searchLocation(c.location)" style="border-radius: 0.25em 0 0 0.25em !important;"/>
+                              aria-describedby="search-addon" v-model="c.location" v-on:keyup.enter="searchLocation(c.location)" style="border-radius: 0.25em 0 0 0.25em !important;" required>
                               <div class="input-group-append" >
                                 <button class="btn btn-secondary" type="button" style="height: 100%; border-radius: 0 0.25em 0.25em 0 !important;" @click="searchLocation(c.location)"><i class="bi bi-search"></i></button>
                               </div>
+                              <div class="invalid-feedback mb-2">
+                                Search for a specific building or location that this stop is in or at.
+                            </div>
                             </div>
                             <div>
                               <div id="'loc-'+i">
@@ -249,12 +220,12 @@
                                 <div class="alert alert-danger" role="alert">No search results. Make sure the location is spelled correctly and is in Ann Arbor.</div>
                               </div>
                             </div>
-                          <div class="invalid-feedback mb-2">
-                              Search for the exact location of this stop.
-                          </div>
                       </div>
               
-                      <label :for="'clue'+i" class="col-sm-2 mt-2 col-form-label">Clue: <span style="color: red;">*</span></label>
+                      <label :for="'clue'+i" class="col-sm-2 mt-2 col-form-label">Clue: 
+                        <span style="color: red;">*</span>
+                        <span data-toggle="tooltip" title="Give your players an initial clue of how to get there!" class="bi bi-info-circle static"><span>
+                        </label>
                       <div class="col-sm-10">
                           <input type="text" class="form-control mt-2" :id="'clue'+i" v-model="c.clue" placeholder="e.g. Where do the graduate students study?" required>
                           <div class="invalid-feedback mb-2">
@@ -262,24 +233,35 @@
                           </div>
                       </div>
               
-                      <label :for="'hint'+i" class="col-sm-2 mt-2 col-form-label">Hint:</label>
+                      <label :for="'hint'+i" class="col-sm-2 mt-2 col-form-label">Hint:
+                        <span data-toggle="tooltip" title="Another optional hint, in case your players get stuck." class="bi bi-info-circle static"><span>
+                      </label>
                       <div class="col-sm-10">
                       <input type="text" class="form-control mt-2" :id="'hint'+i" v-model="c.hint" placeholder="e.g. It starts with 'hat'.">
                       </div>
               
-                      <label :for="'task'+i" class="col-sm-2 mt-2 col-form-label">Task: <span style="color: red;">*</span></label>
+                      <label :for="'task'+i" class="col-sm-2 mt-2 col-form-label">Task: 
+                        <span style="color: red;">*</span>
+                        <span data-toggle="tooltip" title="What should your players do once there?" class="bi bi-info-circle static"><span>
+                        </label>
                       <div class="col-sm-10">
                           <input type="text" class="form-control mt-2" :id="'task'+i" v-model="c.task" placeholder="e.g. Take a photo in the stacks." required>
                           <div class="invalid-feedback mb-2">
                               Please provide a task for people to complete at the location.
                           </div>
                       </div>
+
+                      <label :for="'points'+i" class="col-sm-2 mt-2 col-form-label">Points: 
+                        <span data-toggle="tooltip" title="How many points should be awarded?" class="bi bi-info-circle static"><span>
+                        </label>
+                      <div class="col-sm-10">
+                          <input type="number" class="form-control mt-2" :id="'points'+i" v-model="c.points">
+                      </div>
               
-                      <div class="">
-                        <button class="btn btn-primary" type="button" @click="validateForm">Submit form</button>
+                      <div class="col-sm-12" style="display:flex; width:100%; justify-content: center; align-items: center;">
+                        <button class="btn btn-primary" type="button" @click="validateForm">Save Stop</button>
                       </div>
                     </form>                  
->>>>>>> fee-polish
                   </div>
                 </div>
               </div>

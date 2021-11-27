@@ -139,6 +139,10 @@
     margin: auto;
 }
 
+.static {
+    position: static;
+}
+
 /*screen that is larger than the mobile view, Large Screen*/
 @media only screen and (min-width:480px) {
     

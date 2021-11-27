@@ -275,6 +275,11 @@ map = new Vue({
       this.expandLastAcc = false;
       $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('show');
     }
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip({
+          placement : 'right'
+      });
+    });
   },
   methods: {
     selectIcon(event){
@@ -463,9 +468,10 @@ map = new Vue({
 
 
       if(ogbtn == "Save Stop"){
-        $('#addStopBtn').html("Add Stop");
-        $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('hide');
-        this.expandLastAcc = false;
+        this.validateForm();
+        // $('#addStopBtn').html("Add Stop");
+        // $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('hide');
+        // this.expandLastAcc = false;
       }
       else{
 
