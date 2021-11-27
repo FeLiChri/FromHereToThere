@@ -467,15 +467,15 @@ map = new Vue({
 
 
 
-      if(ogbtn == "Save Stop"){
-        this.validateForm();
-        // $('#addStopBtn').html("Add Stop");
-        // $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('hide');
-        // this.expandLastAcc = false;
-      }
-      else{
+      // if(ogbtn == "Save Stop"){
+      //   this.validateForm();
+      //   // $('#addStopBtn').html("Add Stop");
+      //   // $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('hide');
+      //   // this.expandLastAcc = false;
+      // }
+      // else{
 
-        $('#addStopBtn').html("Save Stop");
+        // $('#addStopBtn').html("Save Stop");
         this.currHunt.stops.push( {
         clue: "",
         answer: "",
@@ -489,7 +489,7 @@ map = new Vue({
       });
         map.currHunt.inProgress.currStopId = this.currHunt.stops.length - 1;
         this.expandLastAcc = true;
-      }
+      // }
 
 
     },

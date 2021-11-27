@@ -193,7 +193,7 @@
                       <div class="col-sm-10">
                           <input type="text" class="form-control mt-2" :id="'answer'+i" v-model="c.answer" placeholder="Stop Name (e.g. Hatcher)"  required>
                           <div class="invalid-feedback mb-2">
-                              Tell the participants where they should go. This is also what they will guess.
+                              Please provide a stop name.
                           </div>
                       </div>
               
@@ -209,7 +209,7 @@
                                 <button class="btn btn-secondary" type="button" style="height: 100%; border-radius: 0 0.25em 0.25em 0 !important;" @click="searchLocation(c.location)"><i class="bi bi-search"></i></button>
                               </div>
                               <div class="invalid-feedback mb-2">
-                                Search for a specific building or location that this stop is in or at.
+                                Please provide a location.
                             </div>
                             </div>
                             <div>
@@ -229,7 +229,7 @@
                       <div class="col-sm-10">
                           <input type="text" class="form-control mt-2" :id="'clue'+i" v-model="c.clue" placeholder="e.g. Where do the graduate students study?" required>
                           <div class="invalid-feedback mb-2">
-                              Please provide a clue for where participants should go.
+                              Please provide a clue.
                           </div>
                       </div>
               
@@ -247,7 +247,7 @@
                       <div class="col-sm-10">
                           <input type="text" class="form-control mt-2" :id="'task'+i" v-model="c.task" placeholder="e.g. Take a photo in the stacks." required>
                           <div class="invalid-feedback mb-2">
-                              Please provide a task for people to complete at the location.
+                              Please provide a task.
                           </div>
                       </div>
 
@@ -258,8 +258,8 @@
                           <input type="number" class="form-control mt-2" :id="'points'+i" v-model="c.points">
                       </div>
               
-                      <div class="col-sm-12" style="display:flex; width:100%; justify-content: center; align-items: center;">
-                        <button class="btn btn-primary" type="button" @click="validateForm">Save Stop</button>
+                      <div class="col-sm-12 mt-3" style="display:flex; width:100%; justify-content: center; align-items: center;">
+                        <h2><button class="btn btn-primary" type="button" @click="validateForm">Save Stop</button></h2>
                       </div>
                     </form>                  
                   </div>
@@ -283,7 +283,7 @@
     <!-- button -->
     <div class="row align-items-center">            
     <button type="button" class="btn btn-primary mt-4" @click="addStop">
-                  <h1 id="addStopBtn">Add Stop</h1>
+                  <h1 id="addStopBtn">Add New Stop</h1>
                 </button>
               </div> <!-- button -->
               
