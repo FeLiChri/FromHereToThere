@@ -482,7 +482,7 @@ map = new Vue({
         hint: "",
         task: "",
         points: 15,
-        latlong: L.latLng(42.2766, -83.7397),
+        latlong: null,
         expanded: true,
         location: "",
         possibleLocations: [],
@@ -514,21 +514,27 @@ map = new Vue({
     publish: function() {
       // TODO: error checking!
 
-      // Check if selected time limit
-      var timelimit = document.getElementById('mins').value + (60*document.getElementById('hours').value)
-      if(timelimit == 0 ){
-        $('#timelimit').css('border', '2px solid red');
-        alert("No time limit selected");
-        return;
+      if (this.allFormsValid()) {
+        var timelimit = document.getElementById('mins').value + (60*document.getElementById('hours').value)
+
+        this.currHunt.expectedTime = timelimit;
+        this.allHunts.push(this.currHunt);
+        this.switchPage("join");
       }
-      // TODO: increment id when adding this
-      console.log("publish");
+
+      // // Check if selected time limit
+      // if(timelimit == 0 ){
+      //   $('#timelimit').css('border', '2px solid red');
+      //   alert("No time limit selected");
+      //   return;
+      // }
+      // // TODO: increment id when adding this
+      // console.log("publish");
 
       // Example starter JavaScript for disabling form submissions if there are invalid fields
     
       // add hunt to persistent memory
-      this.allHunts.push(this.currHunt);
-      this.switchPage("join");
+      
 
 
 
@@ -645,7 +651,7 @@ map = new Vue({
         // Initialize new blank hunt
         this.currHunt = {
             expectedDistance: 0,
-            expectedTime: 30,
+            expectedTime: 0,
             title: "", // TODO: add id
             icon: "",
             id: this.allHunts.length,
@@ -687,25 +693,60 @@ map = new Vue({
       }
       this.switchPage("index");
     },
-    validateForm: function() {
+    validateForm: function(formName) {
+      // this.allFormsValid();
       console.log("validate form");
+      console.log(formName);
+
+      var form = document.querySelector(formName + '.needs-validation');
+      var header = document.querySelector('#accordion-item-' + formName[formName.length - 1]);
+      console.log(header);
+      console.log(form);
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.querySelectorAll('.needs-validation')
+        if (!form.checkValidity()) {
+          console.log("invalid form");
+          console.log(form);
+          invalidFormsPresent = true;
+          header.classList.add('invalid');
+        }
+        else {
+          header.classList.remove('invalid')
+        }
+        form.classList.add('was-validated');
+    },
+    allFormsValid: function() {
+      var forms = document.querySelectorAll('.needs-validation')
       
-        console.log("VALIDATING FORMS");
-        console.log(forms);
-        // Loop over them and prevent submission
-        Array.prototype.slice.call(forms)
-          .forEach(function (form) {
-            form.addEventListener('click', function (event) {
-              if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-              }
+      console.log("VALIDATING FORMS");
+      console.log(forms);
+      // Loop over them and prevent submission
+
+      invalidFormsPresent = false;
+
+      forms.forEach(form => {
+
       
-              form.classList.add('was-validated')
-            }, false)
-          })
+      var header = document.querySelector('#accordion-item-' + form.id[form.id.length - 1]);
+      console.log(header);
+      console.log(form);
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        if (!form.checkValidity()) {
+          console.log("invalid form");
+          console.log(form);
+          invalidFormsPresent = true;
+          if (header) {
+            header.classList.add('invalid')
+          }
+        }
+        else {
+          if (header) {
+            header.classList.remove('invalid')
+          }
+        }
+        form.classList.add('was-validated');
+      })
+
+      return !invalidFormsPresent;
     },
   }, 
   computed: {

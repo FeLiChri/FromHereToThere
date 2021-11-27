@@ -53,10 +53,6 @@
     background-color: rgba(50, 134, 243, 0.8);
 }
 
-.accordion-body {
-    background-color: rgba(50, 134, 243, 0.8);
-}
-
 #container{
   width: 300px;
   display: block;
@@ -142,6 +138,11 @@
 .static {
     position: static;
 }
+
+.accordion-item.invalid {
+    border: solid 3px red;
+}
+
 
 /*screen that is larger than the mobile view, Large Screen*/
 @media only screen and (min-width:480px) {

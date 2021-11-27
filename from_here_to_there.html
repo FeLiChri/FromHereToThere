@@ -99,9 +99,14 @@
 
               <!-- title -->
               <div>
-                  Title:
-                  <input type="text" id="title" name="title" v-model="currHunt.title" placeholder="Add a title here!">
-              </div>
+                <form class="needs-validation" id="titleform" novalidate>
+                  <label for="title">Title:</label>
+                  <input type="text" id="title" name="title" v-model="currHunt.title" placeholder="Add a title here!" required>
+                  <div class="invalid-feedback">
+                    Please give your hunt a title.
+                  </div>
+                  </form>
+                </div>
           </h1>
 
           <div class="Instructions">
@@ -117,6 +122,54 @@
         <div class="row"> 
             <!-- map -->
             <div id="map-div" class="blue_border col-sm-6">
+              <h2>Time Limit</h2>
+              <div id="timelimit" style="display:flex; flex-direction: row;">
+                <form class="needs-validation row mt-2" id="timeform" novalidate>
+                  <label for="hours" class="col-sm-2">Hr:</label>
+                  <div class="col-sm-4 p-0">
+                  <select class="form-select" id="hours" style="width: 100px;" required>
+                    <option selected disabled value="">-</option>
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Select a value.
+                  </div>
+                </div>
+                  <label for="minutes" class="col-sm-2">Min:</label>
+                  <div class="col-sm-4 p-0">
+                  <select class="form-select" style="width: 100px;" id="minutes" required>
+                    <option selected disabled value="">-</option>
+                    <option>0</option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>20</option>
+                    <option>25</option>
+                    <option>30</option>
+                    <option>35</option>
+                    <option>40</option>
+                    <option>45</option>
+                    <option>50</option>
+                    <option>55</option>
+                  </select>
+                  <div class="invalid-feedback col-sm-2">
+                    Select a value.
+                  </div>
+                </div>
+                  <!-- <div class="mb-3">
+                    <button class="btn btn-primary" type="button" @click="validateForm('#timeform')">validate</button>                    </div> -->
+                </form>
+              </div>
                 <div class="mapclass">
                   <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymap" id="mymap">
                     <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
@@ -129,48 +182,14 @@
                 <!-- <div id='routermap' style="height: 350px; width: 100%;"> -->
     
                 <!-- </div> -->
-                Time Limit: 
-    
-                <div id="timelimit">
-                    <label for="hours" style="color:red;">Hours:</label>
-                    <select class="form-control" id="hours" style="width:50px; margin: 5px;">
-                      <option>0</option>
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                      <option>6</option>
-                      <option>7</option>
-                      <option>8</option>
-                      <option>9</option>
-                      <option>10</option>
-                    </select>
-                    <label for="mins" style="color:red;">Mins:</label>
-                    <select class="form-control" id="mins" style="width: 50px; margin: 5px;">
-                      <option>0</option>
-                      <option>5</option>
-                      <option>10</option>
-                      <option>15</option>
-                      <option>20</option>
-                      <option>25</option>
-                      <option>30</option>
-                      <option>35</option>
-                      <option>40</option>
-                      <option>45</option>
-                      <option>50</option>
-                      <option>55</option>
-                    </select>
-                </div>
                 
-                <br>
             </div> <!-- map -->
     
             <!-- form -->
             <div class="form col-sm-6 mt-sm-0">
               <!-- hint accordion -->
               <div class="accordion mt-4" id="accordionExample">
-              <div class="accordion-item" draggable="true" v-for="(c, i) in currHunt.stops">
+              <div :id="'accordion-item-'+i" class="accordion-item" draggable="true" v-for="(c, i) in currHunt.stops">
                 <div class="accordion-header" v-bind:id="'header'+i">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" v-bind:data-bs-target="'#collapse'+i" aria-expanded="false" v-bind:aria-controls="'collapse'+i" @click="setActiveStop(i)">
                     <p style="display: flex; justify-content: space-between; width: 100%; align-items: center; align-content: center;">
@@ -185,7 +204,7 @@
                 </div>
                 <div v-bind:id="'collapse'+i" class="accordion-collapse collapse" v-bind:aria-labelledby="'header'+i" data-bs-parent="#accordionExample">
                   <div class="accordion-body">
-                    <form class="needs-validation row mt-3" novalidate>
+                    <form :id="'form'+i" class="needs-validation row mt-3" novalidate>
                       <label :for="'answer'+i" class="col-sm-2 mt-2 col-form-label">Go to: 
                       <span style="color: red;">* </span>
                       <span data-toggle="tooltip" title="Nickname of your destination - what your players will guess." class="bi bi-info-circle static"><span>
@@ -259,7 +278,7 @@
                       </div>
               
                       <div class="col-sm-12 mt-3" style="display:flex; width:100%; justify-content: center; align-items: center;">
-                        <h2><button class="btn btn-primary" type="button" @click="validateForm">Save Stop</button></h2>
+                        <h2><button class="btn btn-primary" type="button" @click="validateForm('#form'+i)">Save Stop</button></h2>
                       </div>
                     </form>                  
                   </div>
