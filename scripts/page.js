@@ -305,6 +305,7 @@ map = new Vue({
         this.welcomeHomeIconSelected = true;
       }
       console.log("icon:", this.iconImage);
+      this.currHunt.icon = this.iconImage;
     },
     loadHunt: function(id){
       this.page = "play";
@@ -534,12 +535,13 @@ map = new Vue({
       if (this.allFormsValid()) {
         // No additional errors! Go ahead and publish.
         if (this.currHunt.errorString === "") {
-          var timelimit = document.getElementById('mins').value + (60*document.getElementById('hours').value)
+          // TODO: check for 0 hours 0 minutes make time limit
+          // var timelimit = document.getElementById('mins').value + (60*document.getElementById('hours').value)
 
           // Strip any trailing whitespace
-          this.currHunt.stops.forEach( s => s.answer.strip());
+          // this.currHunt.stops.forEach( s => s.answer.strip());
 
-          this.currHunt.expectedTime = timelimit;
+          this.currHunt.expectedTime = 60;
           this.allHunts.push(this.currHunt);
           this.switchPage("join");
         }     
