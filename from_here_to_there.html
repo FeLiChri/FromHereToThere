@@ -99,15 +99,27 @@
 
               <!-- title -->
               <div>
-                <form class="needs-validation" id="titleform" novalidate>
-                  <label for="title">Title:</label>
-                  <input type="text" id="title" name="title" v-model="currHunt.title" placeholder="Add a title here!" required>
-                  <div class="invalid-feedback">
-                    Please give your hunt a title.
+                <form class="needs-validation row" id="titleform" style="align-items: center;" novalidate>
+                  <label for="title" class="col-5 col-form-label">Title: 
+                    <span style="color: red;">*</span>
+                    </label>
+                  <div class="col-7">
+                      <input type="text" class="form-control" id="title" name="title" v-model="currHunt.title" placeholder="Add a title here!" required>
+                      <div class="invalid-feedback">
+                        Please give your hunt a title.
+                      </div>
                   </div>
                   </form>
                 </div>
           </h1>
+
+          <div v-show="currHunt.errorString" class="alert alert-danger" role="alert" id="errorMessage">
+            <h2>Please fix the following errors:</h2>
+            <ul>
+              <p v-html="currHunt.errorString"></p>
+            </ul>
+            <h2>Then press Publish again.</h2>
+          </div>
 
           <div class="Instructions">
             <h2><i class="bi bi-info-circle"></i> &nbsp;Instructions:</h2>

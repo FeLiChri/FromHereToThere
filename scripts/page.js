@@ -61,6 +61,7 @@ map = new Vue({
         title: "",
         icon: "",
         id: 0,
+        errorString: "",
 
         inProgress: {
           timeSoFar: 0,
@@ -512,32 +513,30 @@ map = new Vue({
       console.log(this.currHunt.stops);
     },
     publish: function() {
-      // TODO: error checking!
+      console.log("Publish");
+      // Check for additional errors that are outside forms.
+      this.currHunt.errorString = ''
 
-      if (this.allFormsValid()) {
-        var timelimit = document.getElementById('mins').value + (60*document.getElementById('hours').value)
-
-        this.currHunt.expectedTime = timelimit;
-        this.allHunts.push(this.currHunt);
-        this.switchPage("join");
+      if (this.currHunt.stops.length === 0) {
+        this.currHunt.errorString += "Provide at least one stop.<br>"
+      }
+      if (this.currHunt.icon === "") {
+        this.currHunt.errorString += "Select an icon for your hunt.<br>"
       }
 
-      // // Check if selected time limit
-      // if(timelimit == 0 ){
-      //   $('#timelimit').css('border', '2px solid red');
-      //   alert("No time limit selected");
-      //   return;
-      // }
-      // // TODO: increment id when adding this
-      // console.log("publish");
+      // Error check all forms on the page (time limit, individual stops, title)
+      if (this.allFormsValid()) {
+        // No additional errors! Go ahead and publish.
+        if (this.currHunt.errorString === "") {
+          var timelimit = document.getElementById('mins').value + (60*document.getElementById('hours').value)
 
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-    
-      // add hunt to persistent memory
-      
-
-
-
+          this.currHunt.expectedTime = timelimit;
+          this.allHunts.push(this.currHunt);
+          this.switchPage("join");
+        }     
+      }
+      console.log(this.currHunt.errorString);
+      // $('#errorMessage').html(this.currHunt.errorString);
     },    
     searchLocation: function(q) {
     // query = e.target.value;
@@ -655,6 +654,7 @@ map = new Vue({
             title: "", // TODO: add id
             icon: "",
             id: this.allHunts.length,
+            errorString: '',
             inProgress: {
               timeSoFar: 0,
               distanceSoFar: 0,
