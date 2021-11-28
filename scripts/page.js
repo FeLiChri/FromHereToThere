@@ -517,12 +517,13 @@ map = new Vue({
       // Check for additional errors that are outside forms.
       this.currHunt.errorString = ''
 
-      if (this.currHunt.stops.length === 0) {
-        this.currHunt.errorString += "Provide at least one stop.<br>"
-      }
       if (this.currHunt.icon === "") {
         this.currHunt.errorString += "Select an icon for your hunt.<br>"
       }
+      if (this.currHunt.stops.length === 0) {
+        this.currHunt.errorString += "Provide at least one stop.<br>"
+      }
+      
 
       // Error check all forms on the page (time limit, individual stops, title)
       if (this.allFormsValid()) {
@@ -710,7 +711,8 @@ map = new Vue({
           header.classList.add('invalid');
         }
         else {
-          header.classList.remove('invalid')
+          header.classList.remove('invalid');
+          $('#collapse' + String(this.currHunt.inProgress.currStopId)).collapse('hide');
         }
         form.classList.add('was-validated');
     },
