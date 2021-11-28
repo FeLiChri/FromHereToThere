@@ -517,19 +517,27 @@ map = new Vue({
       // Check for additional errors that are outside forms.
       this.currHunt.errorString = ''
 
+      if (this.currHunt.title === "") {
+        this.currHunt.errorString += "Provide a title for your hunt.<br>"
+      }
       if (this.currHunt.icon === "") {
         this.currHunt.errorString += "Select an icon for your hunt.<br>"
       }
       if (this.currHunt.stops.length === 0) {
         this.currHunt.errorString += "Provide at least one stop.<br>"
       }
-      
+      if (!$("#minutes").val() || !$("#hours").val()) {
+        this.currHunt.errorString += "Set a time limit.<br>"
+      }
 
       // Error check all forms on the page (time limit, individual stops, title)
       if (this.allFormsValid()) {
         // No additional errors! Go ahead and publish.
         if (this.currHunt.errorString === "") {
           var timelimit = document.getElementById('mins').value + (60*document.getElementById('hours').value)
+
+          // Strip any trailing whitespace
+          this.currHunt.stops.forEach( s => s.answer.strip());
 
           this.currHunt.expectedTime = timelimit;
           this.allHunts.push(this.currHunt);
