@@ -56,25 +56,30 @@ map = new Vue({
       },
       tempImg: null,
       currHunt: {
+        id: 0,
+        completed: false,
         expectedDistance: 0,
         expectedTime: 30,
         title: "",
         icon: "",
-        id: 0,
         errorString: "",
 
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
           numPoints: 0,
-          currStopId: 0,
           numMarkers: 0,
+          currStopId: 0,
           guessText: "",
           tempGuess: "",
           hintClicked: false,
           tryAgain: false,
           correct: false,
           evidence: [],
+        },
+        finalStats: {
+          numPoints: null,
+          timeTaken: null,
         },
         // TODO: when they publish, remove spaces from ends of all answers
         stops: [
