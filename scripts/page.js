@@ -415,6 +415,7 @@ map = new Vue({
     nextClue: function() {
       // console.log("NEXT CLUE");
       this.allHunts[this.currHunt.id].inProgress.evidence.push(this.tempImg);
+      this.tempImg = null;
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
         alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
         this.allHunts[this.currHunt.id].completed = true;
@@ -429,7 +430,6 @@ map = new Vue({
         this.currHunt.inProgress.hintClicked = false;
         this.currHunt.inProgress.tryAgain = false;
         this.currHunt.inProgress.correct = false;
-        this.tempImg = null;
       }
     },
     prepareEvidence: function(files) {
