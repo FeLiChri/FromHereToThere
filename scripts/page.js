@@ -416,7 +416,7 @@ map = new Vue({
       // console.log("NEXT CLUE");
       this.allHunts[this.currHunt.id].inProgress.evidence.push(this.tempImg);
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
-        alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar}\nPoints: ${this.currHunt.inProgress.numPoints}`);
+        alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
         this.allHunts[this.currHunt.id].completed = true;
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "numPoints", this.currHunt.inProgress.numPoints);
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "timeTaken", this.currHunt.inProgress.timeSoFar);
