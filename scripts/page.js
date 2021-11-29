@@ -148,7 +148,7 @@ map = new Vue({
           },
           {
             clue: "Where to find computers in Angell Hall.",
-            answer: "Fishbowl in Angell Hall",
+            answer: "Fishbowl",
             hint: "Nemo from Finding Nemo might swim in one.",
             task: "Print a poster and upload a photo of the print!",
             points: 15,

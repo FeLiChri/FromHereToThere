@@ -354,18 +354,18 @@
             <tr v-if="!h.completed" key="h.title"  id="h.id" @click="switchPage('play', h.id)">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
               <td><p>{{h.title}}</p></td>
-              <td><h1>--</h1></td>
-              <td><h1>--</td>
-              <td><h1>{{h.expectedTime}} mins</h1></td>
-              <td><h1>{{h.expectedDistance}} mi</h1></td>
+              <td><p>--</p></td>
+              <td><p>--</td>
+              <td><p>{{h.expectedTime}} mins</p></td>
+              <td><p>{{h.expectedDistance}} mi</p></td>
             </tr>
             <tr v-else key="h.title"  id="h.id" @click="switchPage('play', h.id)">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
               <td><p>{{h.title}} (Completed!)</p></td>
-              <td><h1>{{h.finalStats.numPoints}} pts</h1></td>
-              <td><h1>{{h.finalStats.timeTaken}} mins</h1></td>
-              <td><h1>{{h.expectedTime}} mins</h1></td>
-              <td><h1>{{h.expectedDistance}} mi</h1></td>
+              <td><p>{{h.finalStats.numPoints}} pts</p></td>
+              <td><p>{{h.finalStats.timeTaken}} mins</p></td>
+              <td><p>{{h.expectedTime}} mins</p></td>
+              <td><p>{{h.expectedDistance}} mi</p></td>
             
             </tr>
           </tbody>
