@@ -402,7 +402,7 @@ map = new Vue({
             // alert distance and time in miles and minutes
             // console.log(summary.totalDistance / 1760 + ' mi');
             // console.log(summary.totalTime % 3600 / 60 + ' min');
-            map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
+            map.currHunt.expectedTime = (summary.totalDistance * 20).toFixed(2);
             map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
             // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
         });
@@ -541,12 +541,13 @@ map = new Vue({
         // No additional errors! Go ahead and publish.
         if (this.currHunt.errorString === "") {
           // TODO: check for 0 hours 0 minutes make time limit
-          // var timelimit = document.getElementById('mins').value + (60*document.getElementById('hours').value)
+          var timelimit = $("#minutes").val() + (60 * $("#hours").val());
 
           // Strip any trailing whitespace
-          // this.currHunt.stops.forEach( s => s.answer.strip());
+          // TODO test
+          this.currHunt.stops.forEach( s => s.answer.trim());
 
-          this.currHunt.expectedTime = 60;
+          this.currHunt.expectedTime = timelimit;
           this.allHunts.push(this.currHunt);
           this.switchPage("join");
         }     
@@ -634,7 +635,8 @@ map = new Vue({
           // alert distance and time in miles and minutes
           // console.log(summary.totalDistance / 1760 + ' mi');
           // console.log(summary.totalTime % 3600 / 60 + ' min');
-          map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
+          // map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
+          map.currHunt.expectedTime = (summary.totalDistance * 20).toFixed(2);
           map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
           // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
       });
