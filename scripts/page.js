@@ -198,7 +198,7 @@ map = new Vue({
             hint: "It starts with 'p'",
             task: "Take a photo smelling the flowers.",
             points: 15,
-            latlong: L.latLng(42.2808, -83.7430),
+            latlong: L.latLng(42.281052200000005, -83.72563665037023),
             expanded: true,
           },
           {
@@ -207,7 +207,7 @@ map = new Vue({
             hint: "The bard himself",
             task: "Take a photo on stage, giving your best 'to be or not to be'",
             points: 15,
-            latlong: L.latLng(42.2808, -83.7430),
+            latlong: L.latLng(42.2790761, -83.72237684062637),
             expanded: true,
           },
         ],
