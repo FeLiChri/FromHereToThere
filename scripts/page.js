@@ -230,6 +230,26 @@ map = new Vue({
           numPoints: null,
           timeTaken: null,
         },
+        stops: [
+          {
+            clue: "Famous for it's typewriter theme",
+            answer: "Literati",
+            hint: "It starts with 'lit'",
+            task: "Take a photo of your typewritten message.",
+            points: 15,
+            latlong: L.latLng(42.280291,-83.7474556),
+            expanded: true,
+          },
+          {
+            clue: "Pick up a new comic or your next favorite game here",
+            answer: "Vault of Midnight",
+            hint: "Three words (_ of _)",
+            task: "Take a photo with a cool character",
+            points: 15,
+            latlong: L.latLng(42.2801, -83.7484),
+            expanded: true,
+          },
+        ]
       }],      
     };
   },
