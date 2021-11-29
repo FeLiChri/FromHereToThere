@@ -65,10 +65,11 @@
     <span><i class="bi bi-arrow-left-circle-fill backbutton" @click="goBack()"></i></span>
     <div class="container align-items-center text-center app">
         <!-- title -->
-        <div class="row mb-2"> 
-          <h1 style="display:flex; flex-direction: row; justify-content: center;">
+        <div class="mb-2">
+          <h1>
               <!-- Icon Dropdown -->
-              <div class="dropdown">
+              <div class="row justify-content-md-center" >
+              <div class="dropdown col-md-auto" >
                   <button v-if="arborAdventureIconSelected||bookBonanzaIconSelected||welcomeHomeIconSelected" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                       Select an Icon:
                   </button>
@@ -79,26 +80,27 @@
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                       <li>
                           <a v-if="arborAdventureIconSelected" class="btn btn-primary dropdown-item" href="#" id="aaIcon" v-on:click="selectIcon"><img src="src/arborAdventureIcon.png" style="width:40px;"></a>
-                          <a v-else class="btn dropdown-item" href="#" id="aaIcon" v-on:click="selectIcon"><img src="src/arborAdventureIcon.png" style="width:40px;"></a>
+                          <a v-else class="btn dropdown-item" href="#" id="aaIcon" v-on:click="selectIcon"><img src="src/arborAdventureIcon.png" style="width:40px; pointer-events: none;"></a>
                       </li>
                       <li>
                           <a v-if="bookBonanzaIconSelected" class="btn btn-primary dropdown-item" href="#" id="bbIcon" v-on:click="selectIcon"><img src="src/bookBonanzaIcon.png" style="width:40px;"></a>
-                          <a v-else class="dropdown-item btn" href="#" id="bbIcon" v-on:click="selectIcon"><img src="src/bookBonanzaIcon.png" style="width:40px;"></a>
+                          <a v-else class="dropdown-item btn" href="#" id="bbIcon" v-on:click="selectIcon"><img src="src/bookBonanzaIcon.png" style="width:40px; pointer-events: none;"></a>
                       </li>
                       <li>
                           <a v-if="welcomeHomeIconSelected" class="btn btn-primary dropdown-item" href="#" id="whIcon" v-on:click="selectIcon"><img src="src/welcomeHomeIcon.png" style="width:40px;"></a>
-                          <a v-else class="dropdown-item btn" href="#" id="whIcon" v-on:click="selectIcon"><img src="src/welcomeHomeIcon.png" style="width:40px;"></a>
+                          <a v-else class="dropdown-item btn" href="#" id="whIcon" v-on:click="selectIcon"><img src="src/welcomeHomeIcon.png" style=" pointer-events: none; width:40px;"></a>
                       </li>
                   </ul>
               </div>
 
               <!-- Selected Icon -->
-              <div v-show="arborAdventureIconSelected||bookBonanzaIconSelected||welcomeHomeIconSelected">
-                  <img  v-bind:src="iconImage" style="width:40px;">
+              <div class='col-md-auto' v-show="arborAdventureIconSelected||bookBonanzaIconSelected||welcomeHomeIconSelected">
+                  <img  v-bind:src="iconImage" style="width:40px; justify-content: left;padding=0px;">
               </div>
-
+</div>
               <!-- title -->
-              <div>
+              <div class="row justify-content-md-center">
+              <div class="col-sm-6">
                 <form class="needs-validation row" id="titleform" style="align-items: center;" novalidate>
                   <label for="title" class="col-5 col-form-label">Title: 
                     <span style="color: red;">*</span>
@@ -110,15 +112,11 @@
                       </div> -->
                   </div>
                   </form>
-                </div>
+              </div>
+                  </div>
           </h1>
 
-          <div v-show="currHunt.errorString" class="alert alert-danger" role="alert" id="errorMessage">
-            <h2>Please fix the following errors:</h2>
-            <ul>
-              <p v-html="currHunt.errorString"></p>
-            </ul>
-          </div>
+
 
           <div class="Instructions">
             <h2><i class="bi bi-info-circle"></i> &nbsp;Instructions:</h2>
@@ -138,19 +136,19 @@
                 <form class="needs-validation row mt-2" id="timeform" novalidate>
                   <label for="hours" class="col-sm-2">Hr:</label>
                   <div class="col-sm-4 p-0">
-                  <select class="form-select" id="hours" style="width: 100px;" required>
-                    <option selected disabled value="">-</option>
-                    <option>0</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                    <option>10</option>
+                  <select v-model="select_hrs" class="form-select" id="hours" style="width: 100px;" required>
+                    <option selected disabled v-bind:value="0">-</option>
+                    <option v-bind:value="0">0</option>
+                    <option v-bind:value="1">1</option>
+                    <option v-bind:value="2">2</option>
+                    <option v-bind:value="3">3</option>
+                    <option v-bind:value="4">4</option>
+                    <option v-bind:value="5">5</option>
+                    <option v-bind:value="6">6</option>
+                    <option v-bind:value="7">7</option>
+                    <option v-bind:value="8">8</option>
+                    <option v-bind:value="9">9</option>
+                    <option v-bind:value="10">10</option>
                   </select>
                   <!-- <div class="invalid-feedback">
                     Select a value.
@@ -158,20 +156,20 @@
                 </div>
                   <label for="minutes" class="col-sm-2">Min:</label>
                   <div class="col-sm-4 p-0">
-                  <select class="form-select" style="width: 100px;" id="minutes" required>
-                    <option selected disabled value="">-</option>
-                    <option>0</option>
-                    <option>5</option>
-                    <option>10</option>
-                    <option>15</option>
-                    <option>20</option>
-                    <option>25</option>
-                    <option>30</option>
-                    <option>35</option>
-                    <option>40</option>
-                    <option>45</option>
-                    <option>50</option>
-                    <option>55</option>
+                  <select v-model="select_min" class="form-select" style="width: 100px;" id="minutes" required>
+                    <option selected disabled v-bind:value="0">-</option>
+                    <option v-bind:value="0">0</option>
+                    <option v-bind:value="5">5</option>
+                    <option v-bind:value="10">10</option>
+                    <option v-bind:value="15">15</option>
+                    <option v-bind:value="20">20</option>
+                    <option v-bind:value="25">25</option>
+                    <option v-bind:value="30">30</option>
+                    <option v-bind:value="35">35</option>
+                    <option v-bind:value="40">40</option>
+                    <option v-bind:value="45">45</option>
+                    <option v-bind:value="50">50</option>
+                    <option v-bind:value="55">55</option>
                   </select>
                   <!-- <div class="invalid-feedback col-sm-2">
                     Select a value.
@@ -189,7 +187,7 @@
                     </l-marker>
                   </l-map>
                 </div>
-                <h3> {{currHunt.expectedDistance}} mi, {{currHunt.expectedTime}} minutes</h3>
+                <h3>Expected Distance: {{currHunt.expectedDistance}} mi, and Expected Time: {{(select_hrs*60)+select_min}} minutes</h3>
                 <!-- <div id='routermap' style="height: 350px; width: 100%;"> -->
     
                 <!-- </div> -->
@@ -265,7 +263,7 @@
               
                       <label :for="'hint'+i" class="col-sm-2 mt-2 col-form-label">Hint:
                         <span style="color: red;">*</span>
-                        <span data-toggle="tooltip" title="Another optional hint, in case your players get stuck." class="bi bi-info-circle static"><span>
+                        <span data-toggle="tooltip" title="Another hint, in case your players get stuck." class="bi bi-info-circle static"><span>
                       </label>
                       <div class="col-sm-10">
                       <input type="text" class="form-control mt-2" :id="'hint'+i" v-model="c.hint" placeholder="e.g. It starts with 'hat'." required>
@@ -323,7 +321,13 @@
               
             </div> <!-- form -->
         </div> <!-- row -->
-    
+    <div v-show="currHunt.errorString" class="alert alert-danger" role="alert" id="errorMessage">
+            <h2>Please fix the following errors:</h2>
+            <ul>
+              <p v-html="currHunt.errorString"></p>
+            </ul>
+          </div>
+
         <!-- publish -->
         <div class="row"> 
           <button id="publish" type="button" class="btn btn-primary mt-4" @click="publish">
@@ -358,18 +362,18 @@
             <tr v-if="!h.completed" key="h.title"  id="h.id" @click="switchPage('play', h.id)">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
               <td><p>{{h.title}}</p></td>
-              <td><h1>--</h1></td>
-              <td><h1>--</td>
-              <td><h1>{{h.expectedTime}} mins</h1></td>
-              <td><h1>{{h.expectedDistance}} mi</h1></td>
+              <td><p>--</p></td>
+              <td><p>--</td>
+              <td><p>{{h.expectedTime}} mins</p></td>
+              <td><p>{{h.expectedDistance}} mi</p></td>
             </tr>
             <tr v-else key="h.title"  id="h.id" @click="switchPage('play', h.id)">
               <th scope="row"><img :src="h.icon" class="icon"/></th>
               <td><p>{{h.title}} (Completed!)</p></td>
-              <td><h1>{{h.finalStats.numPoints}} pts</h1></td>
-              <td><h1>{{h.finalStats.timeTaken}} mins</h1></td>
-              <td><h1>{{h.expectedTime}} mins</h1></td>
-              <td><h1>{{h.expectedDistance}} mi</h1></td>
+              <td><p>{{h.finalStats.numPoints}} pts</p></td>
+              <td><p>{{h.finalStats.timeTaken}} mins</p></td>
+              <td><p>{{h.expectedTime}} mins</p></td>
+              <td><p>{{h.expectedDistance}} mi</p></td>
             
             </tr>
           </tbody>
@@ -419,7 +423,6 @@
         <div v-if="!currHunt.completed" class="row">
           <!-- map -->
           <div id="map-div" class="blue_border col-sm-6">
-            <h1>Map!</h1>
             <div class="mapclass">
               <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymap" id="mymap">
                 <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
