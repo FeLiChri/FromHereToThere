@@ -394,14 +394,21 @@ map = new Vue({
       return stripped_answer === stripped_guess;
     },
     updateRoute: function(markers) {
-      this.$refs.mymap.mapObject.fitBounds(markers);
+      // this.$refs.mymap.mapObject.fitBounds(markers);
 
       if (this.router) {
         routermap.removeControl(this.router);
+      } 
+
+      var this_map;
+      if (this.inPlayMode) {
+        this_map = this.$refs.mymapGuess.mapObject;
       } else {
-        const this_map = this.$refs.mymap.mapObject;
-        routermap = this_map;
+        this_map = this.$refs.mymapMake.mapObject;
       }
+      routermap = this_map;
+        
+      this_map.fitBounds(markers);
       this.router = L.Routing.control({
         // TODO: check waypoints appearing
         waypoints: markers,   
@@ -720,6 +727,7 @@ map = new Vue({
             hintClicked: false,
             tryAgain: false,
             correct: false,
+            evidence: [],
           };
 
         setInterval(()=>{
