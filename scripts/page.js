@@ -59,6 +59,7 @@ map = new Vue({
         id: 0,
         completed: false,
         expectedDistance: 0,
+        markerDistance: 0,
         expectedTime: 30,
         title: "",
         icon: "",
@@ -114,6 +115,7 @@ map = new Vue({
         id:0,
         completed: false,
         expectedDistance: 1.6,
+        markerDistance: 0,
         expectedTime: 60,
         title: "Welcome Home",
         icon: "src/welcomeHomeIcon.png",
@@ -164,6 +166,7 @@ map = new Vue({
         id:1,
         completed: false,
         expectedDistance: 2,
+        markerDistance: 0,
         expectedTime: 120,
         title: "Arbor Adventure", // TODO: add id
         icon: "src/arborAdventureIcon.png",
@@ -210,6 +213,7 @@ map = new Vue({
         id:2,
         completed: false,
         expectedDistance: 2,
+        markerDistance: 0,
         expectedTime: 120,
         title: "Book Bonanza",
         icon: "src/bookBonanzaIcon.png",
@@ -403,7 +407,7 @@ map = new Vue({
             // console.log(summary.totalDistance / 1760 + ' mi');
             // console.log(summary.totalTime % 3600 / 60 + ' min');
             map.currHunt.expectedTime = (summary.totalDistance * 20).toFixed(2);
-            map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
+            map.currHunt.markerDistance = (summary.totalDistance / 1760).toFixed(2);
             // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
         });
         
@@ -548,6 +552,7 @@ map = new Vue({
           this.currHunt.stops.forEach( s => s.answer.trim());
 
           this.currHunt.expectedTime = timelimit;
+          this.currHunt.expectedDistance = this.currHunt.markerDistance;
           this.allHunts.push(this.currHunt);
           this.switchPage("join");
         }     
@@ -637,7 +642,7 @@ map = new Vue({
           // console.log(summary.totalTime % 3600 / 60 + ' min');
           // map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
           map.currHunt.expectedTime = (summary.totalDistance * 20).toFixed(2);
-          map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
+          map.currHunt.markerDistance = (summary.totalDistance / 1760).toFixed(2);
           // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
       });
       
@@ -668,6 +673,7 @@ map = new Vue({
         // Initialize new blank hunt
         this.currHunt = {
             expectedDistance: 0,
+            markerDistance: 0,
             expectedTime: 0,
             title: "", // TODO: add id
             icon: "",
