@@ -350,7 +350,7 @@
           </thead>
           <tbody v-for="h in this.allHunts">
             <tr v-if="!h.completed" key="h.title"  id="h.id" @click="switchPage('play', h.id)">
-              <th scope="row"><img :src="h.icon" class="icon"/></th>
+              <th scope="row"><img :src="h.iconSrc" class="icon"/></th>
               <td><p>{{h.title}}</p></td>
               <td><p>--</p></td>
               <td><p>--</td>
@@ -358,7 +358,7 @@
               <td><p>{{h.expectedDistance}} mi</p></td>
             </tr>
             <tr v-else key="h.title"  id="h.id" @click="switchPage('play', h.id)">
-              <th scope="row"><img :src="h.icon" class="icon"/></th>
+              <th scope="row"><img :src="h.iconSrc" class="icon"/></th>
               <td><p>{{h.title}} (Completed!)</p></td>
               <td><p>{{h.finalStats.numPoints}} pts</p></td>
               <td><p>{{h.finalStats.timeTaken}} mins</p></td>
@@ -378,7 +378,7 @@
         <!-- title -->
         <div class="mb-2">
           <h1>
-            <img alt="logo" :src="currHunt.icon" class="photo icon" />
+            <img alt="logo" :src="currHunt.iconSrc" class="photo icon" />
             {{currHunt.title}}
             <br>
             <div v-if="!currHunt.completed" class="row justify-content-md-center">

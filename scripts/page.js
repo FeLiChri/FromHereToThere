@@ -121,7 +121,7 @@ map = new Vue({
         markerDistance: 0,
         expectedTime: 60,
         title: "Welcome Home",
-        icon: "src/icons/welcomeHomeIcon.png",
+        iconSrc: "src/icons/welcomeHomeIcon.png",
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
@@ -172,7 +172,7 @@ map = new Vue({
         markerDistance: 0,
         expectedTime: 120,
         title: "Arbor Adventure", // TODO: add id
-        icon: "src/icons/arborAdventureIcon.png",
+        iconSrc: "src/icons/arborAdventureIcon.png",
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
@@ -219,7 +219,7 @@ map = new Vue({
         markerDistance: 0,
         expectedTime: 120,
         title: "Book Bonanza",
-        icon: "src/icons/bookBonanzaIcon.png",
+        iconSrc: "src/icons/bookBonanzaIcon.png",
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
