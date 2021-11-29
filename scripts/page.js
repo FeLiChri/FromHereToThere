@@ -423,8 +423,10 @@ map = new Vue({
         this_map = this.$refs.mymapMake.mapObject;
       }
       routermap = this_map;
-        
+
+      // this_map.invalidateSize();
       this_map.fitBounds(markers);
+
       this.router = L.Routing.control({
         // TODO: check waypoints appearing
         waypoints: markers,   
