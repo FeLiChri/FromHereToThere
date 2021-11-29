@@ -56,25 +56,30 @@ map = new Vue({
       },
       tempImg: null,
       currHunt: {
+        id: 0,
+        completed: false,
         expectedDistance: 0,
         expectedTime: 30,
         title: "",
         icon: "",
-        id: 0,
         errorString: "",
 
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
           numPoints: 0,
-          currStopId: 0,
           numMarkers: 0,
+          currStopId: 0,
           guessText: "",
           tempGuess: "",
           hintClicked: false,
           tryAgain: false,
           correct: false,
           evidence: [],
+        },
+        finalStats: {
+          numPoints: null,
+          timeTaken: null,
         },
         // TODO: when they publish, remove spaces from ends of all answers
         stops: [
@@ -416,8 +421,9 @@ map = new Vue({
     nextClue: function() {
       // console.log("NEXT CLUE");
       this.allHunts[this.currHunt.id].inProgress.evidence.push(this.tempImg);
+      this.tempImg = null;
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
-        alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar}\nPoints: ${this.currHunt.inProgress.numPoints}`);
+        alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
         this.allHunts[this.currHunt.id].completed = true;
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "numPoints", this.currHunt.inProgress.numPoints);
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "timeTaken", this.currHunt.inProgress.timeSoFar);
@@ -430,7 +436,6 @@ map = new Vue({
         this.currHunt.inProgress.hintClicked = false;
         this.currHunt.inProgress.tryAgain = false;
         this.currHunt.inProgress.correct = false;
-        this.tempImg = null;
       }
     },
     prepareEvidence: function(files) {
