@@ -615,8 +615,9 @@ map = new Vue({
         // No additional errors! Go ahead and publish.
         if (this.currHunt.errorString === "") {
           // TODO: check for 0 hours 0 minutes make time limit
-          var timelimit = $("#minutes").val() + (60 * $("#hours").val());
+          var timelimit = Number($("#minutes").val()) + Number((60 * $("#hours").val()));
 
+          console.log(timelimit);
           // Strip any trailing whitespace
           // TODO test
           this.currHunt.stops.forEach( s => s.answer.trim());
