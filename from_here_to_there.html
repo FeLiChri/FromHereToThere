@@ -264,11 +264,15 @@
                       </div>
               
                       <label :for="'hint'+i" class="col-sm-2 mt-2 col-form-label">Hint:
+                        <span style="color: red;">*</span>
                         <span data-toggle="tooltip" title="Another optional hint, in case your players get stuck." class="bi bi-info-circle static"><span>
                       </label>
                       <div class="col-sm-10">
-                      <input type="text" class="form-control mt-2" :id="'hint'+i" v-model="c.hint" placeholder="e.g. It starts with 'hat'.">
-                      </div>
+                      <input type="text" class="form-control mt-2" :id="'hint'+i" v-model="c.hint" placeholder="e.g. It starts with 'hat'." required>
+                      <div class="invalid-feedback mb-2">
+                        Please provide a hint.
+                    </div>
+                    </div>
               
                       <label :for="'task'+i" class="col-sm-2 mt-2 col-form-label">Task: 
                         <span style="color: red;">*</span>
