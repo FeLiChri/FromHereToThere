@@ -393,6 +393,46 @@ map = new Vue({
       // console.log(stripped_guess);
       return stripped_answer === stripped_guess;
     },
+    updateRoute: function(markers) {
+      this.$refs.mymap.mapObject.fitBounds(markers);
+
+      if (this.router) {
+        routermap.removeControl(this.router);
+      } else {
+        const this_map = this.$refs.mymap.mapObject;
+        routermap = this_map;
+      }
+      this.router = L.Routing.control({
+        // TODO: check waypoints appearing
+        waypoints: markers,   
+        routeWhileDragging: false,
+        // TODO: fix dragging problem
+        lineOptions: {
+          addWaypoints: false,
+        },
+        show: false,
+        units: 'imperial',
+        // summaryTemplate: '<h2>{name}</h2><h3>{distance}, {time}</h3>',
+      });
+
+      // TODO: figure out how to replace the router
+          
+      this.router.on('routesfound', function(e) {
+          // console.log("ROUTES FOUND");
+          // console.log(e.waypoints);
+          var routes = e.routes;
+          var summary = routes[0].summary;
+          // alert distance and time in miles and minutes
+          // console.log(summary.totalDistance / 1760 + ' mi');
+          // console.log(summary.totalTime % 3600 / 60 + ' min');
+          map.currHunt.markerDistance = (summary.totalDistance / 1760).toFixed(2);
+          map.currHunt.expectedTime = (map.currHunt.markerDistance * 20).toFixed(2);
+          // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
+      });
+      
+      this.router.addTo(routermap);
+
+    },
     // TODO: keep commas and spaces and such in the answer
     makeGuess: function() {
       if (this.checkAnswer(this.currStop.answer, this.currHunt.inProgress.guessText)) {
@@ -405,42 +445,7 @@ map = new Vue({
         markers = this.guessMarkers;
         // console.log(this.guessMarkers);
 
-        if (this.router) {
-          routermap.removeControl(this.router);
-        } else {
-          const this_map = this.$refs.mymap.mapObject;
-          routermap = this_map;
-        }
-        this.router = L.Routing.control({
-          // TODO: check waypoints appearing
-          waypoints: markers,   
-          routeWhileDragging: false,
-          // TODO: fix dragging problem
-          lineOptions: {
-            addWaypoints: false,
-          },
-          show: false,
-          units: 'imperial',
-          // summaryTemplate: '<h2>{name}</h2><h3>{distance}, {time}</h3>',
-        });
-
-        // TODO: figure out how to replace the router
-            
-        this.router.on('routesfound', function(e) {
-            // console.log("ROUTES FOUND");
-            // console.log(e.waypoints);
-            var routes = e.routes;
-            var summary = routes[0].summary;
-            // alert distance and time in miles and minutes
-            // console.log(summary.totalDistance / 1760 + ' mi');
-            // console.log(summary.totalTime % 3600 / 60 + ' min');
-            map.currHunt.expectedTime = (summary.totalDistance * 20).toFixed(2);
-            map.currHunt.markerDistance = (summary.totalDistance / 1760).toFixed(2);
-            // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
-        });
-        
-        this.router.addTo(routermap);
-
+        this.updateRoute(markers);
       } else {
         // console.log("Wrong Guess!");
         this.currHunt.inProgress.tryAgain = true;
@@ -646,43 +651,8 @@ map = new Vue({
 
       markers = this.inPlayMode ? this.guessMarkers : this.makeMarkers;
 
-      // TODO: make this a helper function 
-      // TODO: zoom map to markers
-      if (this.router) {
-        routermap.removeControl(this.router);
-      } else {
-        const this_map = this.$refs.mymap.mapObject;
-        routermap = this_map;
-      }
-      this.router = L.Routing.control({
-        // TODO: check waypoints appearing
-        waypoints: markers,   
-        routeWhileDragging: false,
-        // TODO: fix dragging problem
-        lineOptions: {
-          addWaypoints: false,
-        },
-        show: false,
-        units: 'imperial',
-        // summaryTemplate: '<h2>{name}</h2><h3>{distance}, {time}</h3>',
-      });
-          
-      this.router.on('routesfound', function(e) {
-          // console.log("ROUTES FOUND");
-          // console.log(e.waypoints);
-          var routes = e.routes;
-          var summary = routes[0].summary;
-          // alert distance and time in miles and minutes
-          // console.log(summary.totalDistance / 1760 + ' mi');
-          // console.log(summary.totalTime % 3600 / 60 + ' min');
-          // map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
-          map.currHunt.expectedTime = (summary.totalDistance * 20).toFixed(2);
-          map.currHunt.markerDistance = (summary.totalDistance / 1760).toFixed(2);
-          // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
-      });
+      this.updateRoute(markers);
       
-      this.router.addTo(routermap);
-
       $('#loc'+stop_i).hide();
 
       console.log("Set location!");
