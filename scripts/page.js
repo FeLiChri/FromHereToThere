@@ -344,6 +344,7 @@ map = new Vue({
     if (this.expandLastAcc) {
       this.expandLastAcc = false;
       $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('show');
+      setTimeout(this.adjustMap, 250);
     }
     $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip({
@@ -409,6 +410,18 @@ map = new Vue({
       // console.log(stripped_guess);
       return stripped_answer === stripped_guess;
     },
+    adjustMap: function() {
+      var this_map;
+
+      if (this.inPlayMode) {
+        this_map = this.$refs.mymapGuess.mapObject;
+      } else {
+        this_map = this.$refs.mymapMake.mapObject;
+      }
+
+      this_map.invalidateSize();
+      this_map.fitBounds(this.markers);
+    },
     updateRoute: function(markers) {
       // this.$refs.mymap.mapObject.fitBounds(markers);
 
@@ -425,7 +438,7 @@ map = new Vue({
       routermap = this_map;
 
       // this_map.invalidateSize();
-      this_map.fitBounds(markers);
+      // this_map.fitBounds(markers);
 
       this.router = L.Routing.control({
         // TODO: check waypoints appearing
@@ -456,6 +469,8 @@ map = new Vue({
       });
       
       this.router.addTo(routermap);
+      // this_map.invalidateSize();
+      this_map.fitBounds(markers);
 
     },
     // TODO: keep commas and spaces and such in the answer
@@ -574,7 +589,6 @@ map = new Vue({
 
       $('#accordian-item-'+String(idx)).collapse('hide');
       console.log(this.currHunt.stops);
-
       this.updateRoute(this.makeMarkers);
     },
     moveStopDown: function(idx) {
@@ -801,6 +815,7 @@ map = new Vue({
         else {
           header.classList.remove('invalid');
           $('#collapse' + String(this.currHunt.inProgress.currStopId)).collapse('hide');
+          setTimeout(this.adjustMap, 250);
         }
         form.classList.add('was-validated');
     },
@@ -854,6 +869,9 @@ map = new Vue({
       }
       return this.makeMarkers.slice(0, this.currHunt.inProgress.numMarkers);
     }, 
+    markers: function() {
+      return this.currHunt.inPlayMode ? this.guessMarkers : this.makeMarkers;
+    },
     getStopNames: function() {
       return this.currHunt.stops.map(s => s.answer);
     },
