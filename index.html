@@ -415,7 +415,6 @@
         <div v-if="!currHunt.completed" class="row">
           <!-- map -->
           <div id="map-div" class="blue_border col-sm-6">
-            <h1>Map!</h1>
             <div class="mapclass">
               <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymap" id="mymap">
                 <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
