@@ -65,10 +65,11 @@
     <span><i class="bi bi-arrow-left-circle-fill backbutton" @click="goBack()"></i></span>
     <div class="container align-items-center text-center app">
         <!-- title -->
-        <div class="row mb-2"> 
-          <h1 style="display:flex; flex-direction: row; justify-content: center;">
+        <div class="mb-2">
+          <h1>
               <!-- Icon Dropdown -->
-              <div class="dropdown">
+              <div class="row justify-content-md-center" >
+              <div class="dropdown col-md-auto" >
                   <button v-if="arborAdventureIconSelected||bookBonanzaIconSelected||welcomeHomeIconSelected" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                       Select an Icon:
                   </button>
@@ -93,12 +94,13 @@
               </div>
 
               <!-- Selected Icon -->
-              <div v-show="arborAdventureIconSelected||bookBonanzaIconSelected||welcomeHomeIconSelected">
-                  <img  v-bind:src="iconImage" style="width:40px;">
+              <div class='col-md-auto' v-show="arborAdventureIconSelected||bookBonanzaIconSelected||welcomeHomeIconSelected">
+                  <img  v-bind:src="iconImage" style="width:40px; justify-content: left;padding=0px;">
               </div>
-
+</div>
               <!-- title -->
-              <div>
+              <div class="row justify-content-md-center">
+              <div class="col-sm-6">
                 <form class="needs-validation row" id="titleform" style="align-items: center;" novalidate>
                   <label for="title" class="col-5 col-form-label">Title: 
                     <span style="color: red;">*</span>
@@ -110,7 +112,8 @@
                       </div> -->
                   </div>
                   </form>
-                </div>
+              </div>
+                  </div>
           </h1>
 
 
