@@ -588,8 +588,14 @@ map = new Vue({
         this.currHunt.errorString += "Set a time limit.<br>"
       }
 
+      allFormsValid = this.allFormsValid();
+
+      if (allFormsValid[1]) {
+        this.currHunt.errorString += "Fix invalid stops.<br>"
+      }
+      
       // Error check all forms on the page (time limit, individual stops, title)
-      if (this.allFormsValid()) {
+      if (allFormsValid[0]) {
         // No additional errors! Go ahead and publish.
         if (this.currHunt.errorString === "") {
           // TODO: check for 0 hours 0 minutes make time limit
@@ -786,6 +792,8 @@ map = new Vue({
       // Loop over them and prevent submission
 
       invalidFormsPresent = false;
+      invalidTimeForm = false;
+      invalidStopForm = false;
 
       forms.forEach(form => {
 
@@ -799,7 +807,8 @@ map = new Vue({
           console.log(form);
           invalidFormsPresent = true;
           if (header) {
-            header.classList.add('invalid')
+            header.classList.add('invalid');
+            invalidStopForm = true;
           }
         }
         else {
@@ -810,7 +819,7 @@ map = new Vue({
         form.classList.add('was-validated');
       })
 
-      return !invalidFormsPresent;
+      return [!invalidFormsPresent, invalidStopForm];
     },
   }, 
   computed: {
