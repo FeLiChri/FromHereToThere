@@ -173,8 +173,6 @@
                 <div class="mapclass">
                   <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymapMake" id="mymapMake">
                     <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
-                    <l-marker v-for="(marker, i) in makeMarkers" :key="'marker-'+i" :lat-lng="marker">
-                    </l-marker>
                   </l-map>
                 </div>
                 <h3>Expected Distance: {{currHunt.markerDistance}} mi, and Expected Time: {{currHunt.expectedTime}} minutes</h3>
@@ -416,7 +414,6 @@
             <div class="mapclass">
               <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymapGuess" id="mymapGuess">
                 <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
-                <l-marker v-for="(marker, i) in guessMarkers" :key="'marker-'+i" :lat-lng="marker" @click="registerMarker"></l-marker>
               </l-map>
             </div>
             <h3> {{currHunt.markerDistance}} mi</h3>
