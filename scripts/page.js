@@ -653,9 +653,7 @@ map = new Vue({
       // TODO: prefer to keep previous possible locations? and just hide them after click?
       this.currHunt.stops[stop_i].possibleLocations = [];
 
-      markers = this.inPlayMode ? this.guessMarkers : this.makeMarkers;
-
-      this.updateRoute(markers);
+      this.updateRoute(this.makeMarkers);
       
       $('#loc'+stop_i).hide();
 
@@ -701,6 +699,7 @@ map = new Vue({
               hintClicked: false,
               tryAgain: false,
               correct: false,
+              evidence: [],
             },
             // TODO: when they publish, remove spaces from ends of all answers
             stops: [],
@@ -709,6 +708,20 @@ map = new Vue({
         this.inPlayMode = true;
         this.currHunt = this.allHunts[idIn];
         console.log(this.currHunt);
+
+        this.currHunt.inProgress = {
+            timeSoFar: 0,
+            distanceSoFar: 0,
+            numPoints: 0,
+            currStopId: 0,
+            numMarkers: 0,
+            guessText: "",
+            tempGuess: "",
+            hintClicked: false,
+            tryAgain: false,
+            correct: false,
+          };
+
         setInterval(()=>{
           this.currHunt.inProgress.timeSoFar += 1;
 
