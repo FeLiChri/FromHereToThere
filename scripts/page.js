@@ -549,6 +549,8 @@ map = new Vue({
 
       $('#accordian-item-'+String(idx)).collapse('hide');
       console.log(this.currHunt.stops);
+
+      this.updateRoute(this.makeMarkers);
     },
     moveStopDown: function(idx) {
       console.log("move stop down" + idx);
@@ -558,6 +560,8 @@ map = new Vue({
         Vue.set(this.currHunt.stops, idx + 1, temp);
       }
       console.log(this.currHunt.stops);
+      this.updateRoute(this.makeMarkers);
+
     },
     publish: function() {
       console.log("Publish");
