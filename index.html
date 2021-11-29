@@ -106,7 +106,7 @@
                     <span style="color: red;">*</span>
                     </label>
                   <div class="col-7">
-                      <input type="text" class="form-control" id="title" name="title" v-model="currHunt.title" placeholder="Add a title here!" required>
+                      <input type="text" class="form-control" id="title" name="title" v-model="currHunt.title" placeholder="Add a title here!" v-on:keydown.enter.prevent required>
                       <!-- <div class="invalid-feedback">
                         Please give your hunt a title.
                       </div> -->
@@ -219,7 +219,7 @@
                       <span data-toggle="tooltip" title="Nickname of your destination - what your players will guess." class="bi bi-info-circle static"><span>
                     </label>               
                       <div class="col-sm-10">
-                          <input type="text" class="form-control mt-2" :id="'answer'+i" v-model="c.answer" placeholder="Stop Name (e.g. Hatcher)"  required>
+                          <input type="text" class="form-control mt-2" :id="'answer'+i" v-model="c.answer" placeholder="Stop Name (e.g. Hatcher)"  v-on:keydown.enter.prevent required>
                           <div class="invalid-feedback mb-2">
                               Please provide a stop name.
                           </div>
@@ -232,7 +232,7 @@
                         <div class="col-sm-10">
                           <div class="input-group input-group-sm-2 mt-2">
                               <input type="search" class="form-control rounded" placeholder="Search for Location" aria-label="Search"
-                              aria-describedby="search-addon" v-model="c.location" v-on:keyup.enter="searchLocation(c.location)" style="border-radius: 0.25em 0 0 0.25em !important;" required>
+                              aria-describedby="search-addon" v-model="c.location" v-on:keyup.enter="searchLocation(c.location)" style="border-radius: 0.25em 0 0 0.25em !important;" v-on:keydown.enter.prevent required>
                               <div class="input-group-append" >
                                 <button class="btn btn-secondary" type="button" style="height: 100%; border-radius: 0 0.25em 0.25em 0 !important;" @click="searchLocation(c.location)"><i class="bi bi-search"></i></button>
                               </div>
@@ -255,7 +255,7 @@
                         <span data-toggle="tooltip" title="Give your players an initial clue of how to get there!" class="bi bi-info-circle static"><span>
                         </label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control mt-2" :id="'clue'+i" v-model="c.clue" placeholder="e.g. Where do the graduate students study?" required>
+                          <input type="text" class="form-control mt-2" :id="'clue'+i" v-model="c.clue" placeholder="e.g. Where do the graduate students study?" v-on:keydown.enter.prevent required>
                           <div class="invalid-feedback mb-2">
                               Please provide a clue.
                           </div>
@@ -266,7 +266,7 @@
                         <span data-toggle="tooltip" title="Another hint, in case your players get stuck." class="bi bi-info-circle static"><span>
                       </label>
                       <div class="col-sm-10">
-                      <input type="text" class="form-control mt-2" :id="'hint'+i" v-model="c.hint" placeholder="e.g. It starts with 'hat'." required>
+                      <input type="text" class="form-control mt-2" :id="'hint'+i" v-model="c.hint" placeholder="e.g. It starts with 'hat'." v-on:keydown.enter.prevent required>
                       <div class="invalid-feedback mb-2">
                         Please provide a hint.
                     </div>
@@ -277,7 +277,7 @@
                         <span data-toggle="tooltip" title="What should your players do once there?" class="bi bi-info-circle static"><span>
                         </label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control mt-2" :id="'task'+i" v-model="c.task" placeholder="e.g. Take a photo in the stacks." required>
+                          <input type="text" class="form-control mt-2" :id="'task'+i" v-model="c.task" placeholder="e.g. Take a photo in the stacks." v-on:keydown.enter.prevent required>
                           <div class="invalid-feedback mb-2">
                               Please provide a task.
                           </div>
@@ -429,7 +429,7 @@
                 <l-marker v-for="marker in guessMarkers" :key="marker" :lat-lng="marker" @click="registerMarker"></l-marker>
               </l-map>
             </div>
-            <h3> {{currHunt.expectedDistance}} mi</h3>
+            <h3> {{currHunt.markerDistance}} mi</h3>
             <!-- <div id='routermap' style="height: 350px; width: 100%;"> -->
     
             <!-- </div> -->

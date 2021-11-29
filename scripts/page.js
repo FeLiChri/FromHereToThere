@@ -580,7 +580,9 @@ map = new Vue({
           this.currHunt.stops.forEach( s => s.answer.trim());
 
           this.currHunt.expectedTime = timelimit;
+          // Reset marker distance
           this.currHunt.expectedDistance = this.currHunt.markerDistance;
+          this.currHunt.markerDistance = 0;
           this.allHunts.push(this.currHunt);
           this.switchPage("join");
           this.currStopId = 0;
@@ -675,9 +677,9 @@ map = new Vue({
           // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
       });
       
-      this.router.addTo(routermap);
+      // this.router.addTo(routermap);
 
-      $('#loc'+stop_i).hide();
+      // $('#loc'+stop_i).hide();
 
     }, 
     setActiveStop: function(i) {
