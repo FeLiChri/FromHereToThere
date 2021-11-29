@@ -206,7 +206,7 @@
                     <form :id="'form'+i" class="needs-validation row mt-3" novalidate>
                       <label :for="'answer'+i" class="col-sm-2 mt-2 col-form-label">Go to: 
                       <span style="color: red;">* </span>
-                      <span data-toggle="tooltip" trigger="hover click" title="Nickname of your destination - what your players will guess." class="bi bi-info-circle static"><span>
+                      <span data-toggle="tooltip" data-trigger="hover click" title="Nickname of your destination - what your players will guess." class="bi bi-info-circle static"><span>
                     </label>               
                       <div class="col-sm-10">
                           <input type="text" class="form-control mt-2" :id="'answer'+i" v-model="c.answer" placeholder="Stop Name (e.g. Hatcher)"  v-on:keydown.enter.prevent required>
@@ -217,7 +217,7 @@
               
                       <label :for="'location'+i" class="col-sm-2 mt-2 col-form-label">At / In: 
                         <span style="color: red;">*</span>
-                        <span data-toggle="tooltip" trigger="hover click" title="Which building or location is this stop in or at?" class="bi bi-info-circle static"><span>
+                        <span data-toggle="tooltip" data-trigger="hover click" title="Which building or location is this stop in or at?" class="bi bi-info-circle static"><span>
                       </label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-sm-2 mt-2">
@@ -242,7 +242,7 @@
               
                       <label :for="'clue'+i" class="col-sm-2 mt-2 col-form-label">Clue: 
                         <span style="color: red;">*</span>
-                        <span data-toggle="tooltip" trigger="hover click" title="Give your players an initial clue of how to get there!" class="bi bi-info-circle static"><span>
+                        <span data-toggle="tooltip" data-trigger="hover click" title="Give your players an initial clue of how to get there!" class="bi bi-info-circle static"><span>
                         </label>
                       <div class="col-sm-10">
                           <input type="text" class="form-control mt-2" :id="'clue'+i" v-model="c.clue" placeholder="e.g. Where do the graduate students study?" v-on:keydown.enter.prevent required>
@@ -253,7 +253,7 @@
               
                       <label :for="'hint'+i" class="col-sm-2 mt-2 col-form-label">Hint:
                         <span style="color: red;">*</span>
-                        <span data-toggle="tooltip" trigger="hover click" title="Another hint, in case your players get stuck." class="bi bi-info-circle static"><span>
+                        <span data-toggle="tooltip" data-trigger="hover click" title="Another hint, in case your players get stuck." class="bi bi-info-circle static"><span>
                       </label>
                       <div class="col-sm-10">
                       <input type="text" class="form-control mt-2" :id="'hint'+i" v-model="c.hint" placeholder="e.g. It starts with 'hat'." v-on:keydown.enter.prevent required>
@@ -264,7 +264,7 @@
               
                       <label :for="'task'+i" class="col-sm-2 mt-2 col-form-label">Task: 
                         <span style="color: red;">*</span>
-                        <span data-toggle="tooltip" trigger="hover click" title="What should your players do once there?" class="bi bi-info-circle static"><span>
+                        <span data-toggle="tooltip" data-trigger="hover click" title="What should your players do once there?" class="bi bi-info-circle static"><span>
                         </label>
                       <div class="col-sm-10">
                           <input type="text" class="form-control mt-2" :id="'task'+i" v-model="c.task" placeholder="e.g. Take a photo in the stacks." v-on:keydown.enter.prevent required>
@@ -274,7 +274,7 @@
                       </div>
 
                       <label :for="'points'+i" class="col-sm-2 mt-2 col-form-label">Points: 
-                        <span data-toggle="tooltip" trigger="hover click" title="How many points should be awarded?" class="bi bi-info-circle static"><span>
+                        <span data-toggle="tooltip" data-trigger="hover click" title="How many points should be awarded?" class="bi bi-info-circle static"><span>
                         </label>
                       <div class="col-sm-10">
                           <input type="number" class="form-control mt-2" :id="'points'+i" v-model="c.points">

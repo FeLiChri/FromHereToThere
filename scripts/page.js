@@ -347,7 +347,7 @@ map = new Vue({
     }
     $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip({
-          placement : 'right'
+          placement : 'right',
       });
     });
   },
