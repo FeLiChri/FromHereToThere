@@ -40,6 +40,8 @@ map = new Vue({
   components: { LMap, LTileLayer, LMarker, LTooltip },
   data() {
     return {
+      select_min:0,
+      select_hrs:0,
       iconImage:"",
       arborAdventureIconSelected:false,
       bookBonanzaIconSelected:false,
@@ -148,7 +150,7 @@ map = new Vue({
           },
           {
             clue: "Where to find computers in Angell Hall.",
-            answer: "Fishbowl in Angell Hall",
+            answer: "Fishbowl",
             hint: "Nemo from Finding Nemo might swim in one.",
             task: "Print a poster and upload a photo of the print!",
             points: 15,
@@ -230,6 +232,26 @@ map = new Vue({
           numPoints: null,
           timeTaken: null,
         },
+        stops: [
+          {
+            clue: "Famous for it's typewriter theme",
+            answer: "Literati",
+            hint: "It starts with 'lit'",
+            task: "Take a photo of your typewritten message.",
+            points: 15,
+            latlong: L.latLng(42.280291,-83.7474556),
+            expanded: true,
+          },
+          {
+            clue: "Pick up a new comic or your next favorite game here",
+            answer: "Vault of Midnight",
+            hint: "Three words (_ of _)",
+            task: "Take a photo with a cool character",
+            points: 15,
+            latlong: L.latLng(42.2801, -83.7484),
+            expanded: true,
+          },
+        ]
       }],      
     };
   },
@@ -293,6 +315,7 @@ map = new Vue({
       // bookBonanzaIconSelected:false,
       // welcomeHomeIconSelected:false,
       var iconSelected = event.target.id;
+      console.log(iconSelected);
       this.arborAdventureIconSelected = false;
       this.bookBonanzaIconSelected = false;
       this.welcomeHomeIconSelected = false;
@@ -309,6 +332,7 @@ map = new Vue({
         this.iconImage = "src/welcomeHomeIcon.png";
         this.welcomeHomeIconSelected = true;
       }
+      this.currHunt.icon = this.iconImage;
       console.log("icon:", this.iconImage);
       this.currHunt.icon = this.iconImage;
     },
@@ -507,6 +531,10 @@ map = new Vue({
         Vue.set(this.currHunt.stops, idx, this.currHunt.stops[idx - 1]);
         Vue.set(this.currHunt.stops, idx - 1, temp);
       }
+      console.log('#accordian-item-'+String(idx))
+      console.log('#accordian-item-'+String(idx-1))
+
+      $('#accordian-item-'+String(idx)).collapse('hide');
       console.log(this.currHunt.stops);
     },
     moveStopDown: function(idx) {
@@ -549,6 +577,7 @@ map = new Vue({
           this.currHunt.expectedTime = 60;
           this.allHunts.push(this.currHunt);
           this.switchPage("join");
+          this.currStopId = 0;
         }     
       }
       console.log(this.currHunt.errorString);
@@ -703,9 +732,16 @@ map = new Vue({
       }
     }, 
     goBack: function() {
+      console.log("page", this.page);
       if (this.page == "play") {
         this.switchPage("join");
         return;
+      }
+      if(this.page == "create") {
+        if(!confirm('Are you sure you want to return? Your hunt may not be saved.')) {
+          //dont' return
+          return;
+        }
       }
       this.switchPage("index");
     },
