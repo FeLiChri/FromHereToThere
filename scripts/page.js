@@ -11,6 +11,10 @@ var { LMap, LTileLayer, LMarker, LTooltip } = Vue2Leaflet;
 
 var routermap;
 
+$(document).on("keydown", ":input:not(textarea)", function(event) {
+  return event.key != "Enter";
+});
+
 window.cb = function cb(json) {
   //do what you want with the json
   console.log("CALLBACK");
@@ -677,9 +681,11 @@ map = new Vue({
           // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
       });
       
-      // this.router.addTo(routermap);
+      this.router.addTo(routermap);
 
-      // $('#loc'+stop_i).hide();
+      $('#loc'+stop_i).hide();
+
+      console.log("Set location!");
 
     }, 
     setActiveStop: function(i) {

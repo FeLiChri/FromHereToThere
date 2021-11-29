@@ -242,7 +242,7 @@
                             </div>
                             <div>
                               <div id="'loc-'+i">
-                                <button v-for="(loc, j) in c.possibleLocations" class="dropdown-item possible-location" id="'loc-'+i+'-'+j" @click="setLocation(i, j)"><p>{{loc.name}}</p></button>
+                                <button type="button" v-for="(loc, j) in c.possibleLocations" class="dropdown-item possible-location" id="'loc-'+i+'-'+j" @click="setLocation(i, j); return false;"><p>{{loc.name}}</p></button>
                               </div>
                               <div id="'no-results'+i" v-if="c.noLocationResults">
                                 <div class="alert alert-danger" role="alert">No search results. Make sure the location is spelled correctly and is in Ann Arbor.</div>
