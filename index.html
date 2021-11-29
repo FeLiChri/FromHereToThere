@@ -70,32 +70,23 @@
               <!-- Icon Dropdown -->
               <div class="row justify-content-md-center" >
               <div class="dropdown col-md-auto" >
-                  <button v-if="arborAdventureIconSelected||bookBonanzaIconSelected||welcomeHomeIconSelected" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button v-if="iconSelected" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                       Select an Icon:
                   </button>
                   <button v-else class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                       Select an Icon:
                   </button>
-
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <li>
-                          <a v-if="arborAdventureIconSelected" class="btn btn-primary dropdown-item" href="#" id="aaIcon" v-on:click="selectIcon"><img src="src/arborAdventureIcon.png" style="width:40px;"></a>
-                          <a v-else class="btn dropdown-item" href="#" id="aaIcon" v-on:click="selectIcon"><img src="src/arborAdventureIcon.png" style="width:40px; pointer-events: none;"></a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="max-height: 230px; overflow-y: scroll;">
+                      <li v-for="icon in icons">
+                        <a class="btn dropdown-item" :class="{'btn-primary' : icon.selected}" href="#" :id="icon.name" v-on:click="selectIcon(icon.name)"><img :src="icon.src" style="width:40px; pointer-events: none;"></a>
                       </li>
-                      <li>
-                          <a v-if="bookBonanzaIconSelected" class="btn btn-primary dropdown-item" href="#" id="bbIcon" v-on:click="selectIcon"><img src="src/bookBonanzaIcon.png" style="width:40px;"></a>
-                          <a v-else class="dropdown-item btn" href="#" id="bbIcon" v-on:click="selectIcon"><img src="src/bookBonanzaIcon.png" style="width:40px; pointer-events: none;"></a>
-                      </li>
-                      <li>
-                          <a v-if="welcomeHomeIconSelected" class="btn btn-primary dropdown-item" href="#" id="whIcon" v-on:click="selectIcon"><img src="src/welcomeHomeIcon.png" style="width:40px;"></a>
-                          <a v-else class="dropdown-item btn" href="#" id="whIcon" v-on:click="selectIcon"><img src="src/welcomeHomeIcon.png" style=" pointer-events: none; width:40px;"></a>
-                      </li>
-                  </ul>
+                    </ul>
+                
               </div>
 
               <!-- Selected Icon -->
-              <div class='col-md-auto' v-show="arborAdventureIconSelected||bookBonanzaIconSelected||welcomeHomeIconSelected">
-                  <img  v-bind:src="iconImage" style="width:40px; justify-content: left;padding=0px;">
+              <div class='col-md-auto' v-show="iconSelected">
+                  <img  v-bind:src="currHunt.iconSrc" style="width:40px; justify-content: left; padding: 0px;">
               </div>
 </div>
               <!-- title -->

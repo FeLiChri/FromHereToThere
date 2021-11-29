@@ -46,10 +46,6 @@ map = new Vue({
     return {
       select_min:0,
       select_hrs:0,
-      iconImage:"",
-      arborAdventureIconSelected:false,
-      bookBonanzaIconSelected:false,
-      welcomeHomeIconSelected:false,
       inPlayMode: false,
       expandLastAcc: false,
       page: "index", // options ["index", "play", "create", "join"]
@@ -68,7 +64,8 @@ map = new Vue({
         markerDistance: 0,
         expectedTime: 30,
         title: "",
-        icon: "",
+        iconName: "",
+        iconSrc: "",
         errorString: "",
 
         inProgress: {
@@ -124,7 +121,7 @@ map = new Vue({
         markerDistance: 0,
         expectedTime: 60,
         title: "Welcome Home",
-        icon: "src/welcomeHomeIcon.png",
+        icon: "src/icons/welcomeHomeIcon.png",
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
@@ -175,7 +172,7 @@ map = new Vue({
         markerDistance: 0,
         expectedTime: 120,
         title: "Arbor Adventure", // TODO: add id
-        icon: "src/arborAdventureIcon.png",
+        icon: "src/icons/arborAdventureIcon.png",
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
@@ -222,7 +219,7 @@ map = new Vue({
         markerDistance: 0,
         expectedTime: 120,
         title: "Book Bonanza",
-        icon: "src/bookBonanzaIcon.png",
+        icon: "src/icons/bookBonanzaIcon.png",
         inProgress: {
           timeSoFar: 0,
           distanceSoFar: 0,
@@ -260,7 +257,44 @@ map = new Vue({
             expanded: true,
           },
         ]
-      }],      
+      }],
+      icons: {
+        'apple': {selected: false, name: 'apple', src: 'src/icons/apple.jpg'},   
+        'arrow': {selected: false, name: 'arrow', src: 'src/icons/arrow.jpg'},   
+        'bank': {selected: false, name: 'bank', src: 'src/icons/bank.jpg'},   
+        'basketball': {selected: false, name: 'basketball', src: 'src/icons/basketball.jpg'},   
+        'blockM': {selected: false, name: 'blockM', src: 'src/icons/blockM.jpg'},   
+        'book': {selected: false, name: 'book', src: 'src/icons/book.jpg'},   
+        'camera': {selected: false, name: 'camera', src: 'src/icons/camera.jpg'},   
+        'computer': {selected: false, name: 'computer', src: 'src/icons/computer.jpg'},   
+        'cube': {selected: false, name: 'cube', src: 'src/icons/cube.jpg'},   
+        'dollar': {selected: false, name: 'dollar', src: 'src/icons/dollar.jpg'},   
+        'drop': {selected: false, name: 'drop', src: 'src/icons/drop.jpg'},   
+        'exclamation': {selected: false, name: 'exclamation', src: 'src/icons/exclamation.jpg'},   
+        'flag': {selected: false, name: 'flag', src: 'src/icons/flag.jpg'},   
+        'food': {selected: false, name: 'food', src: 'src/icons/food.jpg'},   
+        'footsteps': {selected: false, name: 'footsteps', src: 'src/icons/footsteps.jpg'},   
+        'geoloc': {selected: false, name: 'geoloc', src: 'src/icons/geoloc.jpg'},   
+        'heart': {selected: false, name: 'heart', src: 'src/icons/heart.jpg'},   
+        'house': {selected: false, name: 'house', src: 'src/icons/house.jpg'},   
+        'magnify': {selected: false, name: 'magnify', src: 'src/icons/magnify.jpg'},   
+        'mug': {selected: false, name: 'mug', src: 'src/icons/mug.jpg'},   
+        'painting': {selected: false, name: 'painting', src: 'src/icons/painting.jpg'},   
+        'people': {selected: false, name: 'people', src: 'src/icons/people.jpg'},   
+        'person': {selected: false, name: 'person', src: 'src/icons/person.jpg'},   
+        'plant': {selected: false, name: 'plant', src: 'src/icons/plant.jpg'},   
+        'puzzle': {selected: false, name: 'puzzle', src: 'src/icons/puzzle.jpg'},   
+        'question': {selected: false, name: 'question', src: 'src/icons/question.jpg'},   
+        'smiley': {selected: false, name: 'smiley', src: 'src/icons/smiley.jpg'},   
+        'snowflake': {selected: false, name: 'snowflake', src: 'src/icons/snowflake.jpg'},   
+        'snowman': {selected: false, name: 'snowman', src: 'src/icons/snowman.jpg'},   
+        'spiral': {selected: false, name: 'spiral', src: 'src/icons/spiral.jpg'},   
+        'star': {selected: false, name: 'star', src: 'src/icons/star.jpg'},   
+        'sun': {selected: false, name: 'sun', src: 'src/icons/sun.jpg'},   
+        'taco': {selected: false, name: 'taco', src: 'src/icons/taco.jpg'},   
+        'theatre': {selected: false, name: 'theatre', src: 'src/icons/theatre.jpg'},   
+        'tree': {selected: false, name: 'tree', src: 'src/icons/tree.jpg'},   
+      },
     };
   },
   mounted() {
@@ -318,31 +352,13 @@ map = new Vue({
     });
   },
   methods: {
-    selectIcon(event){
-      // arborAdventureIconSelected:true,
-      // bookBonanzaIconSelected:false,
-      // welcomeHomeIconSelected:false,
-      var iconSelected = event.target.id;
-      console.log(iconSelected);
-      this.arborAdventureIconSelected = false;
-      this.bookBonanzaIconSelected = false;
-      this.welcomeHomeIconSelected = false;
-
-      if(iconSelected == "aaIcon"){
-        this.iconImage = "src/arborAdventureIcon.png";
-        this.arborAdventureIconSelected = true;
+    selectIcon(iconName){
+      if (this.currHunt.iconName !== "") {
+        this.icons[this.currHunt.iconName].selected = false;
       }
-      else if(iconSelected == "bbIcon"){
-        this.iconImage = "src/bookBonanzaIcon.png";
-        this.bookBonanzaIconSelected = true;
-      }
-      else if(iconSelected == "whIcon"){
-        this.iconImage = "src/welcomeHomeIcon.png";
-        this.welcomeHomeIconSelected = true;
-      }
-      this.currHunt.icon = this.iconImage;
-      console.log("icon:", this.iconImage);
-      this.currHunt.icon = this.iconImage;
+      this.currHunt.iconName = iconName;
+      this.icons[iconName].selected = true;
+      this.currHunt.iconSrc = this.icons[iconName].src;
     },
     loadHunt: function(id){
       this.page = "play";
@@ -698,7 +714,8 @@ map = new Vue({
             markerDistance: 0,
             expectedTime: 0,
             title: "", // TODO: add id
-            icon: "",
+            iconName: "",
+            iconSrc: "",
             id: this.allHunts.length,
             errorString: '',
             inProgress: {
@@ -873,6 +890,9 @@ map = new Vue({
     onPlayPage: function() {
       return this.page == "play";
     },
+    iconSelected: function() {
+      return this.currHunt.iconName !== '';
+    }
   }
 });
 
