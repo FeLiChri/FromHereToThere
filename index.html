@@ -171,14 +171,14 @@
                     <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
                   </l-map>
                 </div>
-                <h3>Expected Distance: {{currHunt.markerDistance}} mi, and Expected Time: {{currHunt.expectedTime}} minutes</h3>
+                <h3>Expected Distance: {{currHunt.markerDistance}} mi</h3> <h3>Expected Time: {{currHunt.expectedTime}} minutes</h3>
     
                 <!-- </div> -->
                 
             </div> <!-- map -->
     
             <!-- form -->
-            <div class="form col-sm-6 mt-sm-0">
+            <div class="form col-sm-6 mt-sm-0 mt-2">
               <!-- hint accordion -->
               <div class="accordion mt-4" id="accordionExample">
               <div :id="'accordion-item-'+i" class="accordion-item" draggable="true" v-for="(c, i) in currHunt.stops">
