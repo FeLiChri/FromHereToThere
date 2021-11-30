@@ -284,6 +284,7 @@ map = new Vue({
   updated() {
     console.log("Updated!");
     e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
+    console.log(this.expandLastAcc);
     if (this.expandLastAcc) {
       this.expandLastAcc = false;
       $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('show');
@@ -457,25 +458,37 @@ map = new Vue({
         map.currHunt.inProgress.currStopId = this.currHunt.stops.length - 1;
         this.expandLastAcc = true;
     },
-    moveStopUp: function(idx) {
-      console.log("move stop up" + idx);
+    moveStopUp: function(idx, e) {
+      // Don't expand accordion.
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      this.expandLastAcc = false;
+      console.log("move stop up " + idx);
       if (idx != 0) {
         var temp = this.currHunt.stops[idx];
         Vue.set(this.currHunt.stops, idx, this.currHunt.stops[idx - 1]);
         Vue.set(this.currHunt.stops, idx - 1, temp);
       }
 
-      $('#accordian-item-'+String(idx)).collapse('hide');
+      // $('#accordian-item-'+String(idx)).collapse('hide');
       this.updateRoute(this.makeMarkers);
+      this.adjustMap();
     },
-    moveStopDown: function(idx) {
-      console.log("move stop down" + idx);
+    moveStopDown: function(idx, e) {
+      // Don't expand accordion.
+      e.stopImmediatePropagation();
+      e.preventDefault();
+
+      this.expandLastAcc = false;
+
+      console.log("move stop down " + idx);
       if (idx < this.currHunt.stops.length - 1) {
         var temp = this.currHunt.stops[idx];
         Vue.set(this.currHunt.stops, idx, this.currHunt.stops[idx + 1]);
         Vue.set(this.currHunt.stops, idx + 1, temp);
       }
       this.updateRoute(this.makeMarkers);
+      this.adjustMap();
 
     },
     publish: function() {
