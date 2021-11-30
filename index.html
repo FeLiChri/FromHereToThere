@@ -143,9 +143,6 @@
                     <option v-bind:value="9">9</option>
                     <option v-bind:value="10">10</option>
                   </select>
-                  <!-- <div class="invalid-feedback">
-                    Select a value.
-                  </div> -->
                 </div>
                   <div class="col-2 col-sm-6 col-md-2">
                   <label for="minutes">Min:</label>
@@ -166,12 +163,7 @@
                     <option v-bind:value="50">50</option>
                     <option v-bind:value="55">55</option>
                   </select>
-                  <!-- <div class="invalid-feedback col-sm-2">
-                    Select a value.
-                  </div> -->
                 </div>
-                  <!-- <div class="mb-3">
-                    <button class="btn btn-primary" type="button" @click="validateForm('#timeform')">validate</button>                    </div> -->
                 </form>
               </div>
                 <div class="mapclass">
@@ -180,7 +172,6 @@
                   </l-map>
                 </div>
                 <h3>Expected Distance: {{currHunt.markerDistance}} mi, and Expected Time: {{currHunt.expectedTime}} minutes</h3>
-                <!-- <div id='routermap' style="height: 350px; width: 100%;"> -->
     
                 <!-- </div> -->
                 
@@ -291,19 +282,6 @@
               </div>
             </div> <!-- accordion -->
     
-                <!-- <h1>
-                  Clue: <input type="text" id="" name="" placeholder="Add your clue here!">
-                  <br>
-                  Answer: <input type="text" id="" name="" placeholder="Add your answer here!">
-                  <br>
-                  Hint (opt.): <input type="text" id="" name="" placeholder="Add your optional hint here!">
-                  <br>
-                  Task: <input type="text" id="" name="" placeholder="Add your task here!">
-                  <br>
-                  Points: <input type="text" id="" name="" placeholder="Add your points here!">
-                  <br>
-                </h1> -->
-                <!-- TODO: make sure to add a "save and close" type button -->
     <!-- button -->
     <div class="row align-items-center">            
     <button type="button" class="btn btn-primary mt-4" @click="addStop">
@@ -421,7 +399,6 @@
               </l-map>
             </div>
             <h3> {{currHunt.markerDistance}} mi</h3>
-            <!-- <div id='routermap' style="height: 350px; width: 100%;"> -->
     
             <!-- </div> -->
             <br>

@@ -1,12 +1,3 @@
-// Vue.component('l-map', window.Vue2Leaflet.LMap);
-// link 'http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css';
-// @import "~leaflet/dist/leaflet.css";
-
-// $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', 'https://unpkg.com/leaflet/dist/leaflet.css'));
-
-
-// var { LMap, LTileLayer, LMarker } = Vue2Leaflet;
-
 var { LMap, LTileLayer, LMarker, LTooltip } = Vue2Leaflet;
 
 var routermap;
@@ -15,11 +6,10 @@ $(document).on("keydown", ":input:not(textarea)", function(event) {
   return event.key != "Enter";
 });
 
+// Callback from Nominatim returning geolocations
 window.cb = function cb(json) {
-  //do what you want with the json
-  console.log("CALLBACK");
+  console.log("Geolocations returned");
   console.log(json);
-  console.log(map.currStop);
   possibleLocations = json.map(e => {
     return {
       "name": e.display_name,
@@ -33,9 +23,6 @@ window.cb = function cb(json) {
   else {
     map.currStop.noLocationResults = false;
   }
-  console.log(possibleLocations);
-  console.log(map.currHunt.inProgress.currStopId);
-  console.log("Assign possible locations");
   map.currStop.possibleLocations = possibleLocations;
 }
 
@@ -49,7 +36,6 @@ map = new Vue({
       inPlayMode: false,
       expandLastAcc: false,
       page: "index", // options ["index", "play", "create", "join"]
-      // TODO: diff between current hunt being made vs. being played?
       mapConfig: {
         zoom:14,
         center: L.latLng(42.2808, -83.7430),
@@ -85,7 +71,6 @@ map = new Vue({
           numPoints: null,
           timeTaken: null,
         },
-        // TODO: when they publish, remove spaces from ends of all answers
         stops: [
           {
             clue: "Where the graduates study.",
@@ -139,7 +124,6 @@ map = new Vue({
           numPoints: null,
           timeTaken: null,
         },
-        // TODO: when they publish, remove spaces from ends of all answers
         stops: [
           {
             clue: "Where the graduates study.",
@@ -171,7 +155,7 @@ map = new Vue({
         expectedDistance: 2,
         markerDistance: 0,
         expectedTime: 120,
-        title: "Arbor Adventure", // TODO: add id
+        title: "Arbor Adventure",
         iconSrc: "src/icons/arborAdventureIcon.png",
         inProgress: {
           timeSoFar: 0,
@@ -190,7 +174,6 @@ map = new Vue({
           numPoints: null,
           timeTaken: null,
         },
-        // TODO: when they publish, remove spaces from ends of all answers
         stops: [
           {
             clue: "The arb has a special bed of this kind of flower",
@@ -297,50 +280,10 @@ map = new Vue({
       },
     };
   },
-  mounted() {
-  	// const this_map = this.$refs.mymap.mapObject;
-    // routermap = this_map;
-    // // map.addControl(new L.Control.Fullscreen());
-
-    // console.log(this.makeMarkers);
-
-    // // TODO: make this a helper function
-    // markers = this.inPlayMode ? this.guessMarkers : this.makeMarkers;
-
-    // this.router = L.Routing.control({
-    //   // TODO: check waypoints appearing
-    //   waypoints: markers,   
-    //   routeWhileDragging: false,
-    //   // TODO: fix dragging problem
-    //   lineOptions: {
-    //     addWaypoints: false,
-    //   },
-    //   show: false,
-    //   units: 'imperial',
-    //   // summaryTemplate: '<h2>{name}</h2><h3>{distance}, {time}</h3>',
-    // });
-        
-    // this.router.on('routesfound', function(e) {
-    //     // console.log("ROUTES FOUND");
-    //     // console.log(e.waypoints);
-    //     var routes = e.routes;
-    //     var summary = routes[0].summary;
-    //     // alert distance and time in miles and minutes
-    //     // console.log(summary.totalDistance / 1760 + ' mi');
-    //     // console.log(summary.totalTime % 3600 / 60 + ' min');
-    //     map.currHunt.expectedTime = (summary.totalTime % 3600 / 60).toFixed(2);
-    //     map.currHunt.expectedDistance = (summary.totalDistance / 1760).toFixed(2);
-    //     // map.currHunt.expectedTime = ((summary.totalDistance / (1760 * 2.5)) % 3600 / 60).toFixed(2);
-
-    //     // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
-    // });
-    
-    // this.router.addTo(routermap);
-  },
+  mounted() {},
   updated() {
     console.log("Updated!");
     e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
-    // console.log(e);
     if (this.expandLastAcc) {
       this.expandLastAcc = false;
       $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('show');
@@ -364,22 +307,6 @@ map = new Vue({
     loadHunt: function(id){
       this.page = "play";
       this.inPlayMode = true;
-      // this.currHunt = this.allHunts[id];
-      // console.log("loadHunt");
-      // console.log("loadHunt");
-      // Start countdown of time remaining
-
-
-      // update time so far
-
-    },
-    registerMarker: function(e) {
-        // console.log(e);
-    },
-    setTimeAndDistance: function(time, distance) {
-        // console.log(time, distance);
-        this.currHunt.expectedDistance = distance.toFixed(2);
-        this.currHunt.expectedTime = time.toFixed(2);
     },
     updateGuess: function() {
       if (this.currHunt.inProgress.guessText.length < this.currHunt.inProgress.tempGuess.length) {
@@ -396,18 +323,13 @@ map = new Vue({
       this.currHunt.inProgress.hintClicked = true;
     },
     convertAnswerToCaps: function(answer) {
-      // console.log(answer.toUpperCase().split('').join('\xa0'));
       return answer.toUpperCase().split('').join('\xa0');
     },
     checkAnswer: function(answer, guess) {
-
       // Strip all non-alphanumeric characters
       stripped_answer = answer.replace(/\W/g, '').toUpperCase();
       stripped_guess = guess.replace(/\W/g, '').toUpperCase();
 
-      // console.log("CHECK ANSWER")
-      // console.log(stripped_answer);
-      // console.log(stripped_guess);
       return stripped_answer === stripped_guess;
     },
     adjustMap: function() {
@@ -423,8 +345,6 @@ map = new Vue({
       this_map.fitBounds(this.markers);
     },
     updateRoute: function(markers) {
-      // this.$refs.mymap.mapObject.fitBounds(markers);
-
       if (this.router) {
         routermap.removeControl(this.router);
       } 
@@ -437,11 +357,7 @@ map = new Vue({
       }
       routermap = this_map;
 
-      // this_map.invalidateSize();
-      // this_map.fitBounds(markers);
-
       this.router = L.Routing.control({
-        // TODO: check waypoints appearing
         waypoints: markers,   
         routeWhileDragging: false,
         // TODO: fix dragging problem
@@ -450,43 +366,32 @@ map = new Vue({
         },
         show: false,
         units: 'imperial',
-        // summaryTemplate: '<h2>{name}</h2><h3>{distance}, {time}</h3>',
       });
 
       // TODO: figure out how to replace the router
           
       this.router.on('routesfound', function(e) {
-          // console.log("ROUTES FOUND");
-          // console.log(e.waypoints);
           var routes = e.routes;
           var summary = routes[0].summary;
-          // alert distance and time in miles and minutes
-          // console.log(summary.totalDistance / 1760 + ' mi');
-          // console.log(summary.totalTime % 3600 / 60 + ' min');
           map.currHunt.markerDistance = (summary.totalDistance / 1760).toFixed(2);
           map.currHunt.expectedTime = (map.currHunt.markerDistance * 20).toFixed(2);
-          // alert('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
       });
       
       this.router.addTo(routermap);
       this_map.fitBounds(markers);
 
     },
-    // TODO: keep commas and spaces and such in the answer
     makeGuess: function() {
       if (this.checkAnswer(this.currStop.answer, this.currHunt.inProgress.guessText)) {
-        // console.log("Correct!");
         this.currHunt.inProgress.tryAgain = false;
         this.currHunt.inProgress.correct = true;
         this.currHunt.inProgress.numPoints += this.currStop.points;
         this.currHunt.inProgress.numMarkers += 1;
 
         markers = this.guessMarkers;
-        // console.log(this.guessMarkers);
 
         this.updateRoute(markers);
       } else {
-        // console.log("Wrong Guess!");
         this.currHunt.inProgress.tryAgain = true;
       }
     },
@@ -495,7 +400,6 @@ map = new Vue({
       this.currHunt.inProgress.correct = true;
     },
     nextClue: function() {
-      // console.log("NEXT CLUE");
       this.allHunts[this.currHunt.id].inProgress.evidence.push(this.tempImg);
       this.tempImg = null;
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
@@ -527,38 +431,14 @@ map = new Vue({
 
     },
     deleteStop: function(i) {
-      // TODO: make sure to add an "are you sure? popup"
+      if(!confirm('Are you sure you want to delete this stop?')) {
+        //don't delete
+        return;
+      }
       this.currHunt.stops.splice(i, 1);
       // TODO: decrement currStop if it's after i - make sure it's still open
     },
     addStop: function() {
-      // Change "add stop" to "save":
-      var ogbtn = $('#addStopBtn').html();
-
-      // console.log("ADD STOP");
-      // $("#collapse" + this.currHunt.stops.length - 1).collapse({
-      //   show: true
-      // });
-      // console.log(this.currHunt.stops.length - 1);
-      // this.$nextTick(function () {
-      //   console.log("TICK");
-      //   e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
-      //   console.log(e);
-      //   $('#collapse' + this.currHunt.stops.length - 1).collapse('show');
-      // });
-      // setTimeout( () => {}, 1000);
-
-
-
-      // if(ogbtn == "Save Stop"){
-      //   this.validateForm();
-      //   // $('#addStopBtn').html("Add Stop");
-      //   // $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('hide');
-      //   // this.expandLastAcc = false;
-      // }
-      // else{
-
-        // $('#addStopBtn').html("Save Stop");
         this.currHunt.stops.push( {
         clue: "",
         answer: "",
@@ -572,9 +452,6 @@ map = new Vue({
       });
         map.currHunt.inProgress.currStopId = this.currHunt.stops.length - 1;
         this.expandLastAcc = true;
-      // }
-
-
     },
     moveStopUp: function(idx) {
       console.log("move stop up" + idx);
@@ -583,11 +460,8 @@ map = new Vue({
         Vue.set(this.currHunt.stops, idx, this.currHunt.stops[idx - 1]);
         Vue.set(this.currHunt.stops, idx - 1, temp);
       }
-      console.log('#accordian-item-'+String(idx))
-      console.log('#accordian-item-'+String(idx-1))
 
       $('#accordian-item-'+String(idx)).collapse('hide');
-      console.log(this.currHunt.stops);
       this.updateRoute(this.makeMarkers);
     },
     moveStopDown: function(idx) {
@@ -597,12 +471,10 @@ map = new Vue({
         Vue.set(this.currHunt.stops, idx, this.currHunt.stops[idx + 1]);
         Vue.set(this.currHunt.stops, idx + 1, temp);
       }
-      console.log(this.currHunt.stops);
       this.updateRoute(this.makeMarkers);
 
     },
     publish: function() {
-      console.log("Publish");
       // Check for additional errors that are outside forms.
       this.currHunt.errorString = ''
 
@@ -634,7 +506,6 @@ map = new Vue({
 
           console.log(timelimit);
           // Strip any trailing whitespace
-          // TODO test
           this.currHunt.stops.forEach( s => s.answer.trim());
 
           this.currHunt.expectedTime = timelimit;
@@ -646,51 +517,24 @@ map = new Vue({
           this.currStopId = 0;
         }     
       }
-      console.log(this.currHunt.errorString);
-      // $('#errorMessage').html(this.currHunt.errorString);
     },    
     searchLocation: function(q) {
-    // query = e.target.value;
-    query = q;
-    console.log(q)
-    // console.log("Searching for " + e.target.value);
+      query = q;
+      console.log(q)
 
-    cleaned_query = query.replace(' ', '+');
+      cleaned_query = query.replace(' ', '+');
 
-    if (!cleaned_query.includes("ann") && !cleaned_query.includes("Ann")) {
-      cleaned_query +=  ",ann+arbor";
-    }
+      if (!cleaned_query.includes("ann") && !cleaned_query.includes("Ann")) {
+        cleaned_query +=  ",ann+arbor";
+      }
 
-    // TODO: overwrite
-    // With help from: https://stackoverflow.com/questions/10923769/simple-reverse-geocoding-using-nominatim
-    var s = document.createElement('script');     
-    s.setAttribute("id", "locSearchScript");  
-    s.src = 'http://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query;
-    document.getElementsByTagName('head')[0].appendChild(s);
-    // TODO: attribute!
-    // // console.log("Calling iTunes API with: https://itunes.apple.com/search?attribute=allArtistTerm&term=" + cleaned_query);
-    // axios.get("https://nominatim.openstreetmap.org/search?email=fee.christoph@gmail.com&q=" + cleaned_query + '+ann+arbor/', {
-    //   headers: {
-    //     "Access-Control-Allow-Origin": "*",
-    //     'User-Agent':'Axios 0.21.1',
-    //   },
-    //   proxy: {
-    //     host: 'localhost',
-    //     port: 5500
-    //   }
-    // })
-    //   .then(response => {
-          
-    //     // Log response
-    //     console.log("Returned JSON object:");
-    //     console.log(response);
-    //   }).catch(e => console.log(e));
+      // With help from: https://stackoverflow.com/questions/10923769/simple-reverse-geocoding-using-nominatim
+      var s = document.createElement('script');     
+      s.setAttribute("id", "locSearchScript");  
+      s.src = 'http://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query;
+      document.getElementsByTagName('head')[0].appendChild(s);
     }, 
-    // TODO: set time to be walking time
-    // TODO: also make sure that you can get the possible locations for any location
     setLocation(stop_i, possible_loc_i) {
-      console.log("Set location");
-      console.log(stop_i, possible_loc_i);
       chosenLoc = this.currHunt.stops[stop_i].possibleLocations[possible_loc_i];
       this.currHunt.stops[stop_i].latlong = L.latLng(chosenLoc.latlong[0], chosenLoc.latlong[1])
       this.currHunt.stops[stop_i].location = chosenLoc.name;
@@ -701,23 +545,11 @@ map = new Vue({
       this.updateRoute(this.makeMarkers);
       
       $('#loc'+stop_i).hide();
-
-      console.log("Set location!");
-
     }, 
     setActiveStop: function(i) {
-      // console.log(i);
       this.currHunt.inProgress.currStopId = i;
     }, 
     switchPage: function(pageIn, idIn=null) {
-      // console.log("SWITCHING PAGE TO: " + pageIn);
-      // let pageIn;
-      // let idIn;
-      // let split_args_array = args.split(",");
-      // pageIn = split_args_array[0]
-      // if(split_args_array.length > 1) {
-      //   idIn = split_args_array[1];
-      // }
       this.page = pageIn;
 
       if (pageIn == "join") {
@@ -729,7 +561,7 @@ map = new Vue({
             expectedDistance: 0,
             markerDistance: 0,
             expectedTime: 0,
-            title: "", // TODO: add id
+            title: "",
             iconName: "",
             iconSrc: "",
             id: this.allHunts.length,
@@ -747,7 +579,6 @@ map = new Vue({
               correct: false,
               evidence: [],
             },
-            // TODO: when they publish, remove spaces from ends of all answers
             stops: [],
         };
       } else if (pageIn == "play") {
@@ -782,7 +613,6 @@ map = new Vue({
       }
     }, 
     goBack: function() {
-      console.log("page", this.page);
       if (this.page == "play") {
         this.switchPage("join");
         return;
@@ -796,18 +626,11 @@ map = new Vue({
       this.switchPage("index");
     },
     validateForm: function(formName) {
-      // this.allFormsValid();
-      console.log("validate form");
-      console.log(formName);
-
       var form = document.querySelector(formName + '.needs-validation');
       var header = document.querySelector('#accordion-item-' + formName[formName.length - 1]);
-      console.log(header);
-      console.log(form);
+
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
         if (!form.checkValidity()) {
-          console.log("invalid form");
-          console.log(form);
           invalidFormsPresent = true;
           header.classList.add('invalid');
         }
@@ -821,36 +644,28 @@ map = new Vue({
     allFormsValid: function() {
       var forms = document.querySelectorAll('.needs-validation')
       
-      console.log("VALIDATING FORMS");
-      console.log(forms);
       // Loop over them and prevent submission
 
       invalidFormsPresent = false;
-      invalidTimeForm = false;
       invalidStopForm = false;
 
       forms.forEach(form => {
+        var header = document.querySelector('#accordion-item-' + form.id[form.id.length - 1]);
 
-      
-      var header = document.querySelector('#accordion-item-' + form.id[form.id.length - 1]);
-      console.log(header);
-      console.log(form);
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        if (!form.checkValidity()) {
-          console.log("invalid form");
-          console.log(form);
-          invalidFormsPresent = true;
-          if (header) {
-            header.classList.add('invalid');
-            invalidStopForm = true;
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          if (!form.checkValidity()) {
+            invalidFormsPresent = true;
+            if (header) {
+              header.classList.add('invalid');
+              invalidStopForm = true;
+            }
           }
-        }
-        else {
-          if (header) {
-            header.classList.remove('invalid')
+          else {
+            if (header) {
+              header.classList.remove('invalid')
+            }
           }
-        }
-        form.classList.add('was-validated');
+          form.classList.add('was-validated');
       })
 
       return [!invalidFormsPresent, invalidStopForm];
@@ -858,11 +673,9 @@ map = new Vue({
   }, 
   computed: {
     makeMarkers: function() {
-      console.log(this.currHunt.stops.map(s => s.latlong));
       return this.currHunt.stops.map(s => s.latlong);
     },
     guessMarkers: function() {
-      // console.log("GUESS MARKERS");
       if (!this.currHunt.inProgress.numMarkers) {
         return []
       }
@@ -892,7 +705,6 @@ map = new Vue({
         }
       }
       // hashes = '_'.repeat(this.currStop.answer.length).split('').join(' ');
-      console.log("hashes: ", hashes);
       return hashes.substring(0, hashes.length - 1);
     },
     currStop: function() {
@@ -915,9 +727,6 @@ map = new Vue({
     }
   }
 });
-
-// console.log("I think Vue just rendered?");
-// console.log(map.makeMarkers);
 
 function auto_height(elem) {  /* javascript */
   elem.style.height = "1px";
