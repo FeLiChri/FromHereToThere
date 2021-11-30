@@ -570,6 +570,10 @@ map = new Vue({
       this.page = pageIn;
 
       if (pageIn == "join") {
+        var s = document.createElement('script');     
+        s.setAttribute("id", "confetti");  
+        s.src = "scripts/confetti.js";
+      document.getElementsByTagName('head')[0].appendChild(s);
         this.inPlayMode = false;
       } else if (pageIn == "create") {
         this.inPlayMode = false;
