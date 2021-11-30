@@ -130,7 +130,7 @@
                   </div>
                   <div class="col-4 col-sm-6 col-md-4 p-0 mb-sm-2">
                   <select v-model="select_hrs" class="form-select" id="hours" style="width: 100px;" required>
-                    <option selected disabled v-bind:value="0">-</option>
+                    <option selected="true" disabled="disabled" v-bind:value="null">-</option>
                     <option v-bind:value="0">0</option>
                     <option v-bind:value="1">1</option>
                     <option v-bind:value="2">2</option>
@@ -149,7 +149,7 @@
                   </div>
                   <div class="col-4 col-sm-6 col-md-4 p-0">
                   <select v-model="select_min" class="form-select" style="width: 100px;" id="minutes" required>
-                    <option selected disabled v-bind:value="0">-</option>
+                    <option selected="true" disabled="disabled" v-bind:value="null">-</option>
                     <option v-bind:value="0">0</option>
                     <option v-bind:value="5">5</option>
                     <option v-bind:value="10">10</option>

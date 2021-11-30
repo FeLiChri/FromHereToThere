@@ -31,8 +31,8 @@ map = new Vue({
   components: { LMap, LTileLayer, LMarker, LTooltip },
   data() {
     return {
-      select_min:0,
-      select_hrs:0,
+      select_min: null,
+      select_hrs: null,
       inPlayMode: false,
       expandLastAcc: false,
       page: "index", // options ["index", "play", "create", "join"]
@@ -398,6 +398,10 @@ map = new Vue({
     pressNuclear: function() {
       this.currHunt.inProgress.numPoints -= 50;
       this.currHunt.inProgress.correct = true;
+      this.currHunt.inProgress.numMarkers += 1;
+      
+      markers = this.guessMarkers;
+      this.updateRoute(markers);
     },
     nextClue: function() {
       this.allHunts[this.currHunt.id].inProgress.evidence.push(this.tempImg);
