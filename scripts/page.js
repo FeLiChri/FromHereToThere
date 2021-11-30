@@ -469,7 +469,6 @@ map = new Vue({
       });
       
       this.router.addTo(routermap);
-      // this_map.invalidateSize();
       this_map.fitBounds(markers);
 
     },

@@ -125,8 +125,10 @@
               <h2>Time Limit</h2>
               <div id="timelimit" style="display:flex; flex-direction: row;">
                 <form class="needs-validation row mt-2" id="timeform" novalidate>
-                  <label for="hours" class="col-sm-2">Hr:</label>
-                  <div class="col-sm-4 p-0">
+                  <div class="col-2 col-sm-6 col-md-2 mb-sm-2">
+                    <label for="hours">Hr:</label>
+                  </div>
+                  <div class="col-4 col-sm-6 col-md-4 p-0 mb-sm-2">
                   <select v-model="select_hrs" class="form-select" id="hours" style="width: 100px;" required>
                     <option selected disabled v-bind:value="0">-</option>
                     <option v-bind:value="0">0</option>
@@ -145,8 +147,10 @@
                     Select a value.
                   </div> -->
                 </div>
-                  <label for="minutes" class="col-sm-2">Min:</label>
-                  <div class="col-sm-4 p-0">
+                  <div class="col-2 col-sm-6 col-md-2">
+                  <label for="minutes">Min:</label>
+                  </div>
+                  <div class="col-4 col-sm-6 col-md-4 p-0">
                   <select v-model="select_min" class="form-select" style="width: 100px;" id="minutes" required>
                     <option selected disabled v-bind:value="0">-</option>
                     <option v-bind:value="0">0</option>
