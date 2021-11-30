@@ -485,7 +485,7 @@ map = new Vue({
       if (this.currHunt.title === "") {
         this.currHunt.errorString += "Provide a title for your hunt.<br>"
       }
-      if (this.currHunt.icon === "") {
+      if (this.currHunt.iconSrc === "") {
         this.currHunt.errorString += "Select an icon for your hunt.<br>"
       }
       if (this.currHunt.stops.length === 0) {
@@ -560,6 +560,9 @@ map = new Vue({
         this.inPlayMode = false;
       } else if (pageIn == "create") {
         this.inPlayMode = false;
+        this.select_min = null;
+        this.select_hrs = null;
+        this.expandLastAcc = false;
         // Initialize new blank hunt
         this.currHunt = {
             expectedDistance: 0,
@@ -582,6 +585,10 @@ map = new Vue({
               tryAgain: false,
               correct: false,
               evidence: [],
+            },
+            finalStats: {
+              numPoints: null,
+              timeTaken: null,
             },
             stops: [],
         };
