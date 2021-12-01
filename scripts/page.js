@@ -282,9 +282,7 @@ map = new Vue({
   },
   mounted() {},
   updated() {
-    console.log("Updated!");
     e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
-    console.log(this.expandLastAcc);
     if (this.expandLastAcc) {
       this.expandLastAcc = false;
       $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('show');
@@ -441,6 +439,7 @@ map = new Vue({
         return;
       }
       this.currHunt.stops.splice(i, 1);
+      this.updateRoute(this.makeMarkers);
       // TODO: decrement currStop if it's after i - make sure it's still open
     },
     addStop: function() {
@@ -530,6 +529,8 @@ map = new Vue({
           this.currHunt.expectedDistance = this.currHunt.markerDistance;
           this.currHunt.markerDistance = 0;
           this.allHunts.push(this.currHunt);
+
+          console.log(JSON.stringify(this.allHunts));
           this.switchPage("join");
           this.currStopId = 0;
         }     
