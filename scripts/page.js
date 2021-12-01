@@ -570,6 +570,9 @@ map = new Vue({
     switchPage: function(pageIn, idIn=null) {
       this.page = pageIn;
 
+      console.log(JSON.stringify(this.allHunts));
+
+
       if (pageIn == "join") {
       //   var s = document.createElement('script');     
       //   s.setAttribute("id", "confetti");  
