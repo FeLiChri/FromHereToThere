@@ -39,8 +39,8 @@ map = new Vue({
       mapConfig: {
         zoom:14,
         center: L.latLng(42.2808, -83.7430),
-        url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-        attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        attribution:'&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       },
       tempImg: null,
       currHunt: {
@@ -549,7 +549,7 @@ map = new Vue({
       // With help from: https://stackoverflow.com/questions/10923769/simple-reverse-geocoding-using-nominatim
       var s = document.createElement('script');     
       s.setAttribute("id", "locSearchScript");  
-      s.src = 'http://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query;
+      s.src = 'https://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query;
       document.getElementsByTagName('head')[0].appendChild(s);
     }, 
     setLocation(stop_i, possible_loc_i) {
