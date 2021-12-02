@@ -240,6 +240,78 @@ map = new Vue({
             expanded: true,
           },
         ]
+      }, 
+      {
+        "expectedDistance": 1.05,
+        "markerDistance":0,
+        "expectedTime":30,
+        "title":"Diag Extravaganza!",
+        "iconName":"blockM",
+        "iconSrc":"src/icons/blockM.jpg",
+        "id":3,
+        "errorString":"",
+        "inProgress": {
+          "timeSoFar":0,
+          "distanceSoFar":0,
+          "numPoints":0,
+          "currStopId":3,
+          "numMarkers":0,
+          "guessText":"",
+          "tempGuess":"",
+          "hintClicked":false,
+          "tryAgain":false,
+          "correct":false,
+          "evidence":[]
+        },
+        "finalStats": {
+          "numPoints":null,
+          "timeTaken":null
+        },
+        "stops":[
+          {"clue": "Careful that you don't step on me!",
+          "answer":"Block M",
+          "hint":"Right in the middle of the diag.",
+          "task":"Take a photo with the block M!",
+          "points":15,
+          "latlong": L.latLng(42.2769435, -83.7382121),
+          "expanded":true,
+          "location":"Block M, South State Street, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
+          "possibleLocations":[],
+          "noLocationResults":false
+        },{
+          "clue": "I'm prettier than the Ugli.",
+          "answer":"Hatcher",
+          "hint":"The library for the grad students.",
+          "task":"Take a photo on the Hatcher steps!",
+          "points":15,
+          "latlong": L.latLng(42.276223,-83.73817684707299),
+          "expanded":true,
+          "location":"Hatcher Graduate Library, 913, South University Avenue, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
+          "possibleLocations":[],
+          "noLocationResults":false
+        },{
+          "clue":"I'm across from the big windows.",
+          "answer":"Haven Hall Posting Wall",
+          "hint":"I'm near Mason Hall.",
+          "task":"Take a photo with the posting wall!",
+          "points":15,
+          "latlong": L.latLng(42.27650535,-83.73921763997743),
+          "expanded":true,
+          "location":"Haven Hall, 505, South State Street, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
+          "possibleLocations":[],
+          "noLocationResults":false
+        },{
+          "clue":"I'm full of beautiful artwork.",
+          "answer":"UMMA",
+          "hint":"The acronym starts with \"UM\".",
+          "task":"Take a photo with one of the outdoor sculptures.",
+          "points":15,
+          "latlong": L.latLng(42.27559135, -83.7398376850406),
+          "expanded":true,
+          "location":"University of Michigan Museum of Art, 525, South State Street, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
+          "possibleLocations":[],
+          "noLocationResults":false
+        }]
       }],
       icons: {
         'apple': {selected: false, name: 'apple', src: 'src/icons/apple.jpg'},   
@@ -548,7 +620,7 @@ map = new Vue({
       // With help from: https://stackoverflow.com/questions/10923769/simple-reverse-geocoding-using-nominatim
       var s = document.createElement('script');     
       s.setAttribute("id", "locSearchScript");  
-      s.src = 'http://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query;
+      s.src = 'https://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query;
       document.getElementsByTagName('head')[0].appendChild(s);
     }, 
     setLocation(stop_i, possible_loc_i) {
