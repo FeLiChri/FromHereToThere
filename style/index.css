@@ -13,12 +13,12 @@
 }
 
 .instructions {
-    border-radius: 10px;
+    /* border-radius: 10px; */
     color: white;
     text-align: left;
     flex-direction: row;
-    background-color: rgba(50, 134, 243, 0.8);
-    padding: 10px;
+    /* background-color: rgba(50, 134, 243, 0.8); */
+    /* padding: 10px; */
 }
 
 .backbutton {
