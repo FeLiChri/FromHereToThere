@@ -467,13 +467,22 @@
         </div>
         <div class="evidence">
           <h1>
-            Evidence Gathered:
+            Evidence Gathered: {{currHunt.inProgress.evidence.length}}
           </h1>
           <br>
           <br>
-          <div v-for="(imgUrl, i) in currHunt.inProgress.evidence">
-            <img class="evidenceImg" :src="imgUrl" />
+          <div v-if="currHunt.inProgress.evidence.length > 0">
+            <div v-for="(imgUrl, i) in currHunt.inProgress.evidence">
+              <img class="evidenceImg" :src="imgUrl" />
+            </div>
           </div>
+          <div v-else>
+            <h2>
+              No evidence gathered yet
+            </h2>
+          </div>
+          <br>
+          <br>
         </div>
       </div> <!-- container -->
 </div>
