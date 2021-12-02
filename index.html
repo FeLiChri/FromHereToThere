@@ -331,7 +331,7 @@
             </tr>
           </thead>
           <tbody v-for="h in this.allHunts">
-            <tr v-if="!h.completed" key="h.title"  id="h.id" @click="switchPage('play', h.id)">
+            <tr v-if="!h.completed && !h.started" key="h.title"  id="h.id" @click="switchPage('play', h.id)">
               <th scope="row"><img :src="h.iconSrc" class="icon"/></th>
               <td><p>{{h.title}}</p></td>
               <td><p>--</p></td>
@@ -339,11 +339,19 @@
               <td><p>{{h.expectedTime}} mins</p></td>
               <td><p>{{h.expectedDistance}} mi</p></td>
             </tr>
-            <tr v-else key="h.title"  id="h.id" @click="switchPage('play', h.id)">
+            <tr v-else-if="h.completed" key="h.title"  id="h.id" @click="switchPage('play', h.id)">
               <th scope="row"><img :src="h.iconSrc" class="icon"/></th>
-              <td><p>{{h.title}} (Completed!)</p></td>
+              <td><p>{{h.title}} <span class='text-success'>(Completed!)</span></p></td>
               <td><p>{{h.finalStats.numPoints}} pts</p></td>
               <td><p>{{h.finalStats.timeTaken}} mins</p></td>
+              <td><p>{{h.expectedTime}} mins</p></td>
+              <td><p>{{h.expectedDistance}} mi</p></td>
+            </tr>
+            <tr v-else key="h.title"  id="h.id" @click="switchPage('play', h.id)">
+              <th scope="row"><img :src="h.iconSrc" class="icon"/></th>
+              <td><p>{{h.title}} <span class='text-danger'>(Started!)</span></p></td>
+              <td><p>{{h.inProgress.numPoints}} pts</p></td>
+              <td><p>{{h.inProgress.timeSoFar}} mins</p></td>
               <td><p>{{h.expectedTime}} mins</p></td>
               <td><p>{{h.expectedDistance}} mi</p></td>
             
@@ -367,8 +375,8 @@
               <div class="col-sm-auto">
               Time Remaining: {{currHunt.expectedTime - currHunt.inProgress.timeSoFar}} mins
               </div>
-              <div class="col-sm-auto">
-              Points: {{currHunt.inProgress.numPoints}}
+              <div class="col-sm-auto text-white blue_color">
+                Points: {{currHunt.inProgress.numPoints}}  
               </div>
             </div>
             <div v-else class="row justify-content-md-center">
