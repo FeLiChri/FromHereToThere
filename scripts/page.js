@@ -485,6 +485,10 @@ map = new Vue({
         var points = this.currHunt.inProgress.numPoints;
         var congrats = "<div id='congratulations'><h1>CONGRATULATIONS</h1><h1>YOU'RE DONE!!!</h1><h1>Time taken: "+time+" mins</h1><h1>Points: "+points+"</h1></div>";
         $(".play_page").append(congrats);
+        var s = document.createElement('script');     
+        s.setAttribute("id", "confetti");  
+        s.src = "scripts/confetti.js";
+        document.getElementsByTagName('head')[0].appendChild(s);
 
         this.allHunts[this.currHunt.id].completed = true;
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "numPoints", this.currHunt.inProgress.numPoints);
@@ -718,7 +722,14 @@ map = new Vue({
       }
     }, 
     goBack: function() {
-      if ($("#congratulations").parent().length) { $("#congratulations").remove(); }
+      if ($("#congratulations").parent().length) { 
+        console.log("remove congrats");
+        $("#congratulations").remove();
+      }
+      if ($("#confetti").parent().length) { 
+        $("#confetti").remove(); 
+        console.log("remove script");
+      }
       
       if (this.page == "play") {
         this.switchPage("join");
