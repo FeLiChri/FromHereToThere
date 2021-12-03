@@ -1,3 +1,4 @@
+ let confettiOn = true;
     class Progress {
   constructor(param = {}) {
     this.timestamp        = null;
@@ -29,6 +30,12 @@
       this.delta    = now - this.timestamp;
       this.progress = Math.min(this.delta / this.duration, 1);
 
+      if (!confettiOn) {
+        console.log("confetti on");
+        confettiOn = true;
+        return 0;
+      }
+      
       if (this.progress >= 1 && this.isLoop) {
         this.start(now);
       }
@@ -168,12 +175,22 @@ class Confetti {
     duration : DURATION
   });
 
-  setTimeout(() => {
-    new Confetti({
-      width    : window.innerWidth,
-      height   : window.innerHeight,
-      length   : LENGTH,
-      duration : DURATION
-    });
-  }, DURATION / 2);
+  // setTimeout(() => {
+  //   new Confetti({
+  //     width    : window.innerWidth,
+  //     height   : window.innerHeight,
+  //     length   : LENGTH,
+  //     duration : DURATION
+  //   });
+  // }, DURATION / 2);
 })();
+
+function turnConfettiOff() {
+  confettiOn = false;
+  console.log(confettiOn);
+}
+
+function turnConfettiOn() {
+  confettiOn = true;
+  console.log(confettiOn);
+}
