@@ -729,7 +729,7 @@ map = new Vue({
         //   };
 
         setInterval(()=>{
-          this.currHunt.inProgress.timeSoFar += 1;
+          this.allHunts[idIn].inProgress.timeSoFar += 1;
 
           }
           , 60000);
