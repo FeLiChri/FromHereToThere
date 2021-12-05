@@ -712,7 +712,6 @@ map = new Vue({
         };
       } else if (pageIn == "play") {
         this.inPlayMode = true;
-        this.allHunts[idIn].started = true;
         console.log(this.allHunts[idIn]);
         this.currHunt = this.allHunts[idIn];
         console.log(this.currHunt);
@@ -732,11 +731,14 @@ map = new Vue({
         //     evidence: this.allHunts[idIn].inProgress.evidence,
         //   };
 
-        setInterval(()=>{
-          this.allHunts[idIn].inProgress.timeSoFar += 1;
-
-          }
-          , 60000);
+        if (!this.allHunts[idIn].started) {
+          setInterval(()=>{
+            this.allHunts[idIn].inProgress.timeSoFar += 1;
+  
+            }
+            , 60000);
+        }
+        this.allHunts[idIn].started = true;
 
       } else if (pageIn == "index") {
         this.inPlayMode = false;
