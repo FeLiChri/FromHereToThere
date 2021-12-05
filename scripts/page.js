@@ -46,6 +46,7 @@ map = new Vue({
       currHunt: {
         id: 0,
         completed: false,
+        started: false,
         expectedDistance: 0,
         markerDistance: 0,
         expectedTime: 30,
@@ -103,6 +104,7 @@ map = new Vue({
       {
         id:0,
         completed: false,
+        started: false,
         expectedDistance: 1.6,
         markerDistance: 0,
         expectedTime: 60,
@@ -154,6 +156,7 @@ map = new Vue({
       {
         id:1,
         completed: false,
+        started: false,
         expectedDistance: 2,
         markerDistance: 0,
         expectedTime: 120,
@@ -201,6 +204,7 @@ map = new Vue({
       {
         id:2,
         completed: false,
+        started: false,
         expectedDistance: 2,
         markerDistance: 0,
         expectedTime: 120,
@@ -672,6 +676,9 @@ map = new Vue({
         this.expandLastAcc = false;
         // Initialize new blank hunt
         this.currHunt = {
+            id: this.allHunts.length,
+            completed: false,
+            started: false,
             expectedDistance: 0,
             markerDistance: 0,
             expectedTime: 0,
@@ -679,7 +686,6 @@ map = new Vue({
             title: "",
             iconName: "",
             iconSrc: "",
-            id: this.allHunts.length,
             errorString: '',
             inProgress: {
               timeSoFar: 0,
@@ -702,22 +708,25 @@ map = new Vue({
         };
       } else if (pageIn == "play") {
         this.inPlayMode = true;
+        this.allHunts[idIn].started = true;
+        console.log(this.allHunts[idIn]);
         this.currHunt = this.allHunts[idIn];
         console.log(this.currHunt);
 
-        this.currHunt.inProgress = {
-            timeSoFar: 0,
-            distanceSoFar: 0,
-            numPoints: 0,
-            currStopId: 0,
-            numMarkers: 0,
-            guessText: "",
-            tempGuess: "",
-            hintClicked: false,
-            tryAgain: false,
-            correct: false,
-            evidence: this.allHunts[idIn].inProgress.evidence,
-          };
+        // Uncomment if you don't want to save progress!
+        // this.currHunt.inProgress = {
+        //     timeSoFar: 0,
+        //     distanceSoFar: 0,
+        //     numPoints: 0,
+        //     currStopId: 0,
+        //     numMarkers: 0,
+        //     guessText: "",
+        //     tempGuess: "",
+        //     hintClicked: false,
+        //     tryAgain: false,
+        //     correct: false,
+        //     evidence: this.allHunts[idIn].inProgress.evidence,
+        //   };
 
         setInterval(()=>{
           this.currHunt.inProgress.timeSoFar += 1;
