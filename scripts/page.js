@@ -628,6 +628,10 @@ map = new Vue({
       query = q;
       console.log(q)
 
+      if (q == "") {
+        return;
+      }
+
       cleaned_query = query.replace(' ', '+');
 
       if (!cleaned_query.includes("ann") && !cleaned_query.includes("Ann")) {
