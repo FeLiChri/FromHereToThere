@@ -39,8 +39,8 @@ map = new Vue({
       mapConfig: {
         zoom:14,
         center: L.latLng(42.2808, -83.7430),
-        url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-        attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        attribution:'&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       },
       tempImg: null,
       currHunt: {
@@ -363,9 +363,7 @@ map = new Vue({
   },
   mounted() {},
   updated() {
-    console.log("Updated!");
     e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
-    console.log(this.expandLastAcc);
     if (this.expandLastAcc) {
       this.expandLastAcc = false;
       $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('show');
@@ -489,12 +487,19 @@ map = new Vue({
       this.allHunts[this.currHunt.id].inProgress.evidence.push(this.tempImg);
       this.tempImg = null;
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
-        alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
+        // alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
+        var time = this.currHunt.inProgress.timeSoFar;
+        var points = this.currHunt.inProgress.numPoints;
+        var congrats = "<div id='congratulations'><h1>CONGRATULATIONS</h1><h1>YOU'RE DONE!!!</h1><h1>Time taken: "+time+" mins</h1><h1>Points: "+points+"</h1></div>";
+        $(".play_page").append(congrats);
+
+        $.getScript( "scripts/confetti.js", function() {
+        });
+
         this.allHunts[this.currHunt.id].completed = true;
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "numPoints", this.currHunt.inProgress.numPoints);
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "timeTaken", this.currHunt.inProgress.timeSoFar);
         console.log(this.allHunts);
-        this.goBack();
       } else {
         this.currHunt.inProgress.currStopId += 1;
         this.currHunt.inProgress.guessText = "";
@@ -522,6 +527,7 @@ map = new Vue({
         return;
       }
       this.currHunt.stops.splice(i, 1);
+      this.updateRoute(this.makeMarkers);
       // TODO: decrement currStop if it's after i - make sure it's still open
     },
     addStop: function() {
@@ -611,6 +617,8 @@ map = new Vue({
           this.currHunt.expectedDistance = this.currHunt.markerDistance;
           this.currHunt.markerDistance = 0;
           this.allHunts.push(this.currHunt);
+
+          console.log(JSON.stringify(this.allHunts));
           this.switchPage("join");
           this.currStopId = 0;
         }     
@@ -641,6 +649,8 @@ map = new Vue({
       this.currHunt.stops[stop_i].possibleLocations = [];
 
       this.updateRoute(this.makeMarkers);
+
+      $("#loc-error-"+stop_i).removeClass('d-block')
       
       $('#loc'+stop_i).hide();
     }, 
@@ -649,6 +659,9 @@ map = new Vue({
     }, 
     switchPage: function(pageIn, idIn=null) {
       this.page = pageIn;
+
+      console.log(JSON.stringify(this.allHunts));
+
 
       if (pageIn == "join") {
       //   var s = document.createElement('script');     
@@ -728,6 +741,12 @@ map = new Vue({
       }
     }, 
     goBack: function() {
+      if ($("#congratulations").parent().length) { 
+        console.log("remove congrats");
+        $("#congratulations").remove();
+        $("#confetti").remove(); 
+      }
+      
       if (this.page == "play") {
         this.switchPage("join");
         return;
@@ -744,8 +763,18 @@ map = new Vue({
       var form = document.querySelector(formName + '.needs-validation');
       var header = document.querySelector('#accordion-item-' + formName[formName.length - 1]);
 
+      var index = Number(formName.substring(5));
+      console.log(index);
+      console.log(this.currHunt.stops[index].latlong);
+
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        if (!form.checkValidity()) {
+        if (this.currHunt.stops[index].latlong == null) {
+          console.log("Adding d-block")
+          console.log("#loc-error-"+index.toString());
+          console.log(this.currHunt.stops[index]);
+          $("#loc-error-"+index.toString()).addClass('d-block')
+        }
+        else if (!form.checkValidity()) {
           invalidFormsPresent = true;
           header.classList.add('invalid');
         }
@@ -839,6 +868,9 @@ map = new Vue({
     },
     iconSelected: function() {
       return this.currHunt.iconName !== '';
+    },
+    showExpected: function() {
+      return this.makeMarkers.filter(m => m != null).length >= 2;
     }
   }
 });

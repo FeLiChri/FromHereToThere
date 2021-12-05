@@ -1,3 +1,4 @@
+ let confettiOn = true;
     class Progress {
   constructor(param = {}) {
     this.timestamp        = null;
@@ -29,8 +30,17 @@
       this.delta    = now - this.timestamp;
       this.progress = Math.min(this.delta / this.duration, 1);
 
+      if (!confettiOn) {
+        console.log("confetti off");
+        // confettiOn = true;
+        return 0;
+      }
+      
       if (this.progress >= 1 && this.isLoop) {
         this.start(now);
+      }
+      else if (this.progress >= 1 && !this.isLoop) {
+        this.reset();
       }
 
       return this.progress;
@@ -51,7 +61,7 @@ class Confetti {
     this.yRange         = param.yRange || this.height * 2;
     this.progress       = new Progress({
       duration : param.duration,
-      isLoop   : true
+      isLoop   : false
     });
     this.rotationRange  = typeof param.rotationLength === "number" ? param.rotationRange
                                                                    : 10;
@@ -168,12 +178,23 @@ class Confetti {
     duration : DURATION
   });
 
-  setTimeout(() => {
-    new Confetti({
-      width    : window.innerWidth,
-      height   : window.innerHeight,
-      length   : LENGTH,
-      duration : DURATION
-    });
-  }, DURATION / 2);
+  // setTimeout(() => {
+  //   new Confetti({
+  //     width    : window.innerWidth,
+  //     height   : window.innerHeight,
+  //     length   : LENGTH,
+  //     duration : DURATION
+  //   });
+  // }, DURATION / 2);
 })();
+
+function turnConfettiOff() {
+  confettiOn = false;
+  console.log(confettiOn);
+}
+
+function turnConfettiOn() {
+  confettiOn = true;
+  console.log(confettiOn);
+  // this.start(now);
+}
