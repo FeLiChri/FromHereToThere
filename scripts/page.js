@@ -39,8 +39,8 @@ map = new Vue({
       mapConfig: {
         zoom:14,
         center: L.latLng(42.2808, -83.7430),
-        url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-        attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        attribution:'&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       },
       tempImg: null,
       currHunt: {
@@ -49,6 +49,7 @@ map = new Vue({
         expectedDistance: 0,
         markerDistance: 0,
         expectedTime: 30,
+        timeLimit: 30,
         title: "",
         iconName: "",
         iconSrc: "",
@@ -105,6 +106,7 @@ map = new Vue({
         expectedDistance: 1.6,
         markerDistance: 0,
         expectedTime: 60,
+        timeLimit: 60,
         title: "Welcome Home",
         iconSrc: "src/icons/welcomeHomeIcon.png",
         inProgress: {
@@ -155,6 +157,7 @@ map = new Vue({
         expectedDistance: 2,
         markerDistance: 0,
         expectedTime: 120,
+        timeLimit: 120,
         title: "Arbor Adventure",
         iconSrc: "src/icons/arborAdventureIcon.png",
         inProgress: {
@@ -201,6 +204,7 @@ map = new Vue({
         expectedDistance: 2,
         markerDistance: 0,
         expectedTime: 120,
+        timeLimit: 120,
         title: "Book Bonanza",
         iconSrc: "src/icons/bookBonanzaIcon.png",
         inProgress: {
@@ -240,6 +244,79 @@ map = new Vue({
             expanded: true,
           },
         ]
+      }, 
+      {
+        "expectedDistance": 1.05,
+        "markerDistance":0,
+        "expectedTime":30,
+        "timeLimit": 30,
+        "title":"Diag Extravaganza!",
+        "iconName":"blockM",
+        "iconSrc":"src/icons/blockM.jpg",
+        "id":3,
+        "errorString":"",
+        "inProgress": {
+          "timeSoFar":0,
+          "distanceSoFar":0,
+          "numPoints":0,
+          "currStopId":3,
+          "numMarkers":0,
+          "guessText":"",
+          "tempGuess":"",
+          "hintClicked":false,
+          "tryAgain":false,
+          "correct":false,
+          "evidence":[]
+        },
+        "finalStats": {
+          "numPoints":null,
+          "timeTaken":null
+        },
+        "stops":[
+          {"clue": "Careful that you don't step on me!",
+          "answer":"Block M",
+          "hint":"Right in the middle of the diag.",
+          "task":"Take a photo with the block M!",
+          "points":15,
+          "latlong": L.latLng(42.2769435, -83.7382121),
+          "expanded":true,
+          "location":"Block M, South State Street, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
+          "possibleLocations":[],
+          "noLocationResults":false
+        },{
+          "clue": "I'm prettier than the Ugli.",
+          "answer":"Hatcher",
+          "hint":"The library for the grad students.",
+          "task":"Take a photo on the Hatcher steps!",
+          "points":15,
+          "latlong": L.latLng(42.276223,-83.73817684707299),
+          "expanded":true,
+          "location":"Hatcher Graduate Library, 913, South University Avenue, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
+          "possibleLocations":[],
+          "noLocationResults":false
+        },{
+          "clue":"I'm across from the big windows.",
+          "answer":"Haven Hall Posting Wall",
+          "hint":"I'm near Mason Hall.",
+          "task":"Take a photo with the posting wall!",
+          "points":15,
+          "latlong": L.latLng(42.27650535,-83.73921763997743),
+          "expanded":true,
+          "location":"Haven Hall, 505, South State Street, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
+          "possibleLocations":[],
+          "noLocationResults":false
+        },{
+          "clue":"I'm full of beautiful artwork.",
+          "answer":"UMMA",
+          "hint":"The acronym starts with \"UM\".",
+          "task":"Take a photo with one of the outdoor sculptures.",
+          "points":15,
+          "latlong": L.latLng(42.27559135, -83.7398376850406),
+          "expanded":true,
+          "location":"University of Michigan Museum of Art, 525, South State Street, Ann Arbor, Washtenaw County, Michigan, 48109, United States",
+          "possibleLocations":[],
+          "noLocationResults":false
+        }]
       }],
       icons: {
         'apple': {selected: false, name: 'apple', src: 'src/icons/apple.jpg'},   
@@ -282,9 +359,7 @@ map = new Vue({
   },
   mounted() {},
   updated() {
-    console.log("Updated!");
     e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
-    console.log(this.expandLastAcc);
     if (this.expandLastAcc) {
       this.expandLastAcc = false;
       $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('show');
@@ -408,12 +483,19 @@ map = new Vue({
       this.allHunts[this.currHunt.id].inProgress.evidence.push(this.tempImg);
       this.tempImg = null;
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
-        alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
+        // alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
+        var time = this.currHunt.inProgress.timeSoFar;
+        var points = this.currHunt.inProgress.numPoints;
+        var congrats = "<div id='congratulations'><h1>CONGRATULATIONS</h1><h1>YOU'RE DONE!!!</h1><h1>Time taken: "+time+" mins</h1><h1>Points: "+points+"</h1></div>";
+        $(".play_page").append(congrats);
+
+        $.getScript( "scripts/confetti.js", function() {
+        });
+
         this.allHunts[this.currHunt.id].completed = true;
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "numPoints", this.currHunt.inProgress.numPoints);
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "timeTaken", this.currHunt.inProgress.timeSoFar);
         console.log(this.allHunts);
-        this.goBack();
       } else {
         this.currHunt.inProgress.currStopId += 1;
         this.currHunt.inProgress.guessText = "";
@@ -441,6 +523,7 @@ map = new Vue({
         return;
       }
       this.currHunt.stops.splice(i, 1);
+      this.updateRoute(this.makeMarkers);
       // TODO: decrement currStop if it's after i - make sure it's still open
     },
     addStop: function() {
@@ -525,11 +608,13 @@ map = new Vue({
           // Strip any trailing whitespace
           this.currHunt.stops.forEach( s => s.answer.trim());
 
-          this.currHunt.expectedTime = timelimit;
+          this.currHunt.timeLimit = timelimit;
           // Reset marker distance
           this.currHunt.expectedDistance = this.currHunt.markerDistance;
           this.currHunt.markerDistance = 0;
           this.allHunts.push(this.currHunt);
+
+          console.log(JSON.stringify(this.allHunts));
           this.switchPage("join");
           this.currStopId = 0;
         }     
@@ -548,7 +633,7 @@ map = new Vue({
       // With help from: https://stackoverflow.com/questions/10923769/simple-reverse-geocoding-using-nominatim
       var s = document.createElement('script');     
       s.setAttribute("id", "locSearchScript");  
-      s.src = 'http://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query;
+      s.src = 'https://nominatim.openstreetmap.org/search?json_callback=cb&format=json&q=' + cleaned_query;
       document.getElementsByTagName('head')[0].appendChild(s);
     }, 
     setLocation(stop_i, possible_loc_i) {
@@ -560,6 +645,8 @@ map = new Vue({
       this.currHunt.stops[stop_i].possibleLocations = [];
 
       this.updateRoute(this.makeMarkers);
+
+      $("#loc-error-"+stop_i).removeClass('d-block')
       
       $('#loc'+stop_i).hide();
     }, 
@@ -569,11 +656,14 @@ map = new Vue({
     switchPage: function(pageIn, idIn=null) {
       this.page = pageIn;
 
+      console.log(JSON.stringify(this.allHunts));
+
+
       if (pageIn == "join") {
-        var s = document.createElement('script');     
-        s.setAttribute("id", "confetti");  
-        s.src = "scripts/confetti.js";
-      document.getElementsByTagName('head')[0].appendChild(s);
+      //   var s = document.createElement('script');     
+      //   s.setAttribute("id", "confetti");  
+      //   s.src = "scripts/confetti.js";
+      // document.getElementsByTagName('head')[0].appendChild(s);
         this.inPlayMode = false;
       } else if (pageIn == "create") {
         this.inPlayMode = false;
@@ -585,6 +675,7 @@ map = new Vue({
             expectedDistance: 0,
             markerDistance: 0,
             expectedTime: 0,
+            timeLimit: 0,
             title: "",
             iconName: "",
             iconSrc: "",
@@ -625,7 +716,7 @@ map = new Vue({
             hintClicked: false,
             tryAgain: false,
             correct: false,
-            evidence: [],
+            evidence: this.allHunts[idIn].inProgress.evidence,
           };
 
         setInterval(()=>{
@@ -641,6 +732,12 @@ map = new Vue({
       }
     }, 
     goBack: function() {
+      if ($("#congratulations").parent().length) { 
+        console.log("remove congrats");
+        $("#congratulations").remove();
+        $("#confetti").remove(); 
+      }
+      
       if (this.page == "play") {
         this.switchPage("join");
         return;
@@ -657,8 +754,18 @@ map = new Vue({
       var form = document.querySelector(formName + '.needs-validation');
       var header = document.querySelector('#accordion-item-' + formName[formName.length - 1]);
 
+      var index = Number(formName.substring(5));
+      console.log(index);
+      console.log(this.currHunt.stops[index].latlong);
+
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        if (!form.checkValidity()) {
+        if (this.currHunt.stops[index].latlong == null) {
+          console.log("Adding d-block")
+          console.log("#loc-error-"+index.toString());
+          console.log(this.currHunt.stops[index]);
+          $("#loc-error-"+index.toString()).addClass('d-block')
+        }
+        else if (!form.checkValidity()) {
           invalidFormsPresent = true;
           header.classList.add('invalid');
         }
@@ -761,6 +868,9 @@ map = new Vue({
     },
     iconSelected: function() {
       return this.currHunt.iconName !== '';
+    },
+    showExpected: function() {
+      return this.makeMarkers.filter(m => m != null).length >= 2;
     }
   }
 });
