@@ -47,6 +47,8 @@
 .blue_border {
     border-radius: 3%;
     border: 10px solid rgba(50, 134, 243, 0.8);
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .accordion-body {
