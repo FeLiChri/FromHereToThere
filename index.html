@@ -336,7 +336,7 @@
               <td><p>{{h.title}}</p></td>
               <td><p>--</p></td>
               <td><p>--</td>
-              <td><p>{{h.expectedTime}} mins</p></td>
+              <td><p>{{h.timeLimit}} mins</p></td>
               <td><p>{{h.expectedDistance}} mi</p></td>
             </tr>
             <tr v-else-if="h.completed" key="h.title"  id="h.id" @click="switchPage('play', h.id)">
@@ -344,7 +344,7 @@
               <td><p>{{h.title}} <span class='text-success'>(Completed!)</span></p></td>
               <td><p>{{h.finalStats.numPoints}} pts</p></td>
               <td><p>{{h.finalStats.timeTaken}} mins</p></td>
-              <td><p>{{h.expectedTime}} mins</p></td>
+              <td><p>{{h.timeLimit}} mins</p></td>
               <td><p>{{h.expectedDistance}} mi</p></td>
             </tr>
             <tr v-else key="h.title"  id="h.id" @click="switchPage('play', h.id)">
@@ -373,7 +373,7 @@
             <br>
             <div v-if="!currHunt.completed" class="row justify-content-md-center">
               <div class="col-sm-auto">
-              Time Remaining: {{currHunt.expectedTime - currHunt.inProgress.timeSoFar}} mins
+              Time Remaining: {{currHunt.timeLimit - currHunt.inProgress.timeSoFar}} mins
               </div>
               <div class="col-sm-auto text-white blue_color">
                 Points: {{currHunt.inProgress.numPoints}}  
