@@ -485,22 +485,14 @@ map = new Vue({
         var points = this.currHunt.inProgress.numPoints;
         var congrats = "<div id='congratulations'><h1>CONGRATULATIONS</h1><h1>YOU'RE DONE!!!</h1><h1>Time taken: "+time+" mins</h1><h1>Points: "+points+"</h1></div>";
         $(".play_page").append(congrats);
-        if ($("#confetti").parent().length <= 0) { 
-          console.log("add confetti");
-          var s = document.createElement('script');     
-          s.setAttribute("id", "confetti");  
-          s.src = "scripts/confetti.js";
-          document.getElementsByTagName('head')[0].appendChild(s);
-        } else {
-          turnConfettiOn();
-          console.log("confetti on");
-        }
+
+        $.getScript( "scripts/confetti.js", function() {
+        });
 
         this.allHunts[this.currHunt.id].completed = true;
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "numPoints", this.currHunt.inProgress.numPoints);
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "timeTaken", this.currHunt.inProgress.timeSoFar);
         console.log(this.allHunts);
-        // this.goBack();
       } else {
         this.currHunt.inProgress.currStopId += 1;
         this.currHunt.inProgress.guessText = "";
@@ -731,12 +723,7 @@ map = new Vue({
       if ($("#congratulations").parent().length) { 
         console.log("remove congrats");
         $("#congratulations").remove();
-      }
-      if ($("#confetti").parent().length) { 
-        console.log("turn confetti off");
-        turnConfettiOff();
-        // $("#confetti").remove(); 
-        console.log("remove script");
+        $("#confetti").remove(); 
       }
       
       if (this.page == "play") {
