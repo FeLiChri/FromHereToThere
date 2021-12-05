@@ -561,6 +561,8 @@ map = new Vue({
       this.currHunt.stops[stop_i].possibleLocations = [];
 
       this.updateRoute(this.makeMarkers);
+
+      $("#loc-error-"+stop_i).removeClass('d-block')
       
       $('#loc'+stop_i).hide();
     }, 
@@ -661,8 +663,18 @@ map = new Vue({
       var form = document.querySelector(formName + '.needs-validation');
       var header = document.querySelector('#accordion-item-' + formName[formName.length - 1]);
 
+      var index = Number(formName.substring(5));
+      console.log(index);
+      console.log(this.currHunt.stops[index].latlong);
+
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        if (!form.checkValidity()) {
+        if (this.currHunt.stops[index].latlong == null) {
+          console.log("Adding d-block")
+          console.log("#loc-error-"+index.toString());
+          console.log(this.currHunt.stops[index]);
+          $("#loc-error-"+index.toString()).addClass('d-block')
+        }
+        else if (!form.checkValidity()) {
           invalidFormsPresent = true;
           header.classList.add('invalid');
         }

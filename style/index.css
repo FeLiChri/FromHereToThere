@@ -47,6 +47,9 @@
 .blue_border {
     border-radius: 3%;
     border: 10px solid rgba(50, 134, 243, 0.8);
+}
+
+.join_header {
     margin-left: 20px;
     margin-right: 20px;
 }
