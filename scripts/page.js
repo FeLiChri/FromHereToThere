@@ -39,8 +39,8 @@ map = new Vue({
       mapConfig: {
         zoom:14,
         center: L.latLng(42.2808, -83.7430),
-        url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-        attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        attribution:'&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       },
       tempImg: null,
       currHunt: {
@@ -359,9 +359,7 @@ map = new Vue({
   },
   mounted() {},
   updated() {
-    console.log("Updated!");
     e = document.getElementById('#collapse' + this.currHunt.stops.length - 1);
-    console.log(this.expandLastAcc);
     if (this.expandLastAcc) {
       this.expandLastAcc = false;
       $('#collapse' + String(this.currHunt.stops.length - 1)).collapse('show');
@@ -525,6 +523,7 @@ map = new Vue({
         return;
       }
       this.currHunt.stops.splice(i, 1);
+      this.updateRoute(this.makeMarkers);
       // TODO: decrement currStop if it's after i - make sure it's still open
     },
     addStop: function() {
@@ -614,6 +613,8 @@ map = new Vue({
           this.currHunt.expectedDistance = this.currHunt.markerDistance;
           this.currHunt.markerDistance = 0;
           this.allHunts.push(this.currHunt);
+
+          console.log(JSON.stringify(this.allHunts));
           this.switchPage("join");
           this.currStopId = 0;
         }     
@@ -644,6 +645,8 @@ map = new Vue({
       this.currHunt.stops[stop_i].possibleLocations = [];
 
       this.updateRoute(this.makeMarkers);
+
+      $("#loc-error-"+stop_i).removeClass('d-block')
       
       $('#loc'+stop_i).hide();
     }, 
@@ -652,6 +655,9 @@ map = new Vue({
     }, 
     switchPage: function(pageIn, idIn=null) {
       this.page = pageIn;
+
+      console.log(JSON.stringify(this.allHunts));
+
 
       if (pageIn == "join") {
       //   var s = document.createElement('script');     
@@ -748,8 +754,18 @@ map = new Vue({
       var form = document.querySelector(formName + '.needs-validation');
       var header = document.querySelector('#accordion-item-' + formName[formName.length - 1]);
 
+      var index = Number(formName.substring(5));
+      console.log(index);
+      console.log(this.currHunt.stops[index].latlong);
+
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        if (!form.checkValidity()) {
+        if (this.currHunt.stops[index].latlong == null) {
+          console.log("Adding d-block")
+          console.log("#loc-error-"+index.toString());
+          console.log(this.currHunt.stops[index]);
+          $("#loc-error-"+index.toString()).addClass('d-block')
+        }
+        else if (!form.checkValidity()) {
           invalidFormsPresent = true;
           header.classList.add('invalid');
         }
@@ -843,6 +859,9 @@ map = new Vue({
     },
     iconSelected: function() {
       return this.currHunt.iconName !== '';
+    },
+    showExpected: function() {
+      return this.makeMarkers.filter(m => m != null).length >= 2;
     }
   }
 });

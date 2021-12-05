@@ -175,7 +175,10 @@
                     <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
                   </l-map>
                 </div>
-                <h3>Expected Distance: {{currHunt.markerDistance}} mi</h3> <h3>Expected Time: {{currHunt.expectedTime}} minutes</h3>
+                <div v-if="showExpected">
+                  <h3>This route is {{currHunt.markerDistance}} miles long.</h3>
+                  <h3>By foot, it will take ~{{currHunt.expectedTime}} minutes.</h3>
+                </div>
     
                 <!-- </div> -->
                 
@@ -208,7 +211,7 @@
                       <span data-toggle="tooltip" data-trigger="hover click" title="Nickname of your destination - what your players will guess." class="bi bi-info-circle static"><span>
                     </label>               
                       <div class="col-sm-10">
-                          <input type="text" class="form-control mt-2" :id="'answer'+i" v-model="c.answer" placeholder="Stop Name (e.g. Hatcher)"  v-on:keydown.enter.prevent required>
+                          <input type="text" class="form-control mt-2" :id="'answer'+i" v-model="c.answer" placeholder="Stop Name (e.g. Hatcher)"  v-on:keydown.enter.prevent v-on:blur="searchLocation(c.answer)" required>
                           <div class="invalid-feedback mb-2">
                               Please provide a stop name.
                           </div>
@@ -225,9 +228,9 @@
                               <div class="input-group-append" >
                                 <button class="btn btn-secondary" type="button" style="height: 100%; border-radius: 0 0.25em 0.25em 0 !important;" @click="searchLocation(c.location)"><i class="bi bi-search"></i></button>
                               </div>
-                              <div class="invalid-feedback mb-2">
-                                Please provide a location.
-                            </div>
+                            <div :id="'loc-error-'+i" class="invalid-feedback mb-2">
+                              Please search for and select a location from the dropdown.
+                          </div>
                             </div>
                             <div>
                               <div id="'loc-'+i">
@@ -318,7 +321,7 @@
     <span><i class="bi bi-arrow-left-circle-fill backbutton" @click="goBack()"></i></span>
     <div class="container align-items-center text-center">
         <!-- title -->
-        <div class="blue_border row"> 
+        <div class="blue_border row join_header"> 
           <h1>Pick a scavenger hunt!</h1>
         </div> <!-- title -->
     
