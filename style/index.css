@@ -13,12 +13,28 @@
 }
 
 .instructions {
+    /* border-radius: 10px; */
+    color: white;
+    text-align: left;
+    flex-direction: row;
+    /* background-color: rgba(50, 134, 243, 0.8); */
+    /* padding: 10px; */
+}
+
+#congratulations {
     border-radius: 10px;
     color: white;
     text-align: left;
     flex-direction: row;
-    background-color: rgba(50, 134, 243, 0.8);
+    background-color: rgba(50, 134, 243); 
     padding: 10px;
+    z-index: 100;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    
 }
 
 .backbutton {

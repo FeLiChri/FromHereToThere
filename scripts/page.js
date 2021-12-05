@@ -485,12 +485,19 @@ map = new Vue({
       this.allHunts[this.currHunt.id].inProgress.evidence.push(this.tempImg);
       this.tempImg = null;
       if (this.currHunt.inProgress.currStopId == this.currHunt.stops.length - 1) {
-        alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
+        // alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
+        var time = this.currHunt.inProgress.timeSoFar;
+        var points = this.currHunt.inProgress.numPoints;
+        var congrats = "<div id='congratulations'><h1>CONGRATULATIONS</h1><h1>YOU'RE DONE!!!</h1><h1>Time taken: "+time+" mins</h1><h1>Points: "+points+"</h1></div>";
+        $(".play_page").append(congrats);
+
+        $.getScript( "scripts/confetti.js", function() {
+        });
+
         this.allHunts[this.currHunt.id].completed = true;
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "numPoints", this.currHunt.inProgress.numPoints);
         Vue.set(this.allHunts[this.currHunt.id].finalStats, "timeTaken", this.currHunt.inProgress.timeSoFar);
         console.log(this.allHunts);
-        this.goBack();
       } else {
         this.currHunt.inProgress.currStopId += 1;
         this.currHunt.inProgress.guessText = "";
@@ -719,6 +726,12 @@ map = new Vue({
       }
     }, 
     goBack: function() {
+      if ($("#congratulations").parent().length) { 
+        console.log("remove congrats");
+        $("#congratulations").remove();
+        $("#confetti").remove(); 
+      }
+      
       if (this.page == "play") {
         this.switchPage("join");
         return;
