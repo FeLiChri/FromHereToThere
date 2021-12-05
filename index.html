@@ -171,7 +171,9 @@
                     <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
                   </l-map>
                 </div>
-                <h3>Expected Distance: {{currHunt.markerDistance}} mi</h3> <h3>Expected Time: {{currHunt.expectedTime}} minutes</h3>
+                <div v-if="showExpected">
+                  <h3>Expected Distance: {{currHunt.markerDistance}} mi</h3> <h3>Expected Time: {{currHunt.expectedTime}} minutes</h3>
+                </div>
     
                 <!-- </div> -->
                 

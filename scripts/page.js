@@ -756,6 +756,9 @@ map = new Vue({
     },
     iconSelected: function() {
       return this.currHunt.iconName !== '';
+    },
+    showExpected: function() {
+      return this.makeMarkers.filter(m => m != null).length >= 2;
     }
   }
 });
