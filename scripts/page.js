@@ -672,10 +672,19 @@ map = new Vue({
     allFormsValid: function() {
       var forms = document.querySelectorAll('.needs-validation')
       
-      // Loop over them and prevent submission
+
 
       invalidFormsPresent = false;
       invalidStopForm = false;
+
+      // Loop over each stop to see if there are consecutive stops with same answer
+      for(let i = 0; i < this.currHunt.stops.length-1; i++){
+        if(this.currHunt.stops[i].answer == this.currHunt.stops[i+1].answer){
+          if(!confirm("Stops " + i.toString() + " and " + (i+1).toString() + " have the same answer. Is this what you want?")){
+            return [!invalidFormsPresent, invalidStopForm];
+          }
+        }
+      }
 
       forms.forEach(form => {
         var header = document.querySelector('#accordion-item-' + form.id[form.id.length - 1]);
