@@ -703,7 +703,7 @@ map = new Vue({
             hintClicked: false,
             tryAgain: false,
             correct: false,
-            evidence: [],
+            evidence: this.allHunts[idIn].inProgress.evidence,
           };
 
         setInterval(()=>{
