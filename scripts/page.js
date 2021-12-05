@@ -49,6 +49,7 @@ map = new Vue({
         expectedDistance: 0,
         markerDistance: 0,
         expectedTime: 30,
+        timeLimit: 30,
         title: "",
         iconName: "",
         iconSrc: "",
@@ -105,6 +106,7 @@ map = new Vue({
         expectedDistance: 1.6,
         markerDistance: 0,
         expectedTime: 60,
+        timeLimit: 60,
         title: "Welcome Home",
         iconSrc: "src/icons/welcomeHomeIcon.png",
         inProgress: {
@@ -155,6 +157,7 @@ map = new Vue({
         expectedDistance: 2,
         markerDistance: 0,
         expectedTime: 120,
+        timeLimit: 120,
         title: "Arbor Adventure",
         iconSrc: "src/icons/arborAdventureIcon.png",
         inProgress: {
@@ -201,6 +204,7 @@ map = new Vue({
         expectedDistance: 2,
         markerDistance: 0,
         expectedTime: 120,
+        timeLimit: 120,
         title: "Book Bonanza",
         iconSrc: "src/icons/bookBonanzaIcon.png",
         inProgress: {
@@ -245,6 +249,7 @@ map = new Vue({
         "expectedDistance": 1.05,
         "markerDistance":0,
         "expectedTime":30,
+        "timeLimit": 30,
         "title":"Diag Extravaganza!",
         "iconName":"blockM",
         "iconSrc":"src/icons/blockM.jpg",
@@ -597,7 +602,7 @@ map = new Vue({
           // Strip any trailing whitespace
           this.currHunt.stops.forEach( s => s.answer.trim());
 
-          this.currHunt.expectedTime = timelimit;
+          this.currHunt.timeLimit = timelimit;
           // Reset marker distance
           this.currHunt.expectedDistance = this.currHunt.markerDistance;
           this.currHunt.markerDistance = 0;
@@ -657,6 +662,7 @@ map = new Vue({
             expectedDistance: 0,
             markerDistance: 0,
             expectedTime: 0,
+            timeLimit: 0,
             title: "",
             iconName: "",
             iconSrc: "",
