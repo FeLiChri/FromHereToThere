@@ -330,6 +330,7 @@
           <thead>
             <tr>
               <th scope="col"></th>
+              <th scope="col"></th>
               <th scope="col">Hunt Name</th>
               <th scope="col">Points</th>
               <th scope="col">Time Taken</th>
@@ -339,6 +340,7 @@
           </thead>
           <tbody v-for="h in this.allHunts">
             <tr v-if="!h.completed && !h.started" key="h.title"  id="h.id" @click="switchPage('play', h.id)">
+              <th scope="row"></th>
               <th scope="row"><img :src="h.iconSrc" class="icon"/></th>
               <td><p>{{h.title}}</p></td>
               <td><p>--</p></td>
@@ -347,6 +349,7 @@
               <td><p>{{h.expectedDistance}} mi</p></td>
             </tr>
             <tr v-else-if="h.completed" key="h.title"  id="h.id" @click="switchPage('play', h.id)">
+              <th scope="row"><img v-if="h.completed" class="icon" src="src/gallery.png"/></th>
               <th scope="row"><img :src="h.iconSrc" class="icon"/></th>
               <td><p>{{h.title}} <span class='text-success'>(Completed!)</span></p></td>
               <td><p>{{h.finalStats.numPoints}} pts</p></td>
@@ -355,6 +358,7 @@
               <td><p>{{h.expectedDistance}} mi</p></td>
             </tr>
             <tr v-else key="h.title"  id="h.id" @click="switchPage('play', h.id)">
+              <th scope="row"></th>
               <th scope="row"><img :src="h.iconSrc" class="icon"/></th>
               <td><p>{{h.title}} <span class='text-danger'>(Started!)</span></p></td>
               <td><p>{{h.inProgress.numPoints}} pts</p></td>
