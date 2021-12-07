@@ -134,7 +134,7 @@
                   </div>
                   <div class="col-4 col-sm-6 col-md-4 p-0 mb-sm-2">
                   <select v-model="select_hrs" class="form-select" id="hours" style="width: 100px;" required>
-                    <option selected="true" disabled="disabled" v-bind:value="null">-</option>
+                    <option selected="true" disabled="disabled" v-bind:value="0">-</option>
                     <option v-bind:value="0">0</option>
                     <option v-bind:value="1">1</option>
                     <option v-bind:value="2">2</option>
@@ -410,6 +410,7 @@
                   <li>If you need a hint, tap the HINT button</li>
                   <li>If you still can't figure it out, click NUCLEAR to deduct 50pts and reveal the answer</li>
                   <li>The time remaining is displayed above</li>
+                    <li>The underscores in the answer are the number of letters in the word.</li>
                 </ul>
               </div>
             </div>
@@ -457,7 +458,7 @@
               <br>
     
               <button v-if="!currHunt.inProgress.hintClicked" type="button" class="btn btn-primary mt-4" @click='showHint'>
-                <h1>Hint</h1>
+                <h1>Hint (-1pt)</h1>
               </button>
               <button v-else type="button" class="btn btn-primary mt-4" disabled>
                 <h1>Hint</h1>
@@ -480,7 +481,7 @@
               <br>
     
             </h1>
-            <h1>Submit Evidence:</h1>
+            <h1>Submit Picture for Evidence:</h1>
             <button type="button" class="btn btn-primary mt-4">
               <input type="file" id="evidence" @change="prepareEvidence($event.target.files)" accept="image/png, image/jpeg">
               <br>

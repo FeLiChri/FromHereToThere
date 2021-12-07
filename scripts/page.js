@@ -401,6 +401,7 @@ map = new Vue({
     },
     showHint: function() {
       this.currHunt.inProgress.hintClicked = true;
+      this.currHunt.inProgress.numPoints = this.currHunt.inProgress.numPoints - 1;
     },
     convertAnswerToCaps: function(answer) {
       return answer.toUpperCase().split('').join('\xa0');
