@@ -491,7 +491,14 @@ map = new Vue({
         // alert(`CONGRATULATIONS YOU'RE DONE!!!\nTime taken: ${this.currHunt.inProgress.timeSoFar} mins\nPoints: ${this.currHunt.inProgress.numPoints} pts`);
         var time = this.currHunt.inProgress.timeSoFar;
         var points = this.currHunt.inProgress.numPoints;
-        var congrats = "<div id='congratulations'><h1>CONGRATULATIONS</h1><h1>YOU'RE DONE!!!</h1><h1>Time taken: "+time+" mins</h1><h1>Points: "+points+"</h1></div>";
+        var congrats = `<div id='congratulations'>
+          <h1>CONGRATULATIONS</h1>
+          <h1>YOU'RE DONE!!!</h1>
+          <h1>Time taken: ` + time + ` mins</h1>
+          <h1>Points: ` + points + `</h1>
+          <h1>Click on the hunt again to view your evidence in the future!</h1>
+        </div>`;
+
         $(".play_page").append(congrats);
 
         $.getScript( "scripts/confetti.js", function() {
