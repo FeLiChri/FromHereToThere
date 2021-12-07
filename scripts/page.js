@@ -263,7 +263,7 @@ map = new Vue({
           "timeSoFar":0,
           "distanceSoFar":0,
           "numPoints":0,
-          "currStopId":3,
+          "currStopId":0,
           "numMarkers":0,
           "guessText":"",
           "tempGuess":"",
@@ -300,8 +300,8 @@ map = new Vue({
           "noLocationResults":false
         },{
           "clue":"I'm across from the big windows.",
-          "answer":"Haven Hall Posting Wall",
-          "hint":"I'm near Mason Hall.",
+          "answer":"Posting Wall",
+          "hint":"I'm full of posters near Mason Hall.",
           "task":"Take a photo with the posting wall!",
           "points":15,
           "latlong": L.latLng(42.27650535,-83.73921763997743),
@@ -495,6 +495,7 @@ map = new Vue({
         $(".play_page").append(congrats);
 
         $.getScript( "scripts/confetti.js", function() {
+          
         });
 
         this.allHunts[this.currHunt.id].completed = true;
@@ -617,11 +618,11 @@ map = new Vue({
           // Reset marker distance
           this.currHunt.expectedDistance = this.currHunt.markerDistance;
           this.currHunt.markerDistance = 0;
+          this.currHunt.inProgress.currStopId = 0;
           this.allHunts.push(this.currHunt);
 
           console.log(JSON.stringify(this.allHunts));
           this.switchPage("join");
-          this.currStopId = 0;
         }     
       }
     },    
@@ -713,7 +714,6 @@ map = new Vue({
         };
       } else if (pageIn == "play") {
         this.inPlayMode = true;
-        this.allHunts[idIn].started = true;
         console.log(this.allHunts[idIn]);
         this.currHunt = this.allHunts[idIn];
         console.log(this.currHunt);
@@ -733,11 +733,14 @@ map = new Vue({
         //     evidence: this.allHunts[idIn].inProgress.evidence,
         //   };
 
-        setInterval(()=>{
-          this.allHunts[idIn].inProgress.timeSoFar += 1;
-
-          }
-          , 60000);
+        if (!this.allHunts[idIn].started) {
+          setInterval(()=>{
+            this.allHunts[idIn].inProgress.timeSoFar += 1;
+  
+            }
+            , 60000);
+        }
+        this.allHunts[idIn].started = true;
 
       } else if (pageIn == "index") {
         this.inPlayMode = false;
