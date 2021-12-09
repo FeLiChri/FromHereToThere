@@ -208,10 +208,10 @@
                     <form :id="'form'+i" class="needs-validation row mt-3" novalidate>
                       <label :for="'answer'+i" class="col-sm-2 mt-2 col-form-label">Go to: 
                       <span style="color: red;">* </span>
-                      <span data-toggle="tooltip" data-trigger="hover click" title="Nickname of your destination - what your players will guess." class="bi bi-info-circle static"><span>
+                      <span data-toggle="tooltip" data-trigger="hover click" :title="'Nickname of your destination - what your players will guess. (max ' + maxAnswerLength + ' characters)'" class="bi bi-info-circle static"><span>
                     </label>               
                       <div class="col-sm-10">
-                          <input type="text" class="form-control mt-2" :id="'answer'+i" v-model="c.answer" placeholder="Stop Name (e.g. Hatcher)"  v-on:keydown.enter.prevent v-on:blur="searchLocation(c.answer)" required>
+                          <input type="text" class="form-control mt-2" :id="'answer'+i" :maxlength="maxAnswerLength" :size="maxAnswerLength" v-model="c.answer" placeholder="Stop Name (e.g. Hatcher)"  v-on:keydown.enter.prevent v-on:blur="searchLocation(c.answer)" required>
                           <div class="invalid-feedback mb-2">
                               Please provide a stop name.
                           </div>
@@ -447,7 +447,7 @@
                 </p>
                 <!-- based on https://stackoverflow.com/questions/26324252/html-keep-placeholder-when-user-types -->
                 <div class="placeholder" :data-placeholder="placeholder">
-                  <input class="guess" :maxlength="answerLength" :size="answerLength" v-model="currHunt.inProgress.guessText" @keyup.enter="makeGuess" @input="updateGuess" />  
+                  <input :maxlength="answerLength" :size="answerLength" v-model="currHunt.inProgress.guessText" @keyup.enter="makeGuess" @input="updateGuess" />  
                 </div>
                 <p v-if="currHunt.inProgress.tryAgain">
                   <img src="src/tryagain.png">

@@ -35,6 +35,7 @@ map = new Vue({
       select_hrs: null,
       inPlayMode: false,
       expandLastAcc: false,
+      maxAnswerLength: 12,
       page: "index", // options ["index", "play", "create", "join"]
       mapConfig: {
         zoom:14,
