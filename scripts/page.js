@@ -659,6 +659,7 @@ map = new Vue({
       }
 
       cleaned_query = query.replace(' ', '+');
+      cleaned_query = encodeURIComponent(cleaned_query);
 
       if (!cleaned_query.includes("ann") && !cleaned_query.includes("Ann")) {
         cleaned_query +=  ",ann+arbor";
