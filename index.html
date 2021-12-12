@@ -168,15 +168,15 @@
                 </div>
                 </form>
               </div>
-                <div class="mapclass">
-                  <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymapMake" id="mymapMake">
-                    <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
-                  </l-map>
-                </div>
-                <div v-if="showExpected">
-                  <h3>This route is {{currHunt.markerDistance}} miles long.</h3>
-                  <h3>By foot, it will take ~{{currHunt.expectedTime}} minutes.</h3>
-                </div>
+              <div class="mapclass" style="flex: 1; margin-bottom: 10px; display: flex; align-items: stretch;">
+                <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymapMake" id="mymapMake" style="flex: 1; margin-bottom: 10px;">
+                  <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
+                </l-map>
+              </div>
+              <div v-if="showExpected">
+                <h3>This route is {{currHunt.markerDistance}} miles long.</h3>
+                <h3>By foot, it will take ~{{currHunt.expectedTime}} minutes.</h3>
+              </div>
     
                 <!-- </div> -->
                 
@@ -422,8 +422,8 @@
         <div v-if="!currHunt.completed" class="row">
           <!-- map -->
           <div id="map-div" class="blue_border col-sm-6">
-            <div class="mapclass">
-              <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymapGuess" id="mymapGuess">
+            <div class="mapclass" style="flex: 1; margin-bottom: 10px; display: flex; align-items: stretch;">
+              <l-map :zoom="mapConfig.zoom" :center="mapConfig.center" ref="mymapGuess" id="mymapGuess" style="position: relative; height: calc(100% - 20px); margin-top: 10px; margin-bottom: 10px;">
                 <l-tile-layer :url="mapConfig.url" :attribution="mapConfig.attribution"></l-tile-layer>
               </l-map>
             </div>

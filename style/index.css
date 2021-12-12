@@ -93,10 +93,6 @@
   cursor: pointer;
 }
 
-.mapclass {
-    flex-grow: 1;
-}
-
 .placeholder {
     position: relative;
     font-family: monospace;
