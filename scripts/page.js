@@ -31,8 +31,8 @@ map = new Vue({
   components: { LMap, LTileLayer, LMarker, LTooltip },
   data() {
     return {
-      select_min: null,
-      select_hrs: null,
+      select_min: 0,
+      select_hrs: 0,
       inPlayMode: false,
       expandLastAcc: false,
       maxAnswerLength: 12,
@@ -588,6 +588,23 @@ map = new Vue({
       this.adjustMap();
 
     },
+    checkTimeValidity: function() {
+      console.log("Check time validity");
+      errorString = "";
+      if ($("#minutes").val() == 0 && $("#hours").val() == 0) {
+        document.getElementById('minutes').setCustomValidity(' ');
+        document.getElementById('hours').setCustomValidity(' ');
+        errorString = "Time limit must be greater than 0."
+      } else {
+        document.getElementById('minutes').setCustomValidity('');
+        document.getElementById('hours').setCustomValidity('');
+     }
+
+     document.getElementById('minutes').reportValidity();
+     document.getElementById('hours').reportValidity();
+
+     return errorString;
+    },
     publish: function() {
       // Check for additional errors that are outside forms.
       this.currHunt.errorString = ''
@@ -601,9 +618,8 @@ map = new Vue({
       if (this.currHunt.stops.length === 0) {
         this.currHunt.errorString += "Provide at least one stop.<br>"
       }
-      if (!$("#minutes").val() || !$("#hours").val()) {
-        this.currHunt.errorString += "Set a time limit.<br>"
-      }
+
+      this.currHunt.errorString += this.checkTimeValidity();
 
       allFormsValid = this.allFormsValid();
 
@@ -665,8 +681,10 @@ map = new Vue({
       this.updateRoute(this.makeMarkers);
 
       $("#loc-error-"+stop_i).removeClass('d-block')
-      
       $('#loc'+stop_i).hide();
+
+      document.getElementById("loc-search-"+stop_i.toString()).setCustomValidity('');
+      document.getElementById("loc-search-"+stop_i.toString()).reportValidity();
     }, 
     setActiveStop: function(i) {
       this.currHunt.inProgress.currStopId = i;
@@ -685,8 +703,8 @@ map = new Vue({
         this.inPlayMode = false;
       } else if (pageIn == "create") {
         this.inPlayMode = false;
-        this.select_min = null;
-        this.select_hrs = null;
+        this.select_min = 0;
+        this.select_hrs = 0;
         this.expandLastAcc = false;
         // Initialize new blank hunt
         this.currHunt = {
@@ -789,6 +807,8 @@ map = new Vue({
           console.log("#loc-error-"+index.toString());
           console.log(this.currHunt.stops[index]);
           $("#loc-error-"+index.toString()).addClass('d-block')
+          document.getElementById("loc-search-"+index.toString()).setCustomValidity(' ');
+          document.getElementById("loc-search-"+index.toString()).reportValidity();
         }
         else if (!form.checkValidity()) {
           invalidFormsPresent = true;

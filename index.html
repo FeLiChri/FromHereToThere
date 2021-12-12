@@ -133,9 +133,8 @@
                     <label for="hours">Hr:</label>
                   </div>
                   <div class="col-4 col-sm-6 col-md-4 p-0 mb-sm-2">
-                  <select v-model="select_hrs" class="form-select" id="hours" style="width: 100px;" required>
-                    <option selected="true" disabled="disabled" v-bind:value="0">-</option>
-                    <option v-bind:value="0">0</option>
+                  <select v-model="select_hrs" class="form-select" id="hours" style="width: 100px;" @change="checkTimeValidity" required>
+                    <option selected="true" v-bind:value="0">0</option>
                     <option v-bind:value="1">1</option>
                     <option v-bind:value="2">2</option>
                     <option v-bind:value="3">3</option>
@@ -152,9 +151,8 @@
                   <label for="minutes">Min:</label>
                   </div>
                   <div class="col-4 col-sm-6 col-md-4 p-0">
-                  <select v-model="select_min" class="form-select" style="width: 100px;" id="minutes" required>
-                    <option selected="true" disabled="disabled" v-bind:value="null">-</option>
-                    <option v-bind:value="0">0</option>
+                  <select v-model="select_min" class="form-select" style="width: 100px;" id="minutes" @change="checkTimeValidity" required>
+                    <option selected="true" v-bind:value="0">0</option>
                     <option v-bind:value="5">5</option>
                     <option v-bind:value="10">10</option>
                     <option v-bind:value="15">15</option>
@@ -223,7 +221,7 @@
                       </label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-sm-2 mt-2">
-                              <input type="search" class="form-control rounded" placeholder="Search for Location" aria-label="Search"
+                              <input :id="'loc-search-'+i" type="search" class="form-control rounded" placeholder="Search for Location" aria-label="Search"
                               aria-describedby="search-addon" v-model="c.location" v-on:keyup.enter="searchLocation(c.location)" style="border-radius: 0.25em 0 0 0.25em !important;" v-on:keydown.enter.prevent required>
                               <div class="input-group-append" >
                                 <button class="btn btn-secondary" type="button" style="height: 100%; border-radius: 0 0.25em 0.25em 0 !important;" @click="searchLocation(c.location)"><i class="bi bi-search"></i></button>
